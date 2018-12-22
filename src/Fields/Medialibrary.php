@@ -2,15 +2,15 @@
 
 namespace DmitryBubyakin\NovaMedialibraryField\Fields;
 
-use DmitryBubyakin\NovaMedialibraryField\Resources\Media as MediaResource;
 use Exception;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Gate;
+use Laravel\Nova\Nova;
 use InvalidArgumentException;
 use Laravel\Nova\Fields\Field;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Nova;
 use Spatie\MediaLibrary\Models\Media as MediaModel;
+use DmitryBubyakin\NovaMedialibraryField\Resources\Media as MediaResource;
 
 class Medialibrary extends Field
 {
@@ -312,19 +312,19 @@ class Medialibrary extends Field
 
         $singleFile = $collection->singleFile ?? false;
 
-        return !$singleFile;
+        return ! $singleFile;
     }
 
     protected function guardThumbnail($thumbnail): void
     {
-        if (!is_callable($thumbnail) && !is_string($thumbnail)) {
+        if (! is_callable($thumbnail) && ! is_string($thumbnail)) {
             throw new InvalidArgumentException('Medialibrary::thumbnail: string or callable expected.');
         }
     }
 
     protected function guardMediaOnIndex($mediaOnIndex): void
     {
-        if (!is_callable($mediaOnIndex) && !is_numeric($mediaOnIndex)) {
+        if (! is_callable($mediaOnIndex) && ! is_numeric($mediaOnIndex)) {
             throw new InvalidArgumentException('Medialibrary::mediaOnIndex: integer or callable expected.');
         }
 
