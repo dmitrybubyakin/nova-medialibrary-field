@@ -16,7 +16,7 @@ With this package you can:
  - [Screenshots](#screenshots)
  - [Installation](#installation)
  - [Usage](#usage)
-    - [What about forms?](#what-about-forms?)
+    - [What about forms?](#what-about-forms)
     - [Display media on the index view](#display-media-on-the-index-view)
     - [Custom media realation](#custom-media-realation)
     - [Thumbnail](#thumbnail)
