@@ -7,9 +7,15 @@
         </div>
 
         <div class="mt-4">
-            <button class="btn btn-default btn-primary" @click="chooseFiles">
+            <input v-if="showFileInput" :id="'fileInput' + _uid" name="name" type="file" class="form-file-input"
+                :multiple="field.multiple"
+                :accept="field.accept"
+                @change="handleFileChange"
+            >
+
+            <label :for="'fileInput' + _uid" class="form-file form-file-btn btn btn-default btn-primary">
                 {{ __('Choose Files') }}
-            </button>
+            </label>
 
             <progress-button v-if="fileToBeUploaded" class="ml-3"
                 :disabled="uploading"
@@ -41,6 +47,7 @@ export default {
         return {
             files: [],
             uploading: false,
+            showFileInput: true,
         }
     },
 
@@ -51,15 +58,12 @@ export default {
     },
 
     methods: {
-        chooseFiles () {
-            const input = document.createElement('input')
-            input.type = 'file'
-            input.multiple = this.field.multiple
-            input.accept = this.field.accept
-            input.onchange = () => this.addFiles([...input.files])
-            document.body.appendChild(input)
-            input.click()
-            document.body.removeChild(input)
+        handleFileChange (event) {
+            this.addFiles([...event.target.files])
+
+            // reset file input
+            this.showFileInput = false
+            this.$nextTick(() => this.showFileInput = true)
         },
 
         deleteFile (fileToBeDeleted) {
