@@ -176,7 +176,8 @@ class Medialibrary extends Field
     }
 
     /**
-     * @param  string|callable $thumbnail
+     * @param string|callable $thumbnail
+     *
      * @return $this
      */
     public function thumbnail($thumbnail): self
@@ -191,7 +192,8 @@ class Medialibrary extends Field
     }
 
     /**
-     * @param  int|callable $mediaOnIndex
+     * @param int|callable $mediaOnIndex
+     *
      * @return $this
      */
     public function mediaOnIndex($mediaOnIndex = 1): self
@@ -229,8 +231,9 @@ class Medialibrary extends Field
     /**
      * Resolve the field's value.
      *
-     * @param  mixed  $resource
-     * @param  string|null  $attribute
+     * @param mixed       $resource
+     * @param string|null $attribute
+     *
      * @return void
      */
     public function resolve($resource, $attribute = null)
@@ -243,13 +246,13 @@ class Medialibrary extends Field
     public function serializeMedia(MediaModel $media): array
     {
         return [
-            'id' => $media->id,
-            'order' => $media->order_column,
-            'filename' => $media->file_name,
-            'extension' => $media->extension,
-            'downloadUrl' => $media->getFullUrl(),
-            'thumbnailUrl' => $this->isImage($media) ? call_user_func($this->thumbnailUrlCallback, $media) : null,
-            'authorizedToView' => Gate::check('view', $media),
+            'id'                 => $media->id,
+            'order'              => $media->order_column,
+            'filename'           => $media->file_name,
+            'extension'          => $media->extension,
+            'downloadUrl'        => $media->getFullUrl(),
+            'thumbnailUrl'       => $this->isImage($media) ? call_user_func($this->thumbnailUrlCallback, $media) : null,
+            'authorizedToView'   => Gate::check('view', $media),
             'authorizedToUpdate' => Gate::check('update', $media),
             'authorizedToDelete' => Gate::check('delete', $media),
         ];
@@ -258,13 +261,13 @@ class Medialibrary extends Field
     public function meta(): array
     {
         return array_merge([
-            'accept' => $this->accept,
-            'bigThumbnails' => $this->bigThumbnails,
-            'mediaSortable' => $this->mediaSortable,
+            'accept'         => $this->accept,
+            'bigThumbnails'  => $this->bigThumbnails,
+            'mediaSortable'  => $this->mediaSortable,
             'collectionName' => $this->collectionName,
-            'resourceName' => $this->resourceName,
-            'relationName' => $this->relationName,
-            'multiple' => $this->multiple,
+            'resourceName'   => $this->resourceName,
+            'relationName'   => $this->relationName,
+            'multiple'       => $this->multiple,
         ], $this->meta);
     }
 
@@ -309,19 +312,19 @@ class Medialibrary extends Field
 
         $singleFile = $collection->singleFile ?? false;
 
-        return ! $singleFile;
+        return !$singleFile;
     }
 
     protected function guardThumbnail($thumbnail): void
     {
-        if (! is_callable($thumbnail) && ! is_string($thumbnail)) {
+        if (!is_callable($thumbnail) && !is_string($thumbnail)) {
             throw new InvalidArgumentException('Medialibrary::thumbnail: string or callable expected.');
         }
     }
 
     protected function guardMediaOnIndex($mediaOnIndex): void
     {
-        if (! is_callable($mediaOnIndex) && ! is_numeric($mediaOnIndex)) {
+        if (!is_callable($mediaOnIndex) && !is_numeric($mediaOnIndex)) {
             throw new InvalidArgumentException('Medialibrary::mediaOnIndex: integer or callable expected.');
         }
 
