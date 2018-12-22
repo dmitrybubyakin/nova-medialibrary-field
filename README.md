@@ -1,5 +1,8 @@
 # Medialibrary Field for Laravel Nova
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/dmitrybubyakin/nova-medialibrary-field.svg?style=flat-square)](https://packagist.org/packages/dmitrybubyakin/nova-medialibrary-field)
+[![Total Downloads](https://img.shields.io/packagist/dt/dmitrybubyakin/nova-medialibrary-field.svg?style=flat-square)](https://packagist.org/packages/dmitrybubyakin/nova-medialibrary-field)
+
 Laravel Nova field for managing the Spatie media library.
 
 With this package you can:
@@ -8,14 +11,32 @@ With this package you can:
  - update media attributes (filename, custom properties, etc)
  - display media on the index view
 
+## Contents
+
+ - [Screenshots](#screenshots)
+ - [Installation](#installation)
+ - [Usage](#usage)
+    - [What about forms?](#what-about-forms?)
+    - [Display media on the index view](#display-media-on-the-index-view)
+    - [Custom media realation](#custom-media-realation)
+    - [Thumbnail](#thumbnail)
+    - [Single media collection](#single-media-collection)
+    - [Store and Replace callbacks](#store-and-replace-callbacks)
+    - [Validation](#validation)
+    - [Sorting](#sorting)
+    - [Custom media resource](#custom-media-resource)
+ - [Changelog](#changelog)
+ - [Alternatives](#alternatives)
+ - [License](#license)
+
 ## Screenshots
 
-![index view](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/index.png)
-![details view](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/details.png)
-![media details modal](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/media-details.png)
-![media update modal](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/media-update.png)
-![media sorting](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/media-sorting.gif)
-![media uploading](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/media-uploading.gif)
+![index view](docs/index.png)
+![details view](docs/details.png)
+![media details modal](docs/media-details.png)
+![media update modal](docs/media-update.png)
+![media sorting](docs/media-sorting.gif)
+![media uploading](docs/media-uploading.gif)
 
 ## Installation
 
@@ -208,7 +229,15 @@ class Post extends Resource
 }
 ```
 
+## Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+
 ## Alternatives
 
  - https://github.com/jameslkingsley/nova-media-library
  - https://github.com/ebess/advanced-nova-media-library
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
