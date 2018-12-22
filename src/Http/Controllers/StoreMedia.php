@@ -2,12 +2,12 @@
 
 namespace DmitryBubyakin\NovaMedialibraryField\Http\Controllers;
 
-use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
-use Illuminate\Support\Facades\DB;
-use Laravel\Nova\Fields\Field;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Nova;
+use Laravel\Nova\Fields\Field;
+use Illuminate\Support\Facades\DB;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
 
 class StoreMedia
 {

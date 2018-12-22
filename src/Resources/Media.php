@@ -2,11 +2,11 @@
 
 namespace DmitryBubyakin\NovaMedialibraryField\Resources;
 
-use Illuminate\Http\Request;
+use Laravel\Nova\Resource;
 use Laravel\Nova\Fields\ID;
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Resource;
 use Spatie\MediaLibrary\Models\Media as MediaModel;
 
 class Media extends Resource
