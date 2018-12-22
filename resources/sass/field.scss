@@ -1,0 +1,48 @@
+.medialibrary-detail-field {
+    .preview-width {
+        width: 8rem;
+    }
+
+    .preview-height {
+        height: 8rem;
+    }
+
+    .big-thumbnails {
+        .preview-width {
+            width: 17rem;
+        }
+
+        .preview-height {
+            height: 17rem;
+        }
+    }
+
+    .object-cover {
+        object-fit: cover;
+    }
+
+    .card {
+        &.hoverable:hover {
+            .card-hover\:flex {
+                display: flex;
+            }
+        }
+    }
+
+    .sortable {
+        &-chosen,
+        &-drag {
+            cursor: move;
+
+            .hoverable:hover {
+                .card-hover\:flex {
+                    display: none;
+                }
+            }
+        }
+
+        &-drag {
+            opacity: .99;
+        }
+    }
+}
