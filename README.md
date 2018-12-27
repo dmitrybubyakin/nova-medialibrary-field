@@ -32,12 +32,12 @@ With this package you can:
 
 ## Screenshots
 
-![index view](docs/index.png)
-![details view](docs/details.png)
-![media details modal](docs/media-details.png)
-![media update modal](docs/media-update.png)
-![media sorting](docs/media-sorting.gif)
-![media uploading](docs/media-uploading.gif)
+![index view](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/index.png)
+![details view](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/details.png)
+![media details modal](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/media-details.png)
+![media update modal](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/media-update.png)
+![media sorting](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/media-sorting.gif)
+![media uploading](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/media-uploading.gif)
 
 ## Installation
 
