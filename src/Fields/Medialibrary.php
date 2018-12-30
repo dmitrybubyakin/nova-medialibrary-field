@@ -252,10 +252,15 @@ class Medialibrary extends Field
             'extension'          => $media->extension,
             'downloadUrl'        => $media->getFullUrl(),
             'thumbnailUrl'       => $this->isImage($media) ? call_user_func($this->thumbnailUrlCallback, $media) : null,
-            'authorizedToView'   => Gate::check('view', $media),
-            'authorizedToUpdate' => Gate::check('update', $media),
-            'authorizedToDelete' => Gate::check('delete', $media),
+            'authorizedToView'   => $this->authorizedTo('view', $media),
+            'authorizedToUpdate' => $this->authorizedTo('update', $media),
+            'authorizedToDelete' => $this->authorizedTo('delete', $media),
         ];
+    }
+
+    protected function authorizedTo(string $ability, MediaModel $media): bool
+    {
+        return Gate::getPolicyFor($media) ? Gate::check($ability, $media) : true;
     }
 
     public function meta(): array
