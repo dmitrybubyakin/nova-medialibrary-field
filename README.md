@@ -230,6 +230,24 @@ class Post extends Resource
 }
 ```
 
+## Authorization Gates 'view', 'update' and 'delete'
+
+To view, update and delete uploaded media, you need to setup some gates. You can use the store and replace callbacks to store additional information to the custom_properties, what can be used inside the gates for authorization.
+
+```php
+Gate::define('view', function ($user, $media) {
+    return true; // view granted
+});
+
+Gate::define('update', function ($user, $media) {
+    return true; // update granted
+});
+
+Gate::define('delete', function ($user, $media) {
+    return true; // deletion granted
+});
+```
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
