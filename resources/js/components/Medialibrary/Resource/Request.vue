@@ -3,7 +3,7 @@ import { Minimum } from 'laravel-nova'
 
 export default {
     props: {
-        request: Object,
+        request: Function,
     },
 
     data () {
