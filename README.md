@@ -26,6 +26,7 @@ With this package you can:
     - [Validation](#validation)
     - [Sorting](#sorting)
     - [Custom media resource](#custom-media-resource)
+    - [Authorization Gates 'view', 'update' and 'delete'](#authorization-gates-view-update-and-delete)
  - [Changelog](#changelog)
  - [Alternatives](#alternatives)
  - [License](#license)
@@ -246,6 +247,39 @@ Gate::define('update', function ($user, $media) {
 Gate::define('delete', function ($user, $media) {
     return true; // deletion granted
 });
+```
+
+You can also use the policy.
+
+```php
+class MediaPolicy
+{
+    use HandlesAuthorization;
+
+    public function view(User $user, Media $media): bool
+    {
+        return true;
+    }
+
+    public function update(User $user, Media $media): bool
+    {
+        return true;
+    }
+
+    public function delete(User $user, Media $media): bool
+    {
+        return true;
+    }
+}
+
+class AuthServiceProvider extends ServiceProvider
+{
+    protected $policies = [
+        Media::class => MediaPolicy::class,
+    ];
+
+    //...
+}
 ```
 
 ## Changelog
