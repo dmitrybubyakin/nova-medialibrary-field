@@ -15,6 +15,7 @@ With this package you can:
 ## Contents
 
  - [Screenshots](#screenshots)
+ - [Requirements](#requirements)
  - [Installation](#installation)
  - [Usage](#usage)
     - [What about forms?](#what-about-forms)
@@ -39,6 +40,10 @@ With this package you can:
 ![media update modal](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/media-update.png)
 ![media sorting](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/media-sorting.gif)
 ![media uploading](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/media-uploading.gif)
+
+## Requirements
+
+ - Laravel Nova >= 1.2.0
 
 ## Installation
 
