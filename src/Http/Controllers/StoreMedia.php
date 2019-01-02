@@ -54,7 +54,7 @@ class StoreMedia
             return $field instanceof Panel ? $field->data : $field;
         })->flatten();
 
-        return $fields->first(function ($field) use ($request) {
+        return $fields->first(function (Field $field) use ($request) {
             return $field instanceof Medialibrary && $field->collectionName == $request->collection;
         });
     }
