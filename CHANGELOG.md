@@ -11,3 +11,10 @@
 ### Fixed
 
 - Global Search : Class name must be a valid object or a string ([#7](https://github.com/dmitrybubyakin/nova-medialibrary-field/issues/7))
+
+
+## [1.1.2 (2019-01-02)](https://github.com/dmitrybubyakin/nova-medialibrary-field/compare/1.1.1...1.1.2)
+
+### Fixed
+
+- Fixed problem with file storing when Medialibrary is in Panel or Panels are before the field ([#8](https://github.com/dmitrybubyakin/nova-medialibrary-field/pull/8))
