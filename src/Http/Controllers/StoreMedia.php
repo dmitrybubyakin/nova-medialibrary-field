@@ -3,8 +3,8 @@
 namespace DmitryBubyakin\NovaMedialibraryField\Http\Controllers;
 
 use Laravel\Nova\Nova;
-use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Panel;
+use Laravel\Nova\Fields\Field;
 use Illuminate\Support\Facades\DB;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Laravel\Nova\Http\Requests\NovaRequest;
