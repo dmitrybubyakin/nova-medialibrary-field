@@ -305,7 +305,11 @@ class Medialibrary extends Field
     {
         $request = app(NovaRequest::class);
 
-        $resource = Nova::resourceForKey($request->viaResource ?? $request->resource);
+        if (is_null($key = $request->viaResource ?? $request->resource)) {
+            return false;
+        }
+
+        $resource = Nova::resourceForKey($key);
 
         $model = app($resource::$model);
 
