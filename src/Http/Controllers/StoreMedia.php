@@ -50,28 +50,11 @@ class StoreMedia
     {
         $parentResource = Nova::resourceForKey($request->viaResource);
 
-        $fields = collect((new $parentResource($parent))->fields($request));
+        $fields = collect((new $parentResource($parent))->fields($request))->map(function ($field) {
+            return $field instanceof Panel ? $field->data : $field;
+        })->flatten();
 
-        // Find all MediaLibraryFields
-        $mediaLibraryFields = $fields->flatMap(function ($field) use ($request) {
-            if ($field instanceof Panel) {
-                $panelFields = collect($field->data);
-
-                // Get all Medialibrary from Panels
-                return $panelFields->map(function ($field) use ($request) {
-                    return $field;
-                })->reject(function ($field) {
-                    return ! $field instanceof Medialibrary;
-                });
-            }
-
-            // Return Medialibrary from root fields
-            return $field;
-        })->reject(function ($field) {
-            return ! $field instanceof Medialibrary;
-        });
-
-        return $mediaLibraryFields->first(function ($field) use ($request) {
+        return $fields->first(function ($field) use ($request) {
             return $field instanceof Medialibrary && $field->collectionName == $request->collection;
         });
     }
