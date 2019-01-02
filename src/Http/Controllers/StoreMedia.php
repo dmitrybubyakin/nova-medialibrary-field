@@ -4,6 +4,7 @@ namespace DmitryBubyakin\NovaMedialibraryField\Http\Controllers;
 
 use Laravel\Nova\Nova;
 use Laravel\Nova\Fields\Field;
+use Laravel\Nova\Panel;
 use Illuminate\Support\Facades\DB;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -51,7 +52,26 @@ class StoreMedia
 
         $fields = collect((new $parentResource($parent))->fields($request));
 
-        return $fields->first(function (Field $field) use ($request) {
+        // Find all MediaLibraryFields
+        $mediaLibraryFields = $fields->flatMap(function ($field) use ($request) {
+            if ($field instanceof Panel) {
+                $panelFields = collect($field->data);
+
+                // Get all Medialibrary from Panels
+                return $panelFields->map(function ($field) use ($request) {
+                    return $field;
+                })->reject(function ($field) {
+                    return ! $field instanceof Medialibrary;
+                });
+            }
+
+            // Return Medialibrary from root fields
+            return $field;
+        })->reject(function ($field) {
+            return ! $field instanceof Medialibrary;
+        });
+
+        return $mediaLibraryFields->first(function ($field) use ($request) {
             return $field instanceof Medialibrary && $field->collectionName == $request->collection;
         });
     }
