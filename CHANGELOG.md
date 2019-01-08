@@ -18,3 +18,9 @@
 ### Fixed
 
 - Fixed problem with file storing when Medialibrary is in Panel or Panels are before the field ([#8](https://github.com/dmitrybubyakin/nova-medialibrary-field/pull/8))
+
+## [1.1.3 (2019-01-08)](https://github.com/dmitrybubyakin/nova-medialibrary-field/compare/1.1.2...1.1.3)
+
+### Added
+
+- Pass an uploaded file to callbacks ([df988bc](https://github.com/dmitrybubyakin/nova-medialibrary-field/commit/df988bc)
