@@ -22,16 +22,16 @@ class StoreMedia
 
         $request->validate(['file' => $field->rules]);
 
-        return DB::transaction(function () use ($parent, $field) {
+        return DB::transaction(function () use ($parent, $field, $request) {
             $fileAdder = $parent->addMediaFromRequest('file');
             $collection = $field->collectionName;
 
             $oldFile = $field->multiple ? null : $parent->getFirstMedia($collection);
 
             if ($oldFile && is_callable($field->replaceUsingCallback)) {
-                $fileAdder = call_user_func($field->replaceUsingCallback, $fileAdder, $oldFile);
+                $fileAdder = call_user_func($field->replaceUsingCallback, $fileAdder, $oldFile, $request->file);
             } elseif (is_callable($field->storeUsingCallback)) {
-                $fileAdder = call_user_func($field->storeUsingCallback, $fileAdder);
+                $fileAdder = call_user_func($field->storeUsingCallback, $fileAdder, $request->file);
             }
 
             return $field->serializeMedia($fileAdder->toMediaCollection($collection));
