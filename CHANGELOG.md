@@ -23,4 +23,4 @@
 
 ### Added
 
-- Pass an uploaded file to callbacks ([df988bc](https://github.com/dmitrybubyakin/nova-medialibrary-field/commit/df988bc)
+- Pass an uploaded file to callbacks ([df988bc](https://github.com/dmitrybubyakin/nova-medialibrary-field/commit/df988bc))
