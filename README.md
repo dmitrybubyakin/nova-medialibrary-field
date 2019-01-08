@@ -167,7 +167,7 @@ If you want to do someting before media saved, you can use `storeUsing` method. 
 
 ```php
 Medialibrary::make('Images', 'post_images')
-    ->storeUsing(function (FileAdder $fileAdder) {
+    ->storeUsing(function (FileAdder $fileAdder, UploadedFile $file) {
         return $fileAdder->withCustomProperties(['description' => $this->resource->title]);
     })
 ```
@@ -176,7 +176,7 @@ When you are using a single media collection, you can also use `replaceUsing` me
 
 ```php
 Medialibrary::make('Featured Image', 'featured')
-    ->replaceUsing(function (FileAdder $fileAdder, Media $oldFile) {
+    ->replaceUsing(function (FileAdder $fileAdder, Media $oldFile, UploadedFile $file) {
         return $fileAdder
             ->usingFileName($oldFile->file_name)
             ->withCustomProperties($oldFile->custom_properties);
