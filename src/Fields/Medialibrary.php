@@ -2,16 +2,15 @@
 
 namespace DmitryBubyakin\NovaMedialibraryField\Fields;
 
-use DmitryBubyakin\NovaMedialibraryField\Resources\Media as MediaResource;
 use Exception;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Gate;
-use InvalidArgumentException;
-use Laravel\Nova\Fields\Field;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Nova;
 use Laravel\Nova\Resource;
+use InvalidArgumentException;
+use Laravel\Nova\Fields\Field;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 use Spatie\MediaLibrary\Models\Media as MediaModel;
+use DmitryBubyakin\NovaMedialibraryField\Resources\Media as MediaResource;
 
 class Medialibrary extends Field
 {
