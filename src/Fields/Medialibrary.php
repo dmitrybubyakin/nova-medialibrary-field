@@ -2,15 +2,16 @@
 
 namespace DmitryBubyakin\NovaMedialibraryField\Fields;
 
+use DmitryBubyakin\NovaMedialibraryField\Resources\Media as MediaResource;
 use Exception;
-use Laravel\Nova\Nova;
-use InvalidArgumentException;
-use Laravel\Nova\Fields\Field;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
+use InvalidArgumentException;
+use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Nova;
+use Laravel\Nova\Resource;
 use Spatie\MediaLibrary\Models\Media as MediaModel;
-use DmitryBubyakin\NovaMedialibraryField\Resources\Media as MediaResource;
 
 class Medialibrary extends Field
 {
@@ -303,13 +304,7 @@ class Medialibrary extends Field
 
     protected function isMultiple(string $collectionName): bool
     {
-        $request = app(NovaRequest::class);
-
-        if (is_null($key = $request->viaResource ?? $request->resource)) {
-            return false;
-        }
-
-        $resource = Nova::resourceForKey($key);
+        $resource = $this->resolveResourceClass();
 
         $model = app($resource::$model);
 
@@ -322,6 +317,15 @@ class Medialibrary extends Field
         $singleFile = $collection->singleFile ?? false;
 
         return ! $singleFile;
+    }
+
+    protected function resolveResourceClass(): ?string
+    {
+        return collect(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 8))
+                ->map->class
+                ->first(function (string $class) {
+                    return is_subclass_of($class, Resource::class);
+                });
     }
 
     protected function guardThumbnail($thumbnail): void
