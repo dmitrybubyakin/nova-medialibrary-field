@@ -12,7 +12,6 @@
 
 - Global Search : Class name must be a valid object or a string ([#7](https://github.com/dmitrybubyakin/nova-medialibrary-field/issues/7))
 
-
 ## [1.1.2 (2019-01-02)](https://github.com/dmitrybubyakin/nova-medialibrary-field/compare/1.1.1...1.1.2)
 
 ### Fixed
@@ -24,3 +23,9 @@
 ### Added
 
 - Pass an uploaded file to callbacks ([df988bc](https://github.com/dmitrybubyakin/nova-medialibrary-field/commit/df988bc))
+
+## [1.1.4 (2019-01-16)](https://github.com/dmitrybubyakin/nova-medialibrary-field/compare/1.1.3...1.1.4)
+
+### Fixed
+
+- Undefined `registerMediaCollections` method is called on related resources ([#10](https://github.com/dmitrybubyakin/nova-medialibrary-field/issues/10))
