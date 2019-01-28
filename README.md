@@ -175,7 +175,7 @@ You can add a short description below the thumbnail title.
 
 ```php
 Medialibrary::make('Featured Image', 'featured')
-    ->thumbnailDescription('custom_properties->description') // hidden by default
+    ->thumbnailDescription('custom_properties->description', $limit = 75) // hidden by default
 
 Medialibrary::make('Featured Image', 'featured')
     ->thumbnailDescription(function (Media $media) {
