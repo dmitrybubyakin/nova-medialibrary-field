@@ -161,7 +161,7 @@ Medialibrary::make('Featured Image', 'featured')
 
 ```php
 Medialibrary::make('Featured Image', 'featured')
-    ->thumbnailTitle('custom_properties->title') // $media->file_name is uesd by default
+    ->thumbnailTitle('custom_properties->title') // $media->file_name is used by default
 
 Medialibrary::make('Featured Image', 'featured')
     ->thumbnailTitle(function (Media $media) {
