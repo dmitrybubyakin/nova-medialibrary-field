@@ -3,9 +3,9 @@
 namespace DmitryBubyakin\NovaMedialibraryField\Http\Controllers;
 
 use Laravel\Nova\Nova;
-use Laravel\Nova\Panel;
 use Laravel\Nova\Fields\Field;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Resources\MergeValue;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
@@ -51,7 +51,7 @@ class StoreMedia
         $parentResource = Nova::resourceForKey($request->viaResource);
 
         $fields = collect((new $parentResource($parent))->fields($request))->map(function ($field) {
-            return $field instanceof Panel ? $field->data : $field;
+            return $field instanceof MergeValue ? $field->data : $field;
         })->flatten();
 
         return $fields->first(function (Field $field) use ($request) {
