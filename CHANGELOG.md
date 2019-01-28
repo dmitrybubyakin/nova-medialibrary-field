@@ -29,3 +29,9 @@
 ### Fixed
 
 - Undefined `registerMediaCollections` method is called on related resources ([#10](https://github.com/dmitrybubyakin/nova-medialibrary-field/issues/10))
+
+## [1.1.5 (2019-01-28)](https://github.com/dmitrybubyakin/nova-medialibrary-field/compare/1.1.4...1.1.5)
+
+### Fixed
+
+- Replace Panel with MergeValue ([b6002ba](https://github.com/dmitrybubyakin/nova-medialibrary-field/commit/b6002ba))
