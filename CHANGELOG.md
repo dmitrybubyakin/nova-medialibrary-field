@@ -35,3 +35,10 @@
 ### Fixed
 
 - Replace Panel with MergeValue ([b6002ba](https://github.com/dmitrybubyakin/nova-medialibrary-field/commit/b6002ba))
+
+## [1.1.6 (2019-01-28)](https://github.com/dmitrybubyakin/nova-medialibrary-field/compare/1.1.5...1.1.6)
+
+### Added
+
+- Possibility to customize the thumbnail title and show a short thumbnail description text
+- Possibility to customize the thumbnail size
