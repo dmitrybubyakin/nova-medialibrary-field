@@ -22,6 +22,7 @@ With this package you can:
     - [Display media on the index view](#display-media-on-the-index-view)
     - [Custom media realation](#custom-media-realation)
     - [Thumbnail](#thumbnail)
+    - [Thumbnail size](#thumbnail-size)
     - [Thumbnail title](#thumbnail-title)
     - [Thumbnail description](#thumbnail-description)
     - [Single media collection](#single-media-collection)
@@ -146,6 +147,14 @@ You can override it:
 Medialibrary::make('Featured Image', 'featured')
     ->imageMimes('image', 'mimes', 'that', 'you', 'need')
     ->thumbnail(...)
+```
+
+### Thumbnail size
+
+```php
+Medialibrary::make('Featured Image', 'featured')
+    ->thumbnailSize('14rem', '9rem') // width, height
+    ->thumbnailSize('10rem') // width = height
 ```
 
 ### Thumbnail title

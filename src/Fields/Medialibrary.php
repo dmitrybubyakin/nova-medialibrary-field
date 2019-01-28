@@ -280,6 +280,14 @@ class Medialibrary extends Field
         return $this;
     }
 
+    public function thumbnailSize(string $width, ?string $height = null): self
+    {
+        return $this->withMeta([
+            'thumbnailWidth' => $width,
+            'thumbnailHeight' => $height ?: $width,
+        ]);
+    }
+
     public function onlyOnForms()
     {
         throw new Exception('Medialibrary::onlyOnForms: can\'t be shown on forms.');

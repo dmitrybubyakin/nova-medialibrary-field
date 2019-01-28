@@ -5,6 +5,8 @@
             <Resource v-for="file in sortedFiles" :file="file" :key="file.id" :field="field" class="p-2">
                 <File slot-scope="{ file, fileEvents }"
                     :file="file"
+                    :width="field.thumbnailWidth"
+                    :height="field.thumbnailHeight"
                     :loading="loadingFileId === file.id"
                     :show-actions="showActions"
                     v-on="fileEvents"

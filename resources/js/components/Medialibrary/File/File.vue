@@ -1,6 +1,6 @@
 <template>
     <div class="card hoverable relative border border-50 overflow-hidden">
-        <FilePreview class="preview-width preview-height" :file="file"/>
+        <FilePreview class="preview-width preview-height" :file="file" :style="previewStyle"/>
 
         <div class="absolute pin-x pin-b bg-90-half text-sm text-white p-2" :class="{ 'text-danger': file.hasError }">
             <p class="truncate">
@@ -33,8 +33,19 @@ export default {
 
     props: {
         file: Object,
+        width: { type: String, required: false },
+        height: { type: String, required: false },
         loading: Boolean,
         showActions: Boolean,
+    },
+
+    computed: {
+        previewStyle () {
+            return this.width && this.height ? {
+                width: this.width,
+                height: this. height,
+            } : {}
+        }
     }
 }
 </script>

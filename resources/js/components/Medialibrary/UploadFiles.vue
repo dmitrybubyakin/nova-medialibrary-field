@@ -2,7 +2,14 @@
     <div>
         <div class="flex flex-wrap -m-2">
             <div v-for="file in files" class="p-2">
-                <File :file="file" :loading="file.loading" :show-actions="true" @delete="deleteFile(file)"/>
+                <File
+                    :file="file"
+                    :width="field.thumbnailWidth"
+                    :height="field.thumbnailHeight"
+                    :loading="file.loading"
+                    :show-actions="true"
+                    @delete="deleteFile(file)"
+                />
             </div>
         </div>
 
