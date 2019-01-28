@@ -22,6 +22,8 @@ With this package you can:
     - [Display media on the index view](#display-media-on-the-index-view)
     - [Custom media realation](#custom-media-realation)
     - [Thumbnail](#thumbnail)
+    - [Thumbnail title](#thumbnail-title)
+    - [Thumbnail description](#thumbnail-description)
     - [Single media collection](#single-media-collection)
     - [Store and Replace callbacks](#store-and-replace-callbacks)
     - [Validation](#validation)
@@ -144,6 +146,32 @@ You can override it:
 Medialibrary::make('Featured Image', 'featured')
     ->imageMimes('image', 'mimes', 'that', 'you', 'need')
     ->thumbnail(...)
+```
+
+### Thumbnail title
+
+```php
+Medialibrary::make('Featured Image', 'featured')
+    ->thumbnailTitle('custom_properties->title') // $media->file_name is uesd by default
+
+Medialibrary::make('Featured Image', 'featured')
+    ->thumbnailTitle(function (Media $media) {
+        return $media->name;
+    })
+```
+
+### Thumbnail description
+
+You can add a short description below the thumbnail title.
+
+```php
+Medialibrary::make('Featured Image', 'featured')
+    ->thumbnailDescription('custom_properties->description') // hidden by default
+
+Medialibrary::make('Featured Image', 'featured')
+    ->thumbnailDescription(function (Media $media) {
+        return 'Size: ' . $media->humanReadableSize;
+    })
 ```
 
 ### Single media collection

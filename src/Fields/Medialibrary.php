@@ -88,6 +88,20 @@ class Medialibrary extends Field
     public $thumbnailUrlCallback;
 
     /**
+     * The callback used to retrieve the thumbnail title.
+     *
+     * @var callable
+     */
+    public $thumbnailTitleCallback;
+
+    /**
+     * The callback used to retrieve the thumbnail description.
+     *
+     * @var callable
+     */
+    public $thumbnailDescriptionCallback;
+
+    /**
      * Resolve the media which should be shown on the index view.
      *
      * @var callable
@@ -109,6 +123,13 @@ class Medialibrary extends Field
     public $bigThumbnails = false;
 
     /**
+     * Indicates if the thumbnail description should be shown.
+     *
+     * @var bool
+     */
+    public $showThumbnailDescription = false;
+
+    /**
      * Available mime types for file input.
      *
      * @var string|null
@@ -126,6 +147,7 @@ class Medialibrary extends Field
             ->relation('media')
             ->collection($collection)
             ->thumbnail('')
+            ->thumbnailTitle('file_name')
             ->imageMimes('image/jpeg', 'image/gif', 'image/png')
             ->mediaOnIndex(1)
             ->exceptOnForms();
@@ -192,6 +214,41 @@ class Medialibrary extends Field
     }
 
     /**
+     * @param string|callable $thumbnail
+     *
+     * @return $this
+     */
+    public function thumbnailTitle($title): self
+    {
+        $this->guardThumbnailTitle($title);
+
+        $this->thumbnailTitleCallback = $this->callback($title, function (MediaModel $media) use ($title) {
+            return data_get($media, str_replace('->', '.', $title));
+        });
+
+        return $this;
+    }
+
+    /**
+     * @param string|callable $thumbnail
+     * @param int $limit
+     *
+     * @return $this
+     */
+    public function thumbnailDescription($description, int $limit = 100): self
+    {
+        $this->guardThumbnailDescription($description);
+
+        $this->showThumbnailDescription = true;
+
+        $this->thumbnailDescriptionCallback = $this->callback($description, function (MediaModel $media) use ($description, $limit) {
+            return str_limit(data_get($media, str_replace('->', '.', $description)), $limit);
+        });
+
+        return $this;
+    }
+
+    /**
      * @param int|callable $mediaOnIndex
      *
      * @return $this
@@ -246,16 +303,32 @@ class Medialibrary extends Field
     public function serializeMedia(MediaModel $media): array
     {
         return [
-            'id'                 => $media->id,
-            'order'              => $media->order_column,
-            'filename'           => $media->file_name,
-            'extension'          => $media->extension,
-            'downloadUrl'        => $media->getFullUrl(),
-            'thumbnailUrl'       => $this->isImage($media) ? call_user_func($this->thumbnailUrlCallback, $media) : null,
-            'authorizedToView'   => $this->authorizedTo('view', $media),
-            'authorizedToUpdate' => $this->authorizedTo('update', $media),
-            'authorizedToDelete' => $this->authorizedTo('delete', $media),
+            'id'                   => $media->id,
+            'order'                => $media->order_column,
+            'extension'            => $media->extension,
+            'downloadUrl'          => $media->getFullUrl(),
+            'thumbnailUrl'         => $this->resolveThumbnailUrl($media),
+            'thumbnailTitle'       => $this->resolveThumbnailTitle($media),
+            'thumbnailDescription' => $this->resolveThumbnailDescription($media),
+            'authorizedToView'     => $this->authorizedTo('view', $media),
+            'authorizedToUpdate'   => $this->authorizedTo('update', $media),
+            'authorizedToDelete'   => $this->authorizedTo('delete', $media),
         ];
+    }
+
+    protected function resolveThumbnailUrl(MediaModel $media): ?string
+    {
+        return $this->isImage($media) ? call_user_func($this->thumbnailUrlCallback, $media) : null;
+    }
+
+    protected function resolveThumbnailTitle(MediaModel $media): ?string
+    {
+        return call_user_func($this->thumbnailTitleCallback, $media);
+    }
+
+    protected function resolveThumbnailDescription(MediaModel $media): ?string
+    {
+        return $this->showThumbnailDescription ? call_user_func($this->thumbnailDescriptionCallback, $media) : null;
     }
 
     protected function authorizedTo(string $ability, MediaModel $media): bool
@@ -330,19 +403,43 @@ class Medialibrary extends Field
     protected function guardThumbnail($thumbnail): void
     {
         if (! is_callable($thumbnail) && ! is_string($thumbnail)) {
-            throw new InvalidArgumentException('Medialibrary::thumbnail: string or callable expected.');
+            $this->stringOrCallableExpected('thumbnail');
+        }
+    }
+
+    protected function guardThumbnailTitle($title): void
+    {
+        if (! is_callable($title) && ! is_string($title)) {
+            $this->stringOrCallableExpected('thumbnailTitle');
+        }
+    }
+
+    protected function guardThumbnailDescription($description): void
+    {
+        if (! is_callable($description) && ! is_string($description)) {
+            $this->stringOrCallableExpected('thumbnailDescription');
         }
     }
 
     protected function guardMediaOnIndex($mediaOnIndex): void
     {
         if (! is_callable($mediaOnIndex) && ! is_numeric($mediaOnIndex)) {
-            throw new InvalidArgumentException('Medialibrary::mediaOnIndex: integer or callable expected.');
+            $this->invalidArgument('mediaOnIndex', 'integer or callable expected');
         }
 
         if (is_numeric($mediaOnIndex) && (int) $mediaOnIndex <= 0) {
-            throw new InvalidArgumentException('Medialibrary::mediaOnIndex: the number of media must be positive.');
+            $this->invalidArgument('mediaOnIndex', 'the number of media must be positive');
         }
+    }
+
+    protected function stringOrCallableExpected(string $method): void
+    {
+        $this->invalidArgument($method, 'string or callable expected');
+    }
+
+    protected function invalidArgument(string $method, string $message): void
+    {
+        throw new InvalidArgumentException("Medialibrary::{$method}: {$message}.");
     }
 
     protected function callback($value, callable $default): callable

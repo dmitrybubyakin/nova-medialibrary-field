@@ -87,9 +87,9 @@ export default {
                 uploadingFailed: false,
                 id: Math.random().toString(36).substr(-8),
                 size: file.size,
-                filename: file.name,
                 extension: file.name.split('.').pop(),
                 thumbnailUrl: null,
+                thumbnailTitle: file.name,
                 authorizedToDelete: true,
             }
         },
@@ -131,7 +131,7 @@ export default {
 
                 this.deleteFile(file)
 
-                this.info(`File :filename was uploaded!`, { filename: data.filename })
+                this.info(`File :thumbnailTitle was uploaded!`, { thumbnailTitle: data.thumbnailTitle })
 
                 Nova.$emit(`medialibrary:uploaded-to-${this.field.collectionName}`, data)
             } catch ({ response }) {
@@ -145,10 +145,10 @@ export default {
             file.loading = false
         },
 
-        handleValidationErrors ({ filename }, { response }) {
+        handleValidationErrors ({ thumbnailTitle }, { response }) {
             const errors = new Errors(response.data.errors)
 
-            this.error(`${filename}: ${errors.first('file')}`, {}, {
+            this.error(`${thumbnailTitle}: ${errors.first('file')}`, {}, {
                 duration: null,
                 action: { text : 'OK', onClick : (e, toast) => toast.goAway(0)}
             })

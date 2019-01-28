@@ -2,8 +2,13 @@
     <div class="card hoverable relative border border-50 overflow-hidden">
         <FilePreview class="preview-width preview-height" :file="file"/>
 
-        <div class="absolute pin-x pin-b bg-90-half text-sm text-white p-2 truncate" :class="{ 'text-danger': file.hasError }">
-            {{ file.filename }}
+        <div class="absolute pin-x pin-b bg-90-half text-sm text-white p-2" :class="{ 'text-danger': file.hasError }">
+            <p class="truncate">
+                {{ file.thumbnailTitle }}
+            </p>
+            <p v-if="file.thumbnailDescription" class="pt-1 text-xs">
+                {{ file.thumbnailDescription }}
+            </p>
         </div>
 
         <div v-if="loading" class="absolute pin bg-90-half flex items-center justify-center">
