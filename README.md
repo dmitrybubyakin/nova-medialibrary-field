@@ -8,7 +8,7 @@ Laravel Nova field for managing the Spatie media library.
 
 With this package you can:
 
- - create, update, delete and sort you media files
+ - create, update, delete and sort your media files
  - update media attributes (filename, custom properties, etc)
  - display media on the index view
 
@@ -134,14 +134,16 @@ Medialibrary::make('Featured Image', 'featured')
         return 'https://dummyimage.com/300x300/ffffff/000000&text=' . strtoupper($media->extension);
     }),
 
+// The default width of a thumbnail is 8 rem.
+// The bigThumbnails method makes a singular thumbnail twice  as wide as the default.
 Medialibrary::make('Featured Image', 'featured')
     ->thumbnail('thumbnailConversion')
-    ->bigThumbnails(), // there are 8rem width for thumbnails by default. bigThumbnails makes them 2x larger
+    ->bigThumbnails(),
 ```
 
-By default, thumbnails are available only for files which mime in `[image/jpeg, image/gif', image/png]`.
+By default, thumbnails are available only for the files with one of the following mime types: `[image/jpeg, image/gif', image/png]`.
 
-You can override it:
+This is how you can override the default setting:
 
 ```php
 Medialibrary::make('Featured Image', 'featured')
@@ -200,7 +202,7 @@ Medialibrary::make('Featured Image', 'featured'), // nothing to do here
 
 ### Store and Replace callbacks
 
-If you want to do someting before media saved, you can use `storeUsing` method. It accepts `FileAdder $fileAdder` as an argument (and must return it).
+If you want to do someting before media is saved, you can use `storeUsing` method.
 
 ```php
 Medialibrary::make('Images', 'post_images')
@@ -209,7 +211,7 @@ Medialibrary::make('Images', 'post_images')
     })
 ```
 
-When you are using a single media collection, you can also use `replaceUsing` method, which allows to you access to an old media.
+When you are using a single media collection, you can also use `replaceUsing` method which allows you to access the old media.
 
 ```php
 Medialibrary::make('Featured Image', 'featured')
@@ -222,7 +224,7 @@ Medialibrary::make('Featured Image', 'featured')
 
 ### Validation
 
-Validation works only when you store a new file.
+Validation works only when you are storing a new file.
 
 ```php
 Medialibrary::make('Featured Image', 'featured')
@@ -275,7 +277,9 @@ class Post extends Resource
 
 ### Authorization Gates 'view', 'update' and 'delete'
 
-To view, update and delete uploaded media, you need to setup some gates. You can use the store and replace callbacks to store additional information to the custom_properties, what can be used inside the gates for authorization.
+To view, update and delete uploaded media, you need to setup some gates.
+You can use the store and replace callbacks to store additional information to the custom_properties.
+The additional information can be used inside the gates for authorization.
 
 ```php
 Gate::define('view', function ($user, $media) {
@@ -326,7 +330,7 @@ class AuthServiceProvider extends ServiceProvider
 
 ## Changelog
 
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+Please see the [CHANGELOG](CHANGELOG.md) for more information about the most recent changed.
 
 ## Alternatives
 
