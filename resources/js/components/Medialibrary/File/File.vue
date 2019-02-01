@@ -55,7 +55,7 @@ export default {
         },
 
         visibleLabels () {
-            return this.file.labels.filter(label => label.visible)
+            return (this.file.labels || []).filter(label => label.visible)
         }
     }
 }
