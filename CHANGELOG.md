@@ -42,3 +42,9 @@
 
 - Possibility to customize the thumbnail title and show a short thumbnail description text
 - Possibility to customize the thumbnail size
+
+## [1.1.6 (2019-02-01)](https://github.com/dmitrybubyakin/nova-medialibrary-field/compare/1.1.6...1.1.7)
+
+### Added
+
+- Possibility to display labels
