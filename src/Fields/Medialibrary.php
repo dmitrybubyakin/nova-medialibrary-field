@@ -213,7 +213,7 @@ class Medialibrary extends Field
      */
     public function thumbnail($thumbnail): self
     {
-        $this->guardThumbnail($thumbnail);
+        $this->validateStringOrCallable($thumbnail, __METHOD__);
 
         $this->thumbnailUrlCallback = $this->callback($thumbnail, function (MediaModel $media) use ($thumbnail) {
             return $media->getFullUrl($thumbnail);
@@ -229,7 +229,7 @@ class Medialibrary extends Field
      */
     public function thumbnailTitle($title): self
     {
-        $this->guardThumbnailTitle($title);
+        $this->validateStringOrCallable($title, __METHOD__);
 
         $this->thumbnailTitleCallback = $this->callback($title, function (MediaModel $media) use ($title) {
             return data_get($media, str_replace('->', '.', $title));
@@ -246,7 +246,7 @@ class Medialibrary extends Field
      */
     public function thumbnailDescription($description, int $limit = 100): self
     {
-        $this->guardThumbnailDescription($description);
+        $this->validateStringOrCallable($description, __METHOD__);
 
         $this->showThumbnailDescription = true;
 
@@ -267,7 +267,7 @@ class Medialibrary extends Field
      */
     public function label(string $title, $condition, $trueColor = 'var(--success)', $falseColor = 'var(--danger)'): self
     {
-        $this->guardLabelCondition($condition);
+        $this->validateStringOrCallable($condition, __METHOD__);
 
         $resolver = $this->callback($condition, function (MediaModel $media) use ($condition) {
             return data_get($media, str_replace('->', '.', $condition));
@@ -444,31 +444,10 @@ class Medialibrary extends Field
                 });
     }
 
-    protected function guardThumbnail($thumbnail): void
+    protected function validateStringOrCallable($value, string $method)
     {
-        if (! is_callable($thumbnail) && ! is_string($thumbnail)) {
-            $this->stringOrCallableExpected('thumbnail');
-        }
-    }
-
-    protected function guardThumbnailTitle($title): void
-    {
-        if (! is_callable($title) && ! is_string($title)) {
-            $this->stringOrCallableExpected('thumbnailTitle');
-        }
-    }
-
-    protected function guardThumbnailDescription($description): void
-    {
-        if (! is_callable($description) && ! is_string($description)) {
-            $this->stringOrCallableExpected('thumbnailDescription');
-        }
-    }
-
-    protected function guardLabelCondition($condition): void
-    {
-        if (! is_callable($condition) && ! is_string($condition)) {
-            $this->stringOrCallableExpected('label');
+        if (! is_callable($value) && ! is_string($value)) {
+            $this->invalidArgument($method, 'string or callable expected');
         }
     }
 
@@ -481,11 +460,6 @@ class Medialibrary extends Field
         if (is_numeric($mediaOnIndex) && (int) $mediaOnIndex <= 0) {
             $this->invalidArgument('mediaOnIndex', 'the number of media must be positive');
         }
-    }
-
-    protected function stringOrCallableExpected(string $method): void
-    {
-        $this->invalidArgument($method, 'string or callable expected');
     }
 
     protected function invalidArgument(string $method, string $message): void
