@@ -24,7 +24,7 @@ class Label
         $condition = (bool) call_user_func($this->resolver, $media);
 
         $visible = is_string($this->trueColor) && $condition ||
-                is_string($this->falseColor) && !$condition ||
+                is_string($this->falseColor) && ! $condition ||
                 is_string($this->trueColor) && is_string($this->falseColor);
 
         return [
