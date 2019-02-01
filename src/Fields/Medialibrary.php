@@ -9,6 +9,7 @@ use InvalidArgumentException;
 use Laravel\Nova\Fields\Field;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
+use DmitryBubyakin\NovaMedialibraryField\Label;
 use Spatie\MediaLibrary\Models\Media as MediaModel;
 use DmitryBubyakin\NovaMedialibraryField\Resources\Media as MediaResource;
 
@@ -102,6 +103,13 @@ class Medialibrary extends Field
     public $thumbnailDescriptionCallback;
 
     /**
+     * The thumbnail labels.
+     *
+     * @var \Illuminate\Support\Collection
+     */
+    public $labels;
+
+    /**
      * Resolve the media which should be shown on the index view.
      *
      * @var callable
@@ -142,6 +150,7 @@ class Medialibrary extends Field
 
         $this->resourceClass = $resource;
         $this->resourceName = $resource::uriKey();
+        $this->labels = collect();
 
         $this
             ->relation('media')
@@ -249,6 +258,27 @@ class Medialibrary extends Field
     }
 
     /**
+     * @param  string $title
+     * @param  string|callable $condition
+     * @param  string|null $trueColor
+     * @param  string|null $falseColor
+     *
+     * @return $this
+     */
+    public function label(string $title, $condition, $trueColor = 'var(--success)', $falseColor = 'var(--danger)'): self
+    {
+        $this->guardLabelCondition($condition);
+
+        $resolver = $this->callback($condition, function (MediaModel $media) use ($condition) {
+            return data_get($media, str_replace('->', '.', $condition));
+        });
+
+        $this->labels[] = new Label($title, $resolver, $trueColor, $falseColor);
+
+        return $this;
+    }
+
+    /**
      * @param int|callable $mediaOnIndex
      *
      * @return $this
@@ -315,6 +345,7 @@ class Medialibrary extends Field
             'order'                => $media->order_column,
             'extension'            => $media->extension,
             'downloadUrl'          => $media->getFullUrl(),
+            'labels'               => $this->resolveLabels($media),
             'thumbnailUrl'         => $this->resolveThumbnailUrl($media),
             'thumbnailTitle'       => $this->resolveThumbnailTitle($media),
             'thumbnailDescription' => $this->resolveThumbnailDescription($media),
@@ -322,6 +353,11 @@ class Medialibrary extends Field
             'authorizedToUpdate'   => $this->authorizedTo('update', $media),
             'authorizedToDelete'   => $this->authorizedTo('delete', $media),
         ];
+    }
+
+    protected function resolveLabels(MediaModel $media): array
+    {
+        return $this->labels->map->resolve($media)->all();
     }
 
     protected function resolveThumbnailUrl(MediaModel $media): ?string
@@ -426,6 +462,13 @@ class Medialibrary extends Field
     {
         if (! is_callable($description) && ! is_string($description)) {
             $this->stringOrCallableExpected('thumbnailDescription');
+        }
+    }
+
+    protected function guardLabelCondition($condition): void
+    {
+        if (! is_callable($condition) && ! is_string($condition)) {
+            $this->stringOrCallableExpected('label');
         }
     }
 

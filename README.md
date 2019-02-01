@@ -21,6 +21,7 @@ With this package you can:
     - [What about forms?](#what-about-forms)
     - [Display media on the index view](#display-media-on-the-index-view)
     - [Custom media realation](#custom-media-realation)
+    - [Labels](#labels)
     - [Thumbnail](#thumbnail)
     - [Thumbnail size](#thumbnail-size)
     - [Thumbnail title](#thumbnail-title)
@@ -121,6 +122,19 @@ class Post extends Model implements HasMedia
 
 Medialibrary::make('Featured Image', 'featured')
     ->relation('featuredMedia'),
+```
+
+### Labels
+
+```php
+Medialibrary::make('Awesome Media', 'awesome_collection')
+    ->label($title, $condition, $trueColor = 'var(--success)', $falseColor = 'var(--danger)'),
+    ->label('Active', 'custom_properties->active'),
+    ->label('Active', 'custom_properties->active', 'var(--success)', null), // visible only when the condition is true
+    ->label('Active', 'custom_properties->active', null, 'var(--danger)'), // visible only when the condition is false
+    ->label('Size > 1MB', function (Media $media) {
+        return $media->size >= 1024 * 1024;
+    }),
 ```
 
 ### Thumbnail

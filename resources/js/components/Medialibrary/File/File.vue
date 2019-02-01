@@ -11,6 +11,13 @@
             </p>
         </div>
 
+        <div v-if="visibleLabels.length" class="absolute pin-l pin-t p-2 z-10 flex flex-col">
+            <div v-for="label in visibleLabels" class="inline-block rounded-full w-3 h-3 border-2 border-white-50%  mb-1"
+                :style="{ backgroundColor: label.color }"
+                :title="label.title"
+            ></div>
+        </div>
+
         <div v-if="loading" class="absolute pin bg-90-half flex items-center justify-center">
             <loader class="text-white" />
         </div>
@@ -45,6 +52,10 @@ export default {
                 width: this.width,
                 height: this. height,
             } : {}
+        },
+
+        visibleLabels () {
+            return this.file.labels.filter(label => label.visible)
         }
     }
 }
