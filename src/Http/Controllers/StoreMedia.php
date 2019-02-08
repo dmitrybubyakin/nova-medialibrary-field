@@ -3,7 +3,6 @@
 namespace DmitryBubyakin\NovaMedialibraryField\Http\Controllers;
 
 use Laravel\Nova\Nova;
-use Laravel\Nova\Fields\Field;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Resources\MergeValue;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
@@ -54,7 +53,7 @@ class StoreMedia
             return $field instanceof MergeValue ? $field->data : $field;
         })->flatten();
 
-        return $fields->first(function (Field $field) use ($request) {
+        return $fields->first(function ($field) use ($request) {
             return $field instanceof Medialibrary && $field->collectionName == $request->collection;
         });
     }
