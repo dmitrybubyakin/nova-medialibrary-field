@@ -52,7 +52,7 @@ class StoreMedia
 
         $fields = collect((new $parentResource($parent))->fields($request))->map(function ($field) {
             return $field instanceof MergeValue ? $field->data : $field;
-        })->flatten();
+        })->flatten()->whereInstanceOf(Field::class);
 
         return $fields->first(function (Field $field) use ($request) {
             return $field instanceof Medialibrary && $field->collectionName == $request->collection;
