@@ -48,3 +48,9 @@
 ### Added
 
 - Possibility to display labels
+
+## [1.1.8 (2019-02-09)](https://github.com/dmitrybubyakin/nova-medialibrary-field/compare/1.1.7...1.1.8)
+
+### Fixed
+
+- Ignore MissingValue ([f20bf3d](https://github.com/dmitrybubyakin/nova-medialibrary-field/commit/f20bf3d))
