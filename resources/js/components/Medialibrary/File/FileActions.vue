@@ -9,6 +9,10 @@
                 <icon type="edit" view-box="0 0 20 20" width="16" height="16"/>
             </button>
 
+            <button v-if="file.croppable" :class="actionButtonClass" @click="handleCrop">
+                <icon type="crop" view-box="0 0 561 561" width="18" height="18"/>
+            </button>
+
             <button v-if="file.authorizedToDelete" :class="actionButtonClass" @click="handleDelete">
                 <icon type="delete" view-box="0 0 20 20" width="16" height="16"/>
             </button>
@@ -46,6 +50,10 @@ export default {
 
         handleDelete () {
             this.$emit('delete')
+        },
+
+        handleCrop () {
+            this.$emit('crop')
         }
     }
 }

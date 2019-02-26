@@ -9,6 +9,7 @@
                     :loading="file.loading"
                     :show-actions="true"
                     @delete="deleteFile(file)"
+                    @crop="openCropModal(file)"
                 />
             </div>
         </div>
@@ -32,14 +33,22 @@
                 {{ __('Upload') }}
             </progress-button>
         </div>
+
+        <portal to="modals">
+            <transition name="fade">
+                <CropModal v-if="cropModalOpen" :file="fileToBeCropped" @close="closeCropModal" @crop="handleCrop"/>
+            </transition>
+        </portal>
     </div>
 </template>
 
 <script>
 import File from './File/File'
+import CropModal from './Modal/CropModal'
 import { Toasted } from '../../mixins'
 import { storeFile } from '../../api'
 import { Errors } from 'laravel-nova'
+import objectToFormData from 'object-to-formdata'
 
 export default {
     mixins: [Toasted],
@@ -48,19 +57,27 @@ export default {
         field: Object,
     },
 
-    components: { File },
+    components: {
+        File,
+        CropModal,
+    },
 
     data () {
         return {
             files: [],
             uploading: false,
             showFileInput: true,
+            fileToBeCropped: null,
         }
     },
 
     computed: {
         fileToBeUploaded () {
             return this.files.filter(file => !file.uploadingFailed)[0]
+        },
+
+        cropModalOpen () {
+            return !!this.fileToBeCropped
         }
     },
 
@@ -91,6 +108,9 @@ export default {
             return {
                 file,
                 loading: false,
+                croppable: this.isCroppable(file),
+                cropperData: null,
+                cropperOriginalUrl: null,
                 uploadingFailed: false,
                 id: Math.random().toString(36).substr(-8),
                 size: file.size,
@@ -101,8 +121,37 @@ export default {
             }
         },
 
+        openCropModal (file) {
+            if (! file.cropperOriginalUrl) {
+                file.cropperOriginalUrl = file.thumbnailUrl
+            }
+
+            this.fileToBeCropped = file
+        },
+
+        closeCropModal () {
+            this.fileToBeCropped = null
+        },
+
+        handleCrop ({ data, url }) {
+            if (this.fileToBeCropped) {
+                this.fileToBeCropped.cropperData = data
+                this.fileToBeCropped.thumbnailUrl = url
+            }
+
+            this.closeCropModal()
+        },
+
+        isImage (file) {
+            return /^image/.test(file.type)
+        },
+
+        isCroppable (file) {
+            return this.field.croppable && this.isImage(file)
+        },
+
         loadFileThumbnailUrl (file) {
-            if (! /^image/.test(file.file.type)) {
+            if (! this.isImage(file.file)) {
                 return
             }
 
@@ -146,6 +195,8 @@ export default {
 
                 if (response.status === 422) {
                     this.handleValidationErrors(file, { response })
+                } else {
+                    Nova.$emit('error', (response.data && response.data.message) || this.__('Something went wrong'))
                 }
             }
 
@@ -162,16 +213,15 @@ export default {
         },
 
         fileToFormData (file) {
-            const formData = new FormData()
-
-            formData.append('file', file.file)
-            formData.append('resource', this.field.resourceName)
-            formData.append('collection', this.field.collectionName)
-            formData.append('viaResource', this.$route.params.resourceName)
-            formData.append('viaResourceId', this.$route.params.resourceId)
-            formData.append('viaRelationship', this.field.relationName)
-
-            return formData
+            return objectToFormData({
+                file: file.file,
+                cropperData: file.cropperData,
+                resource: this.field.resourceName,
+                collection: this.field.collectionName,
+                viaResource: this.$route.params.resourceName,
+                viaResourceId: this.$route.params.resourceId,
+                viaRelationship: this.field.relationName,
+            })
         }
     }
 }

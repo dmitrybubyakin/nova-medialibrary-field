@@ -144,6 +144,13 @@ class Medialibrary extends Field
      */
     public $accept;
 
+    /**
+     * Indicates if the image is croppable.
+     *
+     * @var bool
+     */
+    public $croppable = false;
+
     public function __construct(string $name = 'Media', string $collection = 'default', string $resource = MediaResource::class)
     {
         parent::__construct($name);
@@ -310,6 +317,13 @@ class Medialibrary extends Field
         return $this;
     }
 
+    public function croppable(): self
+    {
+        $this->croppable = true;
+
+        return $this;
+    }
+
     public function thumbnailSize(string $width, ?string $height = null): self
     {
         return $this->withMeta([
@@ -384,6 +398,7 @@ class Medialibrary extends Field
     {
         return array_merge([
             'accept'         => $this->accept,
+            'croppable'      => $this->croppable,
             'bigThumbnails'  => $this->bigThumbnails,
             'mediaSortable'  => $this->mediaSortable,
             'collectionName' => $this->collectionName,

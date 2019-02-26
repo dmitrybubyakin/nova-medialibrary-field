@@ -3,6 +3,7 @@
 namespace DmitryBubyakin\NovaMedialibraryField\Http\Controllers;
 
 use Laravel\Nova\Nova;
+use Spatie\Image\Image;
 use Laravel\Nova\Fields\Field;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Resources\MergeValue;
@@ -23,6 +24,10 @@ class StoreMedia
         $request->validate(['file' => $field->rules]);
 
         return DB::transaction(function () use ($parent, $field, $request) {
+            if ($field->croppable && $request->cropperData) {
+                $this->cropImage($request->file, $request->cropperData);
+            }
+
             $fileAdder = $parent->addMediaFromRequest('file');
             $collection = $field->collectionName;
 
@@ -57,5 +62,15 @@ class StoreMedia
         return $fields->first(function (Field $field) use ($request) {
             return $field instanceof Medialibrary && $field->collectionName == $request->collection;
         });
+    }
+
+    public function cropImage(string $pathToImage, array $data): void
+    {
+        Image::load($pathToImage)->manualCrop(
+            $data['width'],
+            $data['height'],
+            $data['x'],
+            $data['y']
+        )->save();
     }
 }

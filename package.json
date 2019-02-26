@@ -15,7 +15,9 @@
         "laravel-nova": "^1.0"
     },
     "dependencies": {
+        "object-to-formdata": "^1.6.3",
         "vue": "^2.5.0",
+        "vue-cropperjs": "^3.0.0",
         "vuedraggable": "^2.17.0"
     }
 }
