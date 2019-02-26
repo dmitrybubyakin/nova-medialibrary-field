@@ -11,6 +11,7 @@ With this package you can:
  - create, update, delete and sort your media files
  - update media attributes (filename, custom properties, etc)
  - display media on the index view
+ - crop images
 
 ## Contents
 
@@ -21,6 +22,7 @@ With this package you can:
     - [What about forms?](#what-about-forms)
     - [Display media on the index view](#display-media-on-the-index-view)
     - [Custom media realation](#custom-media-realation)
+    - [Crop](#crop)
     - [Labels](#labels)
     - [Thumbnail](#thumbnail)
     - [Thumbnail size](#thumbnail-size)
@@ -122,6 +124,12 @@ class Post extends Model implements HasMedia
 
 Medialibrary::make('Featured Image', 'featured')
     ->relation('featuredMedia'),
+```
+
+### Crop
+
+```php
+Medialibrary::make('Featured Image', 'featured')->croppable(),
 ```
 
 ### Labels
