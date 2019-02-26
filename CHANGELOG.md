@@ -54,3 +54,9 @@
 ### Fixed
 
 - Ignore MissingValue ([f20bf3d](https://github.com/dmitrybubyakin/nova-medialibrary-field/commit/f20bf3d))
+
+## [1.1.9 (2019-02-26)](https://github.com/dmitrybubyakin/nova-medialibrary-field/compare/1.1.8...1.1.9)
+
+### Added
+
+- Possibility to crop images
