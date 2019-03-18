@@ -124,13 +124,6 @@ class Medialibrary extends Field
     public $textAlign = 'center';
 
     /**
-     * Indicates if thumbnails should be big.
-     *
-     * @var bool
-     */
-    public $bigThumbnails = false;
-
-    /**
      * Indicates if the thumbnail description should be shown.
      *
      * @var bool
@@ -303,13 +296,6 @@ class Medialibrary extends Field
         return $this;
     }
 
-    public function bigThumbnails(): self
-    {
-        $this->bigThumbnails = true;
-
-        return $this;
-    }
-
     public function accept(string $accept): self
     {
         $this->accept = $accept;
@@ -399,7 +385,6 @@ class Medialibrary extends Field
         return array_merge([
             'accept'         => $this->accept,
             'croppable'      => $this->croppable,
-            'bigThumbnails'  => $this->bigThumbnails,
             'mediaSortable'  => $this->mediaSortable,
             'collectionName' => $this->collectionName,
             'resourceName'   => $this->resourceName,

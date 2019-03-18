@@ -1,5 +1,5 @@
 <template>
-    <div :class="{ 'big-thumbnails': field.bigThumbnails }">
+    <div>
 
         <SortFiles :files="sortedFiles" @sort="handleSort" :disabled="sortingDisabled" class="flex flex-wrap -m-2">
             <Resource v-for="file in sortedFiles" :file="file" :key="file.id" :field="field" class="p-2" @refresh="refresh">

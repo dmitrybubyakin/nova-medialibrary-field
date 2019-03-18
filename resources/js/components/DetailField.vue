@@ -1,5 +1,5 @@
 <template>
-    <panel-item :field="field" class="medialibrary-detail-field">
+    <panel-item :field="field" class="medialibrary-field">
         <Medialibrary slot="value" :field="field"/>
     </panel-item>
 </template>

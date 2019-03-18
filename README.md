@@ -155,12 +155,6 @@ Medialibrary::make('Featured Image', 'featured')
     ->thumbnail(function (Media $media) {
         return 'https://dummyimage.com/300x300/ffffff/000000&text=' . strtoupper($media->extension);
     }),
-
-// The default width of a thumbnail is 8 rem.
-// The bigThumbnails method makes a singular thumbnail twice  as wide as the default.
-Medialibrary::make('Featured Image', 'featured')
-    ->thumbnail('thumbnailConversion')
-    ->bigThumbnails(),
 ```
 
 By default, thumbnails are available only for the files with one of the following mime types: `[image/jpeg, image/gif', image/png]`.
