@@ -109,31 +109,17 @@ export default {
 
         resourceUpdated () {
             this.closeUpdateModal()
-            this.refreshPanel()
+            this.refresh()
         },
 
         resourceDeleted () {
             this.closeDeleteModal()
             this.closeDetailModal()
-            this.refreshPanel()
+            this.refresh()
         },
 
-        async refreshPanel () {
-            // Is there a better way?
-
-            const detailComponent = this.$root.$children.filter(
-                component => typeof component['initializeComponent'] === 'function'
-            )[0]
-
-            if (detailComponent) {
-                let scrollY = window.scrollY
-
-                await detailComponent.getResource()
-
-                this.$nextTick(() => window.scrollTo(0, scrollY))
-            } else {
-                location.reload()
-            }
+        refresh () {
+            this.$emit('refresh')
         }
     }
 }

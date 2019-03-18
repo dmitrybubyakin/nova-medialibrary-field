@@ -189,7 +189,7 @@ export default {
 
                 this.info(`File :thumbnailTitle was uploaded!`, { thumbnailTitle: data.thumbnailTitle })
 
-                Nova.$emit(`medialibrary:uploaded-to-${this.field.collectionName}`, data)
+                this.$emit('refresh')
             } catch ({ response }) {
                 file.uploadingFailed = true
 
