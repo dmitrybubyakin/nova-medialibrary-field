@@ -9,6 +9,7 @@
                         :resource-name="resourceName"
                         :resource-id="resourceId"
                         :resource="resource"
+                        :readonly="readonly"
                         @close="closeDetailModal"
                         @update="openUpdateModal"
                         @delete="openDeleteModal"
@@ -56,6 +57,7 @@ export default {
     props: {
         file: Object,
         field: Object,
+        readonly: Boolean,
     },
 
     mixins: [Detail, Update, Delete, Toasted],

@@ -13,7 +13,7 @@ export default {
         },
 
         sortingDisabled () {
-            return ! this.field.mediaSortable
+            return ! this.field.mediaSortable || this.readonly
         }
     },
 

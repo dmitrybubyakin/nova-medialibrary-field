@@ -1,8 +1,12 @@
 <template>
     <div>
-
         <SortFiles :files="sortedFiles" @sort="handleSort" :disabled="sortingDisabled" class="flex flex-wrap -m-2">
-            <Resource v-for="file in sortedFiles" :file="file" :key="file.id" :field="field" class="p-2" @refresh="refresh">
+            <Resource v-for="file in sortedFiles" :key="file.id" class="p-2"
+                :file="file"
+                :field="field"
+                :readonly="readonly"
+                @refresh="refresh"
+            >
                 <File slot-scope="{ file, fileEvents }"
                     :file="file"
                     :width="field.thumbnailWidth"
@@ -14,10 +18,11 @@
             </Resource>
         </SortFiles>
 
-        <div v-if="files.length" class="border-b border-40 my-4"></div>
-        <div v-else class="my-2"></div>
+        <template v-if="! readonly">
+            <div :class="files.length ? 'border-b border-40 my-4' : 'my-2'"></div>
 
-        <UploadFiles :field="field" @refresh="refresh"/>
+            <UploadFiles :field="field" @refresh="refresh"/>
+        </template>
     </div>
 </template>
 
@@ -40,6 +45,7 @@ export default {
 
     props: {
         field: Object,
+        readonly: Boolean,
     },
 
     data () {
@@ -73,7 +79,12 @@ export default {
 
     methods: {
         handleFieldUpdate ({ value }) {
-            this.fieldFiles = value || []
+            this.fieldFiles = (value || []).map(file => {
+                file.authorizedToDelete = !this.readonly && file.authorizedToDelete
+                file.authorizedToUpdate = !this.readonly && file.authorizedToUpdate
+
+                return file
+            })
         },
 
         async refresh () {

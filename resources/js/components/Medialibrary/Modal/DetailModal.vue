@@ -6,8 +6,7 @@
                     <h4 class="text-90 font-normal text-2xl flex-no-shrink">{{ resource.id.panel }}</h4>
 
                     <div class="ml-3 w-full flex items-center justify-end">
-                        <button
-                            v-if="resource.authorizedToDelete"
+                        <button v-if="authorizedToDelete"
                             class="btn btn-default btn-icon btn-white"
                             @click="handleDelete"
                             :title="__('Delete')"
@@ -15,8 +14,7 @@
                             <icon type="delete" class="text-80"/>
                         </button>
 
-                        <button
-                            v-if="resource.authorizedToUpdate"
+                        <button v-if="authorizedToUpdate"
                             class="btn btn-default btn-icon bg-primary ml-3"
                             @click="handleUpdate"
                             :title="__('Edit')"
@@ -48,6 +46,17 @@ export default {
         resourceName: String,
         resourceId: Number,
         resource: Object,
+        readonly: Boolean,
+    },
+
+    computed: {
+        authorizedToDelete () {
+            return this.resource.authorizedToDelete && ! this.readonly
+        },
+
+        authorizedToUpdate () {
+            return this.resource.authorizedToUpdate && ! this.readonly
+        },
     },
 
     methods: {
