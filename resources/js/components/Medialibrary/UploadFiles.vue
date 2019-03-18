@@ -25,11 +25,7 @@
                 {{ __('Choose Files') }}
             </label>
 
-            <progress-button v-if="fileToBeUploaded" class="ml-3"
-                :disabled="uploading"
-                :processing="uploading"
-                @click.native="uploadFiles"
-            >
+            <progress-button v-if="fileToBeUploaded" class="ml-3" :disabled="uploading" :processing="uploading" @click.native="uploadFiles">
                 {{ __('Upload') }}
             </progress-button>
         </div>

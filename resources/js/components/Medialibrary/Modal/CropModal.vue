@@ -8,11 +8,7 @@
             </div>
 
             <div class="bg-30 flex px-8 py-4">
-                <button
-                    class="btn text-80 font-normal h-9 px-3 ml-auto mr-3 btn-link"
-                    type="button"
-                    @click.prevent="handleClose"
-                >
+                <button type="button" class="btn text-80 font-normal h-9 px-3 ml-auto mr-3 btn-link" @click.prevent="handleClose">
                     {{__('Cancel')}}
                 </button>
 

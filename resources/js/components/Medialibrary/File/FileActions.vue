@@ -1,19 +1,19 @@
 <template>
     <div class="hidden card-hover:flex flex-col justify-center">
         <div v-if="showActions" class="absolute pin-t pin-x p-2 flex justify-end">
-            <button v-if="file.authorizedToView" :class="actionButtonClass" @click="handleView">
+            <button v-if="file.authorizedToView" type="button" :class="actionButtonClass" @click="handleView">
                 <icon type="view" view-box="0 0 22 14" width="20" height="16"/>
             </button>
 
-            <button v-if="file.authorizedToUpdate" :class="actionButtonClass" @click="handleUpdate">
+            <button v-if="file.authorizedToUpdate" type="button" :class="actionButtonClass" @click="handleUpdate">
                 <icon type="edit" view-box="0 0 20 20" width="16" height="16"/>
             </button>
 
-            <button v-if="file.croppable" :class="actionButtonClass" @click="handleCrop">
+            <button v-if="file.croppable" type="button" :class="actionButtonClass" @click="handleCrop">
                 <icon type="crop" view-box="0 0 561 561" width="18" height="18"/>
             </button>
 
-            <button v-if="file.authorizedToDelete" :class="actionButtonClass" @click="handleDelete">
+            <button v-if="file.authorizedToDelete" type="button" :class="actionButtonClass" @click="handleDelete">
                 <icon type="delete" view-box="0 0 20 20" width="16" height="16"/>
             </button>
         </div>

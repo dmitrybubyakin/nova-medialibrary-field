@@ -6,19 +6,11 @@
                     <h4 class="text-90 font-normal text-2xl flex-no-shrink">{{ resource.id.panel }}</h4>
 
                     <div class="ml-3 w-full flex items-center justify-end">
-                        <button v-if="authorizedToDelete"
-                            class="btn btn-default btn-icon btn-white"
-                            @click="handleDelete"
-                            :title="__('Delete')"
-                        >
+                        <button v-if="authorizedToDelete" type="button" class="btn btn-default btn-icon btn-white" :title="__('Delete')" @click="handleDelete">
                             <icon type="delete" class="text-80"/>
                         </button>
 
-                        <button v-if="authorizedToUpdate"
-                            class="btn btn-default btn-icon bg-primary ml-3"
-                            @click="handleUpdate"
-                            :title="__('Edit')"
-                        >
+                        <button v-if="authorizedToUpdate" type="button" class="btn btn-default btn-icon bg-primary ml-3" :title="__('Edit')" @click="handleUpdate">
                             <icon type="edit" class="text-white" style="margin-top: -2px; margin-left: 3px"/>
                         </button>
                     </div>

@@ -17,19 +17,11 @@
                 </div>
 
                 <div class="bg-30 flex px-8 py-4">
-                    <button
-                        class="btn text-80 font-normal h-9 px-3 ml-auto mr-3 btn-link"
-                        type="button"
-                        @click.prevent="handleClose"
-                    >
+                    <button type="button" class="btn text-80 font-normal h-9 px-3 ml-auto mr-3 btn-link" @click.prevent="handleClose">
                         {{__('Cancel')}}
                     </button>
 
-                    <progress-button
-                        type="submit"
-                        :disabled="processing"
-                        :processing="processing"
-                    >
+                    <progress-button type="submit" :disabled="processing" :processing="processing">
                         {{ __('Update') }} {{ singularName }}
                     </progress-button>
                 </div>
