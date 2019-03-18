@@ -2,7 +2,7 @@
     <div class="card hoverable relative border border-50 overflow-hidden">
         <FilePreview class="preview-width preview-height" :file="file" :style="previewStyle"/>
 
-        <div class="absolute pin-x pin-b bg-90-half text-sm text-white p-2" :class="{ 'text-danger': file.hasError }">
+        <div class="absolute pin-x pin-b bg-90-half text-sm text-white p-2" :class="{ 'text-danger': file.uploadingFailed }">
             <p class="truncate">
                 {{ file.thumbnailTitle }}
             </p>
