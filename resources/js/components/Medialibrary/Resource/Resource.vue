@@ -48,7 +48,7 @@
 
 <script>
 import { Detail, Update, Delete } from '../../../mixins/Resource'
-import { Toasted, RefreshFields } from '../../../mixins'
+import { Toasted } from '../../../mixins'
 import Request from './Request'
 import DetailModal from '../Modal/DetailModal'
 import UpdateModal from '../Modal/UpdateModal'
@@ -60,7 +60,7 @@ export default {
         readonly: Boolean,
     },
 
-    mixins: [Detail, Update, Delete, Toasted, RefreshFields],
+    mixins: [Detail, Update, Delete, Toasted],
 
     components: { Request, DetailModal, UpdateModal },
 
@@ -118,6 +118,16 @@ export default {
             this.closeDeleteModal()
             this.closeDetailModal()
             this.refreshFields()
+        },
+
+        async refreshFields () {
+            const { resourceName, resourceId } = this.$route.params
+
+            const { data: { resource: { fields }}} = await Nova.request().get(`/nova-api/${resourceName}/${resourceId}`)
+
+            _.toArray(fields).filter(field => field.component === 'nova-medialibrary-field').forEach(field => {
+                Nova.$emit(`medialibrary:field-${field.collectionName}-updated`, field)
+            })
         }
     }
 }
