@@ -1,35 +1,25 @@
 <template>
-    <div>
-        <SortFiles :files="sortedFiles" @sort="handleSort" :disabled="sortingDisabled" class="flex flex-wrap -m-2">
-            <Resource v-for="file in sortedFiles" :key="file.id" class="p-2"
+    <SortFiles :files="sortedFiles" @sort="handleSort" :disabled="sortingDisabled" class="flex flex-wrap -m-2">
+        <Resource v-for="file in sortedFiles" :key="file.id" class="p-2"
+            :file="file"
+            :field="field"
+            :readonly="readonly"
+        >
+            <File slot-scope="{ file, fileEvents }"
                 :file="file"
-                :field="field"
-                :readonly="readonly"
-                @refresh="refresh"
-            >
-                <File slot-scope="{ file, fileEvents }"
-                    :file="file"
-                    :width="field.thumbnailWidth"
-                    :height="field.thumbnailHeight"
-                    :loading="loadingFileId === file.id"
-                    :show-actions="showActions"
-                    v-on="fileEvents"
-                />
-            </Resource>
-        </SortFiles>
-
-        <template v-if="! readonly">
-            <div :class="files.length ? 'border-b border-40 my-4' : 'my-2'"></div>
-
-            <UploadFiles :field="field" @refresh="refresh"/>
-        </template>
-    </div>
+                :width="field.thumbnailWidth"
+                :height="field.thumbnailHeight"
+                :loading="loadingFileId === file.id"
+                :show-actions="showActions"
+                v-on="fileEvents"
+            />
+        </Resource>
+    </SortFiles>
 </template>
 
 <script>
 import { Sortable, Toasted, Loading } from '../../mixins'
 import SortFiles from './SortFiles'
-import UploadFiles from './UploadFiles'
 import Resource from './Resource/Resource'
 import File from './File/File'
 
@@ -38,7 +28,6 @@ export default {
 
     components: {
         SortFiles,
-        UploadFiles,
         Resource,
         File,
     },
@@ -70,7 +59,7 @@ export default {
     },
 
     created () {
-        const event = `medialibrary:field-${this.field.attribute}-updated`
+        const event = `medialibrary:field-${this.field.collectionName}-updated`
 
         Nova.$on(event, this.handleFieldUpdate)
 
@@ -84,16 +73,6 @@ export default {
                 file.authorizedToUpdate = !this.readonly && file.authorizedToUpdate
 
                 return file
-            })
-        },
-
-        async refresh () {
-            const { resourceName, resourceId } = this.$route.params
-
-            const { data: { resource: { fields }}} = await Nova.request().get(`/nova-api/${resourceName}/${resourceId}`)
-
-            fields.filter(field => field.component === 'nova-medialibrary-field').forEach(field => {
-                Nova.$emit(`medialibrary:field-${field.attribute}-updated`, field)
             })
         }
     }

@@ -48,7 +48,7 @@
 
 <script>
 import { Detail, Update, Delete } from '../../../mixins/Resource'
-import { Toasted } from '../../../mixins'
+import { Toasted, RefreshFields } from '../../../mixins'
 import Request from './Request'
 import DetailModal from '../Modal/DetailModal'
 import UpdateModal from '../Modal/UpdateModal'
@@ -60,7 +60,7 @@ export default {
         readonly: Boolean,
     },
 
-    mixins: [Detail, Update, Delete, Toasted],
+    mixins: [Detail, Update, Delete, Toasted, RefreshFields],
 
     components: { Request, DetailModal, UpdateModal },
 
@@ -111,17 +111,13 @@ export default {
 
         resourceUpdated () {
             this.closeUpdateModal()
-            this.refresh()
+            this.refreshFields()
         },
 
         resourceDeleted () {
             this.closeDeleteModal()
             this.closeDetailModal()
-            this.refresh()
-        },
-
-        refresh () {
-            this.$emit('refresh')
+            this.refreshFields()
         }
     }
 }

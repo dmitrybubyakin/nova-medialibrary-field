@@ -24,10 +24,6 @@
             <label :for="'fileInput' + _uid" class="form-file form-file-btn btn btn-default btn-primary">
                 {{ __('Choose Files') }}
             </label>
-
-            <progress-button v-if="fileToBeUploaded" class="ml-3" :disabled="uploading" :processing="uploading" @click.native="uploadFiles">
-                {{ __('Upload') }}
-            </progress-button>
         </div>
 
         <portal to="modals">
@@ -42,15 +38,13 @@
 import File from './File/File'
 import CropModal from './Modal/CropModal'
 import { Toasted } from '../../mixins'
-import { storeFile } from '../../api'
-import { Errors } from 'laravel-nova'
-import objectToFormData from 'object-to-formdata'
 
 export default {
     mixins: [Toasted],
 
     props: {
         field: Object,
+        errors: Object,
     },
 
     components: {
@@ -61,20 +55,33 @@ export default {
     data () {
         return {
             files: [],
-            uploading: false,
             showFileInput: true,
             fileToBeCropped: null,
         }
     },
 
     computed: {
-        fileToBeUploaded () {
-            return this.files.filter(file => !file.uploadingFailed)[0]
-        },
-
         cropModalOpen () {
             return !!this.fileToBeCropped
         }
+    },
+
+    watch: {
+        errors: {
+            deep: true,
+            handler (errors) {
+                this.handleValidationErrors(errors)
+            }
+        },
+
+        files: {
+            deep: true,
+            handler (files) {
+                this.$emit('change', files.map(({ file, cropperData }) => {
+                    return { file, cropperData }
+                }))
+            }
+        },
     },
 
     methods: {
@@ -155,68 +162,30 @@ export default {
 
             const fileReader = new FileReader()
 
-            fileReader.onload = () => setTimeout(() => {
+            fileReader.onload = () => this.$nextTick(() => {
                 file.thumbnailUrl = fileReader.result
                 file.loading = false
-            }, 200)
+            })
 
             fileReader.readAsDataURL(file.file)
         },
 
-        async uploadFiles () {
-            if (! this.fileToBeUploaded) {
-                return this.uploading = false
-            }
+        handleValidationErrors (errors) {
+            errors = errors.all()
 
-            this.uploading = true
+            const fieldErrors = Object.keys(errors).filter(key => key.startsWith(`${this.field.collectionName}.`))
 
-            await this.uploadFile(this.fileToBeUploaded)
+            fieldErrors.forEach(key => {
+               const file = this.files[+key.split('.')[1]]
 
-            this.uploadFiles() // upload remaining files recursively
-        },
-
-        async uploadFile (file) {
-            file.loading = true
-
-            try {
-                const { data } = await storeFile(this.fileToFormData(file))
-
-                this.deleteFile(file)
-
-                this.info(`File :thumbnailTitle was uploaded!`, { thumbnailTitle: data.thumbnailTitle })
-
-                this.$emit('refresh')
-            } catch ({ response }) {
                 file.uploadingFailed = true
 
-                if (response.status === 422) {
-                    this.handleValidationErrors(file, { response })
-                } else {
-                    Nova.$emit('error', (response.data && response.data.message) || this.__('Something went wrong'))
-                }
-            }
+                const message = (errors[key][0] || '').replace(key, 'file')
 
-            file.loading = false
-        },
-
-        handleValidationErrors ({ thumbnailTitle }, { response }) {
-            const errors = new Errors(response.data.errors)
-
-            this.error(`${thumbnailTitle}: ${errors.first('file')}`, {}, {
-                duration: null,
-                action: { text : 'OK', onClick : (e, toast) => toast.goAway(0)}
-            })
-        },
-
-        fileToFormData (file) {
-            return objectToFormData({
-                file: file.file,
-                cropperData: file.cropperData,
-                resource: this.field.resourceName,
-                collection: this.field.collectionName,
-                viaResource: this.$route.params.resourceName,
-                viaResourceId: this.$route.params.resourceId,
-                viaRelationship: this.field.relationName,
+                this.error(`${file.file.name}: ${message}`, {}, {
+                    duration: null,
+                    action: { text : 'OK', onClick : (e, toast) => toast.goAway(0)}
+                })
             })
         }
     }

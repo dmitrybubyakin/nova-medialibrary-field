@@ -9,12 +9,15 @@ use InvalidArgumentException;
 use Laravel\Nova\Fields\Field;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use DmitryBubyakin\NovaMedialibraryField\Label;
 use Spatie\MediaLibrary\Models\Media as MediaModel;
 use DmitryBubyakin\NovaMedialibraryField\Resources\Media as MediaResource;
 
 class Medialibrary extends Field
 {
+    use Concerns\SaveFilesFromRequest;
+
     /**
      * The element's component.
      *
@@ -158,8 +161,7 @@ class Medialibrary extends Field
             ->thumbnail('')
             ->thumbnailTitle('file_name')
             ->imageMimes('image/jpeg', 'image/gif', 'image/png')
-            ->mediaOnIndex(1)
-            ->exceptOnForms();
+            ->mediaOnIndex(1);
     }
 
     public function relation(string $relationName): self
@@ -323,9 +325,18 @@ class Medialibrary extends Field
         return $this->withMeta(['readonlyOnDetail' => true]);
     }
 
-    public function onlyOnForms()
+    public function getCreationRules(NovaRequest $request): array
     {
-        throw new Exception('Medialibrary::onlyOnForms: can\'t be shown on forms.');
+        return [
+            "{$this->attribute}.*.file" => parent::getCreationRules($request)[$this->attribute],
+        ];
+    }
+
+    public function getUpdateRules(NovaRequest $request): array
+    {
+        return [
+            "{$this->attribute}.*.file" => parent::getUpdateRules($request)[$this->attribute],
+        ];
     }
 
     /**

@@ -19,7 +19,3 @@ export function deleteFile (resourceName, resources) {
 export function sortFiles (ids) {
     return Nova.request().post(`/nova-vendor/dmitrybubyakin/nova-medialibrary-field/sort`, { ids })
 }
-
-export function storeFile (formData) {
-    return Nova.request().post(`/nova-vendor/dmitrybubyakin/nova-medialibrary-field/store`, formData)
-}

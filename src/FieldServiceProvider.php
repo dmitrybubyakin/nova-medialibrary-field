@@ -6,7 +6,7 @@ use Laravel\Nova\Nova;
 use Laravel\Nova\Events\ServingNova;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use DmitryBubyakin\NovaMedialibraryField\Http\Controllers;
+use DmitryBubyakin\NovaMedialibraryField\Http\Controllers\SortMedia;
 
 class FieldServiceProvider extends ServiceProvider
 {
@@ -41,8 +41,7 @@ class FieldServiceProvider extends ServiceProvider
         Route::middleware(['nova'])
                 ->prefix('nova-vendor/dmitrybubyakin/nova-medialibrary-field')
                 ->group(function () {
-                    Route::post('sort', Controllers\SortMedia::class);
-                    Route::post('store', Controllers\StoreMedia::class);
+                    Route::post('sort', SortMedia::class);
                 });
     }
 
