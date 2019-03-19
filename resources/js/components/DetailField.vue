@@ -1,6 +1,6 @@
 <template>
     <panel-item :field="field" class="medialibrary-field">
-        <Medialibrary slot="value" :field="field" :readonly="true"/>
+        <Medialibrary slot="value" :field="field" :readonly="field.readonlyOnDetail"/>
     </panel-item>
 </template>
 

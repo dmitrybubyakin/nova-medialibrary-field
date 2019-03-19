@@ -318,6 +318,11 @@ class Medialibrary extends Field
         ]);
     }
 
+    public function readonlyOnDetail(): self
+    {
+        return $this->withMeta(['readonlyOnDetail' => true]);
+    }
+
     public function onlyOnForms()
     {
         throw new Exception('Medialibrary::onlyOnForms: can\'t be shown on forms.');
