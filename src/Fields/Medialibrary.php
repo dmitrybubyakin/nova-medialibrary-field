@@ -329,7 +329,6 @@ class Medialibrary extends Field
             'mediaSortable'  => $this->mediaSortable,
             'collectionName' => $this->collectionName,
             'resourceName'   => $this->resourceName,
-            'relationName'   => $this->relationName,
             'multiple'       => $this->multiple,
         ], $this->meta);
     }
