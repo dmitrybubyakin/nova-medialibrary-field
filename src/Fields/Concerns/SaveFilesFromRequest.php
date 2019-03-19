@@ -10,8 +10,6 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 trait SaveFilesFromRequest
 {
     /**
-     * Hydrate the given attribute on the model based on the incoming request.
-     *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  string  $requestAttribute
      * @param  object  $model

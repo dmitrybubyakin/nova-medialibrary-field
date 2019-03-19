@@ -17,133 +17,61 @@ class Medialibrary extends Field
 {
     use Concerns\SaveFilesFromRequest;
 
-    /**
-     * The element's component.
-     *
-     * @var string
-     */
+    /** @var string */
     public $component = 'nova-medialibrary-field';
 
-    /**
-     * The URI key of the media resource.
-     *
-     * @var string
-     */
+    /** @var string */
     public $resourceName;
 
-    /**
-     * The class name of the media resource.
-     *
-     * @var string
-     */
+    /** @var string */
     public $resourceClass;
 
-    /**
-     * The name of the relationship.
-     *
-     * @var string
-     */
+    /** @var string */
     public $relationName;
 
-    /**
-     * The name of the collection.
-     *
-     * @var string
-     */
+    /** @var string */
     public $collectionName;
 
-    /**
-     * Indicates if the collection is not a single file collection.
-     *
-     * @var bool
-     */
+    /** @var bool */
     public $multiple;
 
-    /**
-     * Indicates if the media items are sortable.
-     *
-     * @var bool
-     */
+    /** @var bool */
     public $mediaSortable;
 
-    /**
-     * Image mime types.
-     *
-     * @var array
-     */
+    /** @var array */
     public $imageMimes;
 
-    /**
-     * @var callable|null
-     */
+    /** @var callable|null */
     public $storeUsingCallback;
 
-    /**
-     * @var callable|null
-     */
+    /** @var callable|null */
     public $replaceUsingCallback;
 
-    /**
-     * The callback used to retrieve the thumbnail URL.
-     *
-     * @var callable
-     */
+    /** @var callable */
     public $thumbnailUrlCallback;
 
-    /**
-     * The callback used to retrieve the thumbnail title.
-     *
-     * @var callable
-     */
+    /** @var callable */
     public $thumbnailTitleCallback;
 
-    /**
-     * The callback used to retrieve the thumbnail description.
-     *
-     * @var callable
-     */
+    /** @var callable */
     public $thumbnailDescriptionCallback;
 
-    /**
-     * The thumbnail labels.
-     *
-     * @var \Illuminate\Support\Collection
-     */
+    /** @var \Illuminate\Support\Collection */
     public $labels;
 
-    /**
-     * Resolve the media which should be shown on the index view.
-     *
-     * @var callable
-     */
+    /** @var callable */
     public $mediaOnIndexCallback;
 
-    /**
-     * The text alignment for the field's text in tables.
-     *
-     * @var string
-     */
+    /** @var string */
     public $textAlign = 'center';
 
-    /**
-     * Indicates if the thumbnail description should be shown.
-     *
-     * @var bool
-     */
+    /** @var bool */
     public $showThumbnailDescription = false;
 
-    /**
-     * Available mime types for file input.
-     *
-     * @var string|null
-     */
+    /** @var string|null */
     public $accept;
 
-    /**
-     * Indicates if the image is croppable.
-     *
-     * @var bool
-     */
+    /** @var bool */
     public $croppable = false;
 
     public function __construct(string $name = 'Media', string $collection = 'default', string $resource = MediaResource::class)
@@ -339,8 +267,6 @@ class Medialibrary extends Field
     }
 
     /**
-     * Resolve the field's value.
-     *
      * @param mixed       $resource
      * @param string|null $attribute
      *
