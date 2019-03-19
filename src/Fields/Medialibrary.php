@@ -2,7 +2,6 @@
 
 namespace DmitryBubyakin\NovaMedialibraryField\Fields;
 
-use Exception;
 use Laravel\Nova\Nova;
 use Laravel\Nova\Resource;
 use InvalidArgumentException;

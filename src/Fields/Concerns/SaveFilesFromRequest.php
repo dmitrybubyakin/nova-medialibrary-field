@@ -22,7 +22,7 @@ trait SaveFilesFromRequest
     {
         $files = array_filter($request->{$this->collectionName} ?? []);
 
-        if (!$files) {
+        if (! $files) {
             return;
         }
 
