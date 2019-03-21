@@ -16,7 +16,7 @@ trait SaveFilesFromRequest
      * @param  string  $attribute
      * @return mixed
      */
-    protected function fillAttributeFromRequest(NovaRequest $request, $requestAttribute, $model, $attribute): void
+    protected function fillAttributeFromRequest(NovaRequest $request, $requestAttribute, $model, $attribute)
     {
         $files = array_filter($request->{$this->collectionName} ?? []);
 
@@ -24,11 +24,11 @@ trait SaveFilesFromRequest
             return;
         }
 
-        $model::saved(function (HasMedia $model) use ($files) {
+        return function () use ($files, $model) {
             foreach ($files as $file) {
                 $this->attachFile($model, $file['file'], $file['cropperData'] ?? []);
             }
-        });
+        };
     }
 
     public function attachFile(HasMedia $model, UploadedFile $file, array $cropperData = null): array
