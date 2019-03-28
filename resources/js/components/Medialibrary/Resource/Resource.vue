@@ -126,7 +126,7 @@ export default {
             const { data: { resource: { fields }}} = await Nova.request().get(`/nova-api/${resourceName}/${resourceId}`)
 
             _.toArray(fields).filter(field => field.component === 'nova-medialibrary-field').forEach(field => {
-                Nova.$emit(`medialibrary:field-${field.collectionName}-updated`, field)
+                Nova.$emit(`medialibrary:${field.collectionName}-updated`, field.value)
             })
         }
     }

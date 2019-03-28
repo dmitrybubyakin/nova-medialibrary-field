@@ -1,7 +1,7 @@
 <template>
     <default-field :field="field" :errors="errors" :show-help-text="false" :full-width-content="true" class="medialibrary-field">
         <template slot="field">
-            <Medialibrary slot="value" :field="field"/>
+            <Medialibrary :field="field" v-model="value"/>
 
             <div :class="isNotEmpty ? 'border-b border-40 my-4' : 'my-2'"></div>
 

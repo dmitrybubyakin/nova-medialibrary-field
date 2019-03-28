@@ -32,47 +32,46 @@ export default {
     },
 
     props: {
+        value: Array,
         field: Object,
         readonly: Boolean,
     },
 
     data () {
         return {
-            fieldFiles: [],
-        }
-    },
-
-    computed: {
-        files () {
-            return this.field.multiple ? this.fieldFiles : this.fieldFiles.slice(-1)
+            files: [],
         }
     },
 
     watch: {
-        field: {
+        value: {
             immediate: true,
-            handler (field) {
-                this.handleFieldUpdate(field)
+            handler (value) {
+                this.handleValueChange(value)
             }
         }
     },
 
     created () {
-        const event = `medialibrary:field-${this.field.collectionName}-updated`
+        const event = `medialibrary:${this.field.collectionName}-updated`
 
-        Nova.$on(event, this.handleFieldUpdate)
+        const handler = value => this.$emit('input', value)
 
-        this.$once('hook:beforeDestroy', () => Nova.$off(event, this.handleFieldUpdate))
+        Nova.$on(event, handler)
+
+        this.$once('hook:beforeDestroy', () => Nova.$off(event, handler))
     },
 
     methods: {
-        handleFieldUpdate ({ value }) {
-            this.fieldFiles = (value || []).map(file => {
+        handleValueChange (value) {
+            const files = (value || []).map(file => {
                 file.authorizedToDelete = !this.readonly && file.authorizedToDelete
                 file.authorizedToUpdate = !this.readonly && file.authorizedToUpdate
 
                 return file
             })
+
+            this.files = this.field.multiple ? files : files.slice(-1)
         }
     }
 }
