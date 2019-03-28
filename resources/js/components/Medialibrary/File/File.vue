@@ -40,18 +40,16 @@ export default {
 
     props: {
         file: Object,
-        width: { type: String, required: false },
-        height: { type: String, required: false },
+        field: Object,
         loading: Boolean,
         showActions: Boolean,
     },
 
     computed: {
         previewStyle () {
-            return this.width && this.height ? {
-                width: this.width,
-                height: this. height,
-            } : {}
+            const { thumbnailWidth: width, thumbnailHeight: height } = this.field
+
+            return width && height ? { width, height } : {}
         },
 
         visibleLabels () {

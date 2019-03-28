@@ -4,8 +4,7 @@
             <div v-for="file in files" class="p-2">
                 <File
                     :file="file"
-                    :width="field.thumbnailWidth"
-                    :height="field.thumbnailHeight"
+                    :field="field"
                     :loading="file.loading"
                     :show-actions="true"
                     @delete="deleteFile(file)"

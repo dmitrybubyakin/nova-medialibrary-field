@@ -7,8 +7,7 @@
         >
             <File slot-scope="{ file, fileEvents }"
                 :file="file"
-                :width="field.thumbnailWidth"
-                :height="field.thumbnailHeight"
+                :field="field"
                 :loading="loadingFileId === file.id"
                 :show-actions="showActions"
                 v-on="fileEvents"
