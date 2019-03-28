@@ -2,14 +2,23 @@
     <div>
         <div class="flex flex-wrap -m-2">
             <div v-for="file in files" class="p-2">
-                <File
-                    :file="file"
+                <component
+                    :is="fileWrapperComponent"
                     :field="field"
-                    :loading="file.loading"
-                    :show-actions="true"
-                    @delete="deleteFile(file)"
-                    @crop="openCropModal(file)"
-                />
+                    :file="file"
+                    :file-events="{
+                        delete: () => deleteFile(file),
+                        crop: () => openCropModal(file),
+                    }"
+                >
+                    <File slot-scope="{ file, fileEvents }"
+                        :file="file"
+                        :field="field"
+                        :loading="file.loading"
+                        :show-actions="true"
+                        v-on="fileEvents"
+                    />
+                </component>
             </div>
         </div>
 
@@ -39,10 +48,15 @@ import CropModal from './Modal/CropModal'
 import { Toasted } from '../../mixins'
 
 export default {
+    model: {
+        prop: 'files',
+    },
+
     mixins: [Toasted],
 
     props: {
         field: Object,
+        files: Array,
         errors: Object,
     },
 
@@ -53,7 +67,6 @@ export default {
 
     data () {
         return {
-            files: [],
             showFileInput: true,
             fileToBeCropped: null,
         }
@@ -62,6 +75,10 @@ export default {
     computed: {
         cropModalOpen () {
             return !!this.fileToBeCropped
+        },
+
+        fileWrapperComponent () {
+            return this.field.fileWrapperComponent || 'medialibrary-field-file-wrapper'
         }
     },
 
@@ -71,16 +88,7 @@ export default {
             handler (errors) {
                 this.handleValidationErrors(errors)
             }
-        },
-
-        files: {
-            deep: true,
-            handler (files) {
-                this.$emit('change', files.map(({ file, cropperData }) => {
-                    return { file, cropperData }
-                }))
-            }
-        },
+        }
     },
 
     methods: {
@@ -92,15 +100,19 @@ export default {
             this.$nextTick(() => this.showFileInput = true)
         },
 
-        deleteFile (fileToBeDeleted) {
-            this.files = this.files.filter(file => file.id !== fileToBeDeleted.id)
+        updateFiles (files) {
+            this.$emit('input', files)
+        },
+
+        deleteFile ({ id }) {
+            this.updateFiles(this.files.filter(file => file.id !== id))
         },
 
         addFiles (files) {
             files.forEach(callWithDelay(file => {
                 file = this.wrapFile(file)
 
-                this.field.multiple ? this.files.push(file) : (this.files = [file])
+                this.updateFiles(this.field.multiple ? this.files.concat(file) : [file])
 
                 this.loadFileThumbnailUrl(file)
             }))
@@ -113,6 +125,7 @@ export default {
                 croppable: this.isCroppable(file),
                 cropperData: null,
                 cropperOriginalUrl: null,
+                customProperties: {},
                 uploadingFailed: false,
                 id: Math.random().toString(36).substr(-8),
                 size: file.size,

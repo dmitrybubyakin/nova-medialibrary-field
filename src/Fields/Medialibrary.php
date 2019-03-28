@@ -252,6 +252,11 @@ class Medialibrary extends Field
         return $this->withMeta(['readonlyOnDetail' => true]);
     }
 
+    public function fileWrapperComponent(string $component): self
+    {
+        return $this->withMeta(['fileWrapperComponent' => $component]);
+    }
+
     public function getCreationRules(NovaRequest $request): array
     {
         return [
@@ -286,6 +291,7 @@ class Medialibrary extends Field
             'order'                => $media->order_column,
             'extension'            => $media->extension,
             'downloadUrl'          => $media->getFullUrl(),
+            'customProperties'     => $media->custom_properties,
             'labels'               => $this->resolveLabels($media),
             'thumbnailUrl'         => $this->resolveThumbnailUrl($media),
             'thumbnailTitle'       => $this->resolveThumbnailTitle($media),

@@ -5,13 +5,20 @@
             :field="field"
             :readonly="readonly"
         >
-            <File slot-scope="{ file, fileEvents }"
-                :file="file"
+            <component slot-scope="{ file, fileEvents }"
+                :is="fileWrapperComponent"
                 :field="field"
-                :loading="loadingFileId === file.id"
-                :show-actions="showActions"
-                v-on="fileEvents"
-            />
+                :file="file"
+                :file-events="fileEvents"
+            >
+                <File slot-scope="{ file, fileEvents }"
+                    :field="field"
+                    :file="file"
+                    :loading="loadingFileId === file.id"
+                    :show-actions="showActions"
+                    v-on="fileEvents"
+                />
+            </component>
         </Resource>
     </SortFiles>
 </template>
@@ -40,6 +47,12 @@ export default {
     data () {
         return {
             files: [],
+        }
+    },
+
+    computed: {
+        fileWrapperComponent () {
+            return this.field.fileWrapperComponent || 'medialibrary-field-file-wrapper'
         }
     },
 

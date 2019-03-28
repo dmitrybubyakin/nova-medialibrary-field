@@ -5,7 +5,7 @@
 
             <div :class="isNotEmpty ? 'border-b border-40 my-4' : 'my-2'"></div>
 
-            <UploadFiles :field="field" :errors="errors" @change="handleFilesChange"/>
+            <UploadFiles :field="field" v-model="filesToUpload" :errors="errors"/>
         </template>
     </default-field>
 </template>
@@ -49,10 +49,6 @@ export default {
 
         handleChange (value) {
             this.value = value
-        },
-
-        handleFilesChange (filesToUpload) {
-            this.filesToUpload = filesToUpload
         }
     },
 }
