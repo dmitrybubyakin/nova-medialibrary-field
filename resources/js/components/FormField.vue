@@ -1,7 +1,7 @@
 <template>
     <default-field :field="field" :errors="errors" :show-help-text="false" :full-width-content="true" class="medialibrary-field">
         <template slot="field">
-            <Medialibrary :field="field" v-model="value"/>
+            <Medialibrary v-if="isNotEmpty" :field="field" v-model="value"/>
 
             <div :class="isNotEmpty ? 'border-b border-40 my-4' : 'my-2'"></div>
 
@@ -34,7 +34,7 @@ export default {
 
     computed: {
         isNotEmpty () {
-            return this.field.value && this.field.value.length
+            return this.value && this.value.length
         }
     },
 
@@ -44,7 +44,11 @@ export default {
         },
 
         fill (formData) {
-            objectToFormData({ [this.field.collectionName]: this.filesToUpload }, { indices: true }, formData)
+            const files = this.filesToUpload.map(({ file, cropperData }) => {
+                return { file, cropperData }
+            })
+
+            objectToFormData({ [this.field.collectionName]: files }, { indices: true }, formData)
         },
 
         handleChange (value) {
