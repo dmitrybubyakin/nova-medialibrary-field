@@ -141,6 +141,8 @@ export default {
                 file.cropperOriginalUrl = file.thumbnailUrl
             }
 
+            file.cropOptions = this.field.cropOptions;
+
             this.fileToBeCropped = file
         },
 

@@ -74,6 +74,9 @@ class Medialibrary extends Field
     /** @var bool */
     public $croppable = false;
 
+    /** @var array */
+    public $cropOptions;
+
     public function __construct(string $name = 'Media', string $collection = 'default', string $resource = MediaResource::class)
     {
         parent::__construct($name);
@@ -236,6 +239,15 @@ class Medialibrary extends Field
     {
         $this->croppable = true;
 
+        $this->cropOptions['viewMode'] = 3;
+
+        return $this;
+    }
+
+    public function setCropOptions(array $options)
+    {
+        $this->cropOptions = array_merge($this->cropOptions, $options);
+
         return $this;
     }
 
@@ -332,6 +344,7 @@ class Medialibrary extends Field
         return array_merge([
             'accept'         => $this->accept,
             'croppable'      => $this->croppable,
+            'cropOptions'    => $this->cropOptions,
             'mediaSortable'  => $this->mediaSortable,
             'collectionName' => $this->collectionName,
             'resourceName'   => $this->resourceName,

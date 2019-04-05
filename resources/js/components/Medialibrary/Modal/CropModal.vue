@@ -4,7 +4,12 @@
             <h4 class="text-90 font-normal text-2xl flex-no-shrink px-8 pt-6">{{ __('Crop Image') }}</h4>
 
             <div class="px-8 py-6">
-                <VueCropper ref="cropper" :src="file.cropperOriginalUrl" :data="file.cropperData" :view-mode="3"/>
+                <VueCropper ref="cropper"
+                            :src="file.cropperOriginalUrl"
+                            :data="file.cropperData"
+                            :view-mode="viewMode"
+                            :aspect-ratio="aspectRatio"
+                />
             </div>
 
             <div class="bg-30 flex px-8 py-4">
@@ -35,6 +40,14 @@ export default {
     computed: {
         cropper () {
             return this.$refs.cropper
+        },
+
+        viewMode() {
+            return this.getCropOption('viewMode', 0)
+        },
+
+        aspectRatio() {
+            return this.getCropOption('aspectRatio', NaN)
         }
     },
 
@@ -48,7 +61,13 @@ export default {
                 data: this.cropper.getData(true),
                 url: this.cropper.getCroppedCanvas().toDataURL(this.file.file.type)
             })
-        }
+        },
+
+        getCropOption(name, defaultValue) {
+            return (this.file.cropOptions && this.file.cropOptions[name])
+                ? this.file.cropOptions[name]
+                : defaultValue
+        },
     }
 }
 </script>
