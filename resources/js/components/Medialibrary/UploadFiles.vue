@@ -36,7 +36,7 @@
 
         <portal to="modals">
             <transition name="fade">
-                <CropModal v-if="cropModalOpen" :file="fileToBeCropped" @close="closeCropModal" @crop="handleCrop"/>
+                <CropModal v-if="cropModalOpen" :file="fileToBeCropped" :options="cropperOptions" @close="closeCropModal" @crop="handleCrop"/>
             </transition>
         </portal>
     </div>
@@ -79,6 +79,10 @@ export default {
 
         fileWrapperComponent () {
             return this.field.fileWrapperComponent || 'medialibrary-field-file-wrapper'
+        },
+
+        cropperOptions () {
+            return this.field.cropperOptions
         }
     },
 
@@ -140,8 +144,6 @@ export default {
             if (! file.cropperOriginalUrl) {
                 file.cropperOriginalUrl = file.thumbnailUrl
             }
-
-            file.cropOptions = this.field.cropOptions;
 
             this.fileToBeCropped = file
         },

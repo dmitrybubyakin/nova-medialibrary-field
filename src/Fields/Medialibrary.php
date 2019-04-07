@@ -74,9 +74,6 @@ class Medialibrary extends Field
     /** @var bool */
     public $croppable = false;
 
-    /** @var array */
-    public $cropOptions;
-
     public function __construct(string $name = 'Media', string $collection = 'default', string $resource = MediaResource::class)
     {
         parent::__construct($name);
@@ -91,7 +88,10 @@ class Medialibrary extends Field
             ->thumbnail('')
             ->thumbnailTitle('file_name')
             ->imageMimes('image/jpeg', 'image/gif', 'image/png')
-            ->mediaOnIndex(1);
+            ->mediaOnIndex(1)
+            ->cropperOptions([
+                'viewMode' => 1, // https://github.com/fengyuanchen/cropperjs/blob/master/README.md#viewmode
+            ]);
     }
 
     public function relation(string $relationName): self
@@ -239,16 +239,14 @@ class Medialibrary extends Field
     {
         $this->croppable = true;
 
-        $this->cropOptions['viewMode'] = 3;
-
         return $this;
     }
 
-    public function setCropOptions(array $options)
+    public function cropperOptions(array $cropperOptions): self
     {
-        $this->cropOptions = array_merge($this->cropOptions, $options);
-
-        return $this;
+        return $this->withMeta([
+            'cropperOptions' => $cropperOptions,
+        ]);
     }
 
     public function thumbnailSize(string $width, ?string $height = null): self
@@ -344,7 +342,6 @@ class Medialibrary extends Field
         return array_merge([
             'accept'         => $this->accept,
             'croppable'      => $this->croppable,
-            'cropOptions'    => $this->cropOptions,
             'mediaSortable'  => $this->mediaSortable,
             'collectionName' => $this->collectionName,
             'resourceName'   => $this->resourceName,
