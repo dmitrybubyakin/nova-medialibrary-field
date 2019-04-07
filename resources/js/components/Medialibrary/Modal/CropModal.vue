@@ -4,7 +4,7 @@
             <h4 class="text-90 font-normal text-2xl flex-no-shrink px-8 pt-6">{{ __('Crop Image') }}</h4>
 
             <div class="px-8 py-6">
-                <VueCropper ref="cropper" :src="file.cropperOriginalUrl" :data="file.cropperData" :view-mode="3"/>
+                <VueCropper ref="cropper" v-bind="cropperProps" style="max-height: 500px"/>
             </div>
 
             <div class="bg-30 flex px-8 py-4">
@@ -26,6 +26,7 @@ import VueCropper from 'vue-cropperjs'
 export default {
     props: {
         file: Object,
+        options: Object,
     },
 
     components: {
@@ -35,6 +36,14 @@ export default {
     computed: {
         cropper () {
             return this.$refs.cropper
+        },
+
+        cropperProps () {
+            return {
+                src: this.file.cropperOriginalUrl,
+                data: this.file.cropperData,
+                ...this.options,
+            }
         }
     },
 

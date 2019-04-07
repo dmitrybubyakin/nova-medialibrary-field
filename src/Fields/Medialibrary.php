@@ -88,7 +88,10 @@ class Medialibrary extends Field
             ->thumbnail('')
             ->thumbnailTitle('file_name')
             ->imageMimes('image/jpeg', 'image/gif', 'image/png')
-            ->mediaOnIndex(1);
+            ->mediaOnIndex(1)
+            ->cropperOptions([
+                'viewMode' => 1, // https://github.com/fengyuanchen/cropperjs/blob/master/README.md#viewmode
+            ]);
     }
 
     public function relation(string $relationName): self
@@ -237,6 +240,13 @@ class Medialibrary extends Field
         $this->croppable = true;
 
         return $this;
+    }
+
+    public function cropperOptions(array $cropperOptions): self
+    {
+        return $this->withMeta([
+            'cropperOptions' => $cropperOptions,
+        ]);
     }
 
     public function thumbnailSize(string $width, ?string $height = null): self
