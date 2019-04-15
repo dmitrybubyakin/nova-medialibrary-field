@@ -26,18 +26,22 @@ trait SaveFilesFromRequest
 
         return function () use ($files, $model) {
             foreach ($files as $file) {
-                $this->attachFile($model, $file['file'], $file['cropperData'] ?? []);
+                $this->attachFile($model, $file['file'], $file);
             }
         };
     }
 
-    public function attachFile(HasMedia $model, UploadedFile $file, array $cropperData = null): array
+    public function attachFile(HasMedia $model, UploadedFile $file, array $fileData): array
     {
+        $cropperData = $fileData['cropperData'] ?? [];
+        $customProperties = $fileData['customProperties'] ?? [];
+
         if ($this->croppable && $cropperData) {
             $this->cropImage($file, $cropperData);
         }
 
-        $fileAdder = $model->addMedia($file);
+        $fileAdder = $model->addMedia($file)
+            ->withCustomProperties($customProperties);
 
         $oldFile = $this->multiple ? null : $model->getFirstMedia($this->collectionName);
 

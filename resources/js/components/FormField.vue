@@ -44,8 +44,8 @@ export default {
         },
 
         fill (formData) {
-            const files = this.filesToUpload.map(({ file, cropperData }) => {
-                return { file, cropperData }
+            const files = this.filesToUpload.map(({ file, cropperData, customProperties }) => {
+                return { file, cropperData, customProperties }
             })
 
             objectToFormData({ [this.field.collectionName]: files }, { indices: true }, formData)
