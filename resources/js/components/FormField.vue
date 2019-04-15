@@ -1,5 +1,5 @@
 <template>
-    <default-field :field="field" :errors="errors" :show-help-text="false" :full-width-content="true" class="medialibrary-field">
+    <default-field :field="field" :errors="errors" :show-help-text="!!field.helpText" :full-width-content="true" class="medialibrary-field">
         <template slot="field">
             <Medialibrary v-if="isNotEmpty" :field="field" v-model="value"/>
 
