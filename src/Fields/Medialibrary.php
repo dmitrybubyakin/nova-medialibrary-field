@@ -82,6 +82,13 @@ class Medialibrary extends Field
     public $replaceUsingCallback;
 
     /**
+     * The callback used to retrieve the download URL.
+     *
+     * @var callable
+     */
+    public $downloadUsingCallback;
+
+    /**
      * The callback used to retrieve the thumbnail URL.
      *
      * @var callable
@@ -209,6 +216,14 @@ class Medialibrary extends Field
     public function replaceUsing(callable $replaceUsingCallback): self
     {
         $this->replaceUsingCallback = $replaceUsingCallback;
+
+        return $this;
+    }
+
+
+    public function downloadUsing(callable $downloadUsingCallback): self
+    {
+        $this->downloadUsingCallback = $downloadUsingCallback;
 
         return $this;
     }
@@ -358,8 +373,8 @@ class Medialibrary extends Field
             'id'                   => $media->id,
             'order'                => $media->order_column,
             'extension'            => $media->extension,
-            'downloadUrl'          => $media->getFullUrl(),
             'labels'               => $this->resolveLabels($media),
+            'downloadUrl'          => $this->resolveDownloadUrl($media),
             'thumbnailUrl'         => $this->resolveThumbnailUrl($media),
             'thumbnailTitle'       => $this->resolveThumbnailTitle($media),
             'thumbnailDescription' => $this->resolveThumbnailDescription($media),
@@ -372,6 +387,15 @@ class Medialibrary extends Field
     protected function resolveLabels(MediaModel $media): array
     {
         return $this->labels->map->resolve($media)->all();
+    }
+
+    protected function resolveDownloadUrl(MediaModel $media): string
+    {
+        if (is_callable($this->downloadUsingCallback)) {
+            return call_user_func($this->downloadUsingCallback, $media);
+        }
+
+        return $media->getFullUrl();
     }
 
     protected function resolveThumbnailUrl(MediaModel $media): ?string

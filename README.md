@@ -30,6 +30,7 @@ With this package you can:
     - [Thumbnail description](#thumbnail-description)
     - [Single media collection](#single-media-collection)
     - [Store and Replace callbacks](#store-and-replace-callbacks)
+    - [Custom download url](#custom-download-url)
     - [Validation](#validation)
     - [Sorting](#sorting)
     - [Custom media resource](#custom-media-resource)
@@ -243,6 +244,18 @@ Medialibrary::make('Featured Image', 'featured')
             ->withCustomProperties($oldFile->custom_properties);
     })
 ```
+
+### Custom download url
+
+You can change URL of the download button.
+
+```php
+Medialibrary::make('Featured Image', 'featured')
+    ->downloadUsing(function (Media $media) {
+        return <...>;
+    })
+```
+
 
 ### Validation
 
