@@ -60,3 +60,9 @@
 ### Added
 
 - Possibility to crop images
+
+## [1.1.10 (2019-07-01)](https://github.com/dmitrybubyakin/nova-medialibrary-field/compare/1.1.9...1.1.10)
+
+### Added
+
+- Possibility to customize URL of the download button
