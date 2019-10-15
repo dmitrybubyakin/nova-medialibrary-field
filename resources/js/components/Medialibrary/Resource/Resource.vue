@@ -4,7 +4,7 @@
 
         <portal to="modals" v-if="detailModalOpen || updateModalOpen || deleteModalOpen">
             <Request v-if="detailModalOpen" :request="detailRequest" v-on="requestEvents">
-                <DetailModal v-if="deleteModalClosed" slot-scope="{ resource }"
+                <DetailModal slot-scope="{ resource }"
                     :resource-name="resourceName"
                     :resource-id="resourceId"
                     :resource="resource"

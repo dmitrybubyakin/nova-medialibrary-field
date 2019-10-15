@@ -15,11 +15,12 @@ export default {
 
     methods: {
         openDeleteModal () {
-            this.deleteModalOpen = true
+            this.swapDetailModal(() => this.deleteModalOpen = true)
         },
 
         closeDeleteModal () {
             this.deleteModalOpen = false
+            this.$nextTick(() => this.swapDetailModal())
         },
 
         async deleteResource () {

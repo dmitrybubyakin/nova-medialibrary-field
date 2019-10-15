@@ -12,13 +12,12 @@ export default {
 
     methods: {
         openUpdateModal () {
-            this.closeDetailModal()
-
-            this.updateModalOpen = true
+            this.swapDetailModal(() => this.updateModalOpen = true)
         },
 
         closeUpdateModal () {
             this.updateModalOpen = false
+            this.$nextTick(() => this.swapDetailModal())
         },
 
         updateFieldsRequest () {

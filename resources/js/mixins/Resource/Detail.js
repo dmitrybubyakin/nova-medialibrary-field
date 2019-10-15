@@ -4,6 +4,7 @@ export default {
     data () {
         return {
             detailModalOpen: false,
+            detailModalWasOpen: false,
         }
     },
 
@@ -14,6 +15,18 @@ export default {
 
         closeDetailModal () {
             this.detailModalOpen = false
+        },
+
+        swapDetailModal (callback = null) {
+            [
+                this.detailModalOpen,
+                this.detailModalWasOpen,
+            ] = [
+                this.detailModalWasOpen,
+                this.detailModalOpen,
+            ]
+
+            callback && this.$nextTick(callback)
         },
 
         detailRequest () {
