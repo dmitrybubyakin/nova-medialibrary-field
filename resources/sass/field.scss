@@ -24,7 +24,7 @@
     .card {
         &.hoverable:hover {
             .card-hover\:flex {
-                display: flex;
+                display: flex !important;
             }
         }
     }
