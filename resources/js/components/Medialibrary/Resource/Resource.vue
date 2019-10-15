@@ -23,7 +23,7 @@
                     <UpdateModal slot-scope="fields"
                         :resource-name="resourceName"
                         :resource-id="resourceId"
-                        :fields="fields"
+                        :fields="fields.fields"
                         :validation-errors="validationErrors"
                         :processing="processing"
                         @submit="updateResource"
