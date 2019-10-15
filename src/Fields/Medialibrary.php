@@ -3,7 +3,6 @@
 namespace DmitryBubyakin\NovaMedialibraryField\Fields;
 
 use Exception;
-use Laravel\Nova\Nova;
 use Laravel\Nova\Resource;
 use InvalidArgumentException;
 use Laravel\Nova\Fields\Field;
@@ -219,7 +218,6 @@ class Medialibrary extends Field
 
         return $this;
     }
-
 
     public function downloadUsing(callable $downloadUsingCallback): self
     {
