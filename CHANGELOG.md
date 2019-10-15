@@ -66,3 +66,9 @@
 ### Added
 
 - Possibility to customize URL of the download button
+
+## [1.2.0 (2019-10-15)](https://github.com/dmitrybubyakin/nova-medialibrary-field/compare/1.1.10...1.2.0)
+
+### Added
+
+- Add Nova 2.4 support
