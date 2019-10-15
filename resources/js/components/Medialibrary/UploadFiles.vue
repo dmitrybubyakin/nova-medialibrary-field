@@ -34,10 +34,8 @@
             </progress-button>
         </div>
 
-        <portal to="modals">
-            <transition name="fade">
-                <CropModal v-if="cropModalOpen" :file="fileToBeCropped" @close="closeCropModal" @crop="handleCrop"/>
-            </transition>
+        <portal to="modals" v-if="cropModalOpen">
+            <CropModal :file="fileToBeCropped" @close="closeCropModal" @crop="handleCrop"/>
         </portal>
     </div>
 </template>

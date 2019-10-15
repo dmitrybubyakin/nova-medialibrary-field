@@ -2,45 +2,35 @@
     <div>
         <slot :file="file" :file-events="fileEvents"/>
 
-        <portal to="modals">
-            <transition name="fade">
-                <Request v-if="detailModalOpen" :request="detailRequest" v-on="requestEvents">
-                    <DetailModal v-if="deleteModalClosed" slot-scope="{ resource }"
-                        :resource-name="resourceName"
-                        :resource-id="resourceId"
-                        :resource="resource"
-                        @close="closeDetailModal"
-                        @update="openUpdateModal"
-                        @delete="openDeleteModal"
-                    />
-                </Request>
-            </transition>
-        </portal>
-
-        <portal to="modals">
-            <transition name="fade">
-                <Request v-if="updateModalOpen" :request="updateFieldsRequest" v-on="requestEvents">
-                    <UpdateModal slot-scope="fields"
-                        :resource-name="resourceName"
-                        :resource-id="resourceId"
-                        :fields="fields"
-                        :validation-errors="validationErrors"
-                        :processing="processing"
-                        @submit="updateResource"
-                        @close="closeUpdateModal"
-                    />
-                </Request>
-            </transition>
-        </portal>
-
-        <portal to="modals">
-            <transition name="fade">
-                <delete-resource-modal v-if="deleteModalOpen"
-                    @confirm="deleteResource"
-                    @close="closeDeleteModal"
-                    mode="delete"
+        <portal to="modals" v-if="detailModalOpen || updateModalOpen || deleteModalOpen">
+            <Request v-if="detailModalOpen" :request="detailRequest" v-on="requestEvents">
+                <DetailModal v-if="deleteModalClosed" slot-scope="{ resource }"
+                    :resource-name="resourceName"
+                    :resource-id="resourceId"
+                    :resource="resource"
+                    @close="closeDetailModal"
+                    @update="openUpdateModal"
+                    @delete="openDeleteModal"
                 />
-            </transition>
+            </Request>
+
+            <Request v-if="updateModalOpen" :request="updateFieldsRequest" v-on="requestEvents">
+                <UpdateModal slot-scope="{ fields }"
+                    :resource-name="resourceName"
+                    :resource-id="resourceId"
+                    :fields="fields"
+                    :validation-errors="validationErrors"
+                    :processing="processing"
+                    @submit="updateResource"
+                    @close="closeUpdateModal"
+                />
+            </Request>
+
+            <delete-resource-modal v-if="deleteModalOpen"
+                @confirm="deleteResource"
+                @close="closeDeleteModal"
+                mode="delete"
+            />
         </portal>
     </div>
 </template>
