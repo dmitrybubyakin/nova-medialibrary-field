@@ -445,9 +445,11 @@ class Medialibrary extends Field
 
     protected function isIndexView(): bool
     {
-        return collect(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10))
-                ->map->function
-                ->contains('indexFields');
+        return collect(
+            debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10)
+        )->map(function (array $trace) {
+            return $trace['function'] ?? '';
+        })->contains('indexFields');
     }
 
     protected function isImage(MediaModel $media): bool
@@ -474,11 +476,13 @@ class Medialibrary extends Field
 
     protected function resolveResourceClass(): ?string
     {
-        return collect(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 8))
-                ->map->class
-                ->first(function (string $class) {
-                    return is_subclass_of($class, Resource::class);
-                });
+        return collect(
+            debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 8)
+        )->map(function (array $trace) {
+            return $trace['class'] ?? '';
+        })->first(function (string $class) {
+            return is_subclass_of($class, Resource::class);
+        });
     }
 
     protected function validateStringOrCallable($value, string $method)
