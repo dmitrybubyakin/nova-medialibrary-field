@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) Dmitry Bubyakin <dimabubyakin@mail.ru>
+Copyright (c) Dmitry Bubyakin <dimabubyakin97@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

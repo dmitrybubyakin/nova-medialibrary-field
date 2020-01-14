@@ -1,0 +1,34 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:vue/recommended",
+    "prettier"
+  ],
+  "plugins": [
+    "vue"
+  ],
+  "parserOptions": {
+    "parser": "babel-eslint"
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "globals": {
+    "Nova": "readonly",
+    "_": "readonly"
+  },
+  "rules": {
+    "indent": ["error", 2],
+    "semi": ["error", "never"],
+    "quotes": ["error", "single"],
+    "comma-dangle": ["error", "always-multiline"],
+    "space-before-function-paren": ["error", "never"],
+    "object-curly-spacing": ["error", "always"],
+    "arrow-parens": ["error", "as-needed"],
+    "vue/html-indent": ["error", 2],
+    "vue/max-attributes-per-line": ["error", {"singleline": 5, "multiline": {"max": 1, "allowFirstLine": true}}],
+    "vue/component-name-in-template-casing": ["error", "PascalCase", {"registeredComponentsOnly": true}],
+    "vue/object-curly-spacing": ["error", "always"],
+  }
+}

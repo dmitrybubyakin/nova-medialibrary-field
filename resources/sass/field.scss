@@ -1,48 +1,54 @@
-.medialibrary-detail-field {
-    .preview-width {
-        width: 8rem;
+.h-16 {
+  height: 4rem;
+}
+
+.w-32 {
+  width: 8rem;
+}
+
+.h-24 {
+  height: 6rem;
+}
+
+.bg-overlay {
+  background: hsla(0, 0%, 0%, 0.3);
+}
+
+.object-cover {
+  object-fit: cover;
+}
+
+.group {
+  &:hover {
+    .group-hover\:block {
+      display: block;
     }
-
-    .preview-height {
-        height: 8rem;
+    .group-hover\:opacity-75 {
+      opacity: .75;
     }
-
-    .big-thumbnails {
-        .preview-width {
-            width: 17rem;
-        }
-
-        .preview-height {
-            height: 17rem;
-        }
+    .group-hover\:hidden {
+      display: none;
     }
+  }
+}
 
-    .object-cover {
-        object-fit: cover;
-    }
+.shadow-danger {
+  box-shadow: 0 0 0 2px var(--danger);
+}
 
-    .card {
-        &.hoverable:hover {
-            .card-hover\:flex {
-                display: flex;
-            }
-        }
-    }
+.dragging {
+  .dragging\:hidden {
+    display: none !important;
+  }
 
-    .sortable {
-        &-chosen,
-        &-drag {
-            cursor: move;
+  .dragging\:border-none,
+  &.dragging\:border-none {
+    border: none !important;
+  }
+}
 
-            .hoverable:hover {
-                .card-hover\:flex {
-                    display: none;
-                }
-            }
-        }
-
-        &-drag {
-            opacity: .99;
-        }
-    }
+.medialibrary-tooltips-hidden {
+  .medialibrary-tooltip {
+    opacity: 0;
+  }
 }

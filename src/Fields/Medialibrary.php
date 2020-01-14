@@ -1,515 +1,284 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace DmitryBubyakin\NovaMedialibraryField\Fields;
 
-use Exception;
-use Laravel\Nova\Resource;
-use InvalidArgumentException;
-use Laravel\Nova\Fields\Field;
+use function DmitryBubyakin\NovaMedialibraryField\callable_or_default;
+use DmitryBubyakin\NovaMedialibraryField\Fields\Support\AttachCallback;
+use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaFields;
+use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaPresenter;
+use DmitryBubyakin\NovaMedialibraryField\TransientModel;
+use function DmitryBubyakin\NovaMedialibraryField\validate_args;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Gate;
-use DmitryBubyakin\NovaMedialibraryField\Label;
-use Spatie\MediaLibrary\Models\Media as MediaModel;
-use DmitryBubyakin\NovaMedialibraryField\Resources\Media as MediaResource;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
+use Laravel\Nova\Fields\Field;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\Models\Media;
 
 class Medialibrary extends Field
 {
-    /**
-     * The element's component.
-     *
-     * @var string
-     */
     public $component = 'nova-medialibrary-field';
 
-    /**
-     * The URI key of the media resource.
-     *
-     * @var string
-     */
-    public $resourceName;
-
-    /**
-     * The class name of the media resource.
-     *
-     * @var string
-     */
-    public $resourceClass;
-
-    /**
-     * The name of the relationship.
-     *
-     * @var string
-     */
-    public $relationName;
-
-    /**
-     * The name of the collection.
-     *
-     * @var string
-     */
     public $collectionName;
 
-    /**
-     * Indicates if the collection is not a single file collection.
-     *
-     * @var bool
-     */
-    public $multiple;
+    public $diskName;
 
-    /**
-     * Indicates if the media items are sortable.
-     *
-     * @var bool
-     */
-    public $mediaSortable;
+    public $fieldsCallback;
 
-    /**
-     * Image mime types.
-     *
-     * @var array
-     */
-    public $imageMimes;
+    public $attachCallback;
 
-    /**
-     * @var callable|null
-     */
-    public $storeUsingCallback;
-
-    /**
-     * @var callable|null
-     */
-    public $replaceUsingCallback;
-
-    /**
-     * The callback used to retrieve the download URL.
-     *
-     * @var callable
-     */
-    public $downloadUsingCallback;
-
-    /**
-     * The callback used to retrieve the thumbnail URL.
-     *
-     * @var callable
-     */
-    public $thumbnailUrlCallback;
-
-    /**
-     * The callback used to retrieve the thumbnail title.
-     *
-     * @var callable
-     */
-    public $thumbnailTitleCallback;
-
-    /**
-     * The callback used to retrieve the thumbnail description.
-     *
-     * @var callable
-     */
-    public $thumbnailDescriptionCallback;
-
-    /**
-     * The thumbnail labels.
-     *
-     * @var \Illuminate\Support\Collection
-     */
-    public $labels;
-
-    /**
-     * Resolve the media which should be shown on the index view.
-     *
-     * @var callable
-     */
     public $mediaOnIndexCallback;
 
-    /**
-     * The text alignment for the field's text in tables.
-     *
-     * @var string
-     */
-    public $textAlign = 'center';
+    public $downloadCallback;
 
-    /**
-     * Indicates if thumbnails should be big.
-     *
-     * @var bool
-     */
-    public $bigThumbnails = false;
+    public $previewCallback;
 
-    /**
-     * Indicates if the thumbnail description should be shown.
-     *
-     * @var bool
-     */
-    public $showThumbnailDescription = false;
+    public $tooltipCallback;
 
-    /**
-     * Available mime types for file input.
-     *
-     * @var string|null
-     */
-    public $accept;
+    public $titleCallback;
 
-    /**
-     * Indicates if the image is croppable.
-     *
-     * @var bool
-     */
-    public $croppable = false;
+    public $single;
 
-    public function __construct(string $name = 'Media', string $collection = 'default', string $resource = MediaResource::class)
+    public $cropperConversion;
+
+    public $cropperOptionsCallback;
+
+    public $attachRules;
+
+    public function __construct(string $name, string $collectionName = 'default', string $diskName = '')
     {
         parent::__construct($name);
 
-        $this->resourceClass = $resource;
-        $this->resourceName = $resource::uriKey();
-        $this->labels = collect();
-
-        $this
-            ->relation('media')
-            ->collection($collection)
-            ->thumbnail('')
-            ->thumbnailTitle('file_name')
-            ->imageMimes('image/jpeg', 'image/gif', 'image/png')
-            ->mediaOnIndex(1)
-            ->exceptOnForms();
-    }
-
-    public function relation(string $relationName): self
-    {
-        $this->relationName = $relationName;
-
-        return $this;
-    }
-
-    public function sortable($value = true)
-    {
-        $this->mediaSortable = $value;
-
-        return $this;
-    }
-
-    public function collection(string $collectionName): self
-    {
         $this->collectionName = $collectionName;
+        $this->diskName = $diskName;
+        $this->fieldsCallback = MediaFields::make();
+        $this->attachCallback = new AttachCallback;
+        $this->single(false);
+        $this->mediaOnIndex(1);
+        $this->attachRules([]);
+    }
 
-        $this->multiple = $this->isMultiple($collectionName);
+    public function fields(callable $callback): self
+    {
+        $this->fieldsCallback = $callback;
 
         return $this;
     }
 
-    public function imageMimes(string ...$imageMimes): self
+    public function attachUsing(callable $callback): self
     {
-        $this->imageMimes = $imageMimes;
-
-        return $this;
-    }
-
-    public function storeUsing(callable $storeUsingCallback): self
-    {
-        $this->storeUsingCallback = $storeUsingCallback;
-
-        return $this;
-    }
-
-    public function replaceUsing(callable $replaceUsingCallback): self
-    {
-        $this->replaceUsingCallback = $replaceUsingCallback;
-
-        return $this;
-    }
-
-    public function downloadUsing(callable $downloadUsingCallback): self
-    {
-        $this->downloadUsingCallback = $downloadUsingCallback;
-
-        return $this;
-    }
-
-    /**
-     * @param string|callable $thumbnail
-     *
-     * @return $this
-     */
-    public function thumbnail($thumbnail): self
-    {
-        $this->validateStringOrCallable($thumbnail, __METHOD__);
-
-        $this->thumbnailUrlCallback = $this->callback($thumbnail, function (MediaModel $media) use ($thumbnail) {
-            return $media->getFullUrl($thumbnail);
-        });
-
-        return $this;
-    }
-
-    /**
-     * @param string|callable $thumbnail
-     *
-     * @return $this
-     */
-    public function thumbnailTitle($title): self
-    {
-        $this->validateStringOrCallable($title, __METHOD__);
-
-        $this->thumbnailTitleCallback = $this->callback($title, function (MediaModel $media) use ($title) {
-            return data_get($media, str_replace('->', '.', $title));
-        });
-
-        return $this;
-    }
-
-    /**
-     * @param string|callable $thumbnail
-     * @param int $limit
-     *
-     * @return $this
-     */
-    public function thumbnailDescription($description, int $limit = 100): self
-    {
-        $this->validateStringOrCallable($description, __METHOD__);
-
-        $this->showThumbnailDescription = true;
-
-        $this->thumbnailDescriptionCallback = $this->callback($description, function (MediaModel $media) use ($description, $limit) {
-            return str_limit(data_get($media, str_replace('->', '.', $description)), $limit);
-        });
-
-        return $this;
-    }
-
-    /**
-     * @param  string $title
-     * @param  string|callable $condition
-     * @param  string|null $trueColor
-     * @param  string|null $falseColor
-     *
-     * @return $this
-     */
-    public function label(string $title, $condition, $trueColor = 'var(--success)', $falseColor = 'var(--danger)'): self
-    {
-        $this->validateStringOrCallable($condition, __METHOD__);
-
-        $resolver = $this->callback($condition, function (MediaModel $media) use ($condition) {
-            return data_get($media, str_replace('->', '.', $condition));
-        });
-
-        $this->labels[] = new Label($title, $resolver, $trueColor, $falseColor);
+        $this->attachCallback = $callback;
 
         return $this;
     }
 
     /**
      * @param int|callable $mediaOnIndex
-     *
-     * @return $this
      */
-    public function mediaOnIndex($mediaOnIndex = 1): self
+    public function mediaOnIndex($mediaOnIndex): self
     {
-        $this->guardMediaOnIndex($mediaOnIndex);
+        validate_args();
 
-        $this->mediaOnIndexCallback = $this->callback($mediaOnIndex, function (Collection $mediaItems) use ($mediaOnIndex) {
-            return $mediaItems->take($mediaOnIndex);
-        });
-
-        $this->showOnIndex = true;
+        $this->mediaOnIndexCallback = callable_or_default(
+            $mediaOnIndex,
+            function (HasMedia $resource, string $collectionName) use ($mediaOnIndex): Collection {
+                return $resource->media()->where('collection_name', $collectionName)
+                                ->limit($mediaOnIndex)
+                                ->orderBy('order_column')
+                                ->get();
+            }
+        );
 
         return $this;
     }
 
-    public function bigThumbnails(): self
+    /**
+     * @param string|callable $downloadUsing
+     */
+    public function downloadUsing($downloadUsing): self
     {
-        $this->bigThumbnails = true;
+        validate_args();
+
+        $this->downloadCallback = callable_or_default(
+            $downloadUsing,
+            function (Media $media) use ($downloadUsing): ?string {
+                return $media->getFullUrl($downloadUsing);
+            }
+        );
 
         return $this;
+    }
+
+    /**
+     * @param string|callable $previewUsing
+     */
+    public function previewUsing($previewUsing): self
+    {
+        validate_args();
+
+        $this->previewCallback = callable_or_default(
+            $previewUsing,
+            function (Media $media) use ($previewUsing): ?string {
+                return $media->getFullUrl($previewUsing);
+            }
+        );
+
+        return $this;
+    }
+
+    /**
+     * @param string|callable $tooltip
+     */
+    public function tooltip($tooltip): self
+    {
+        validate_args();
+
+        $this->tooltipCallback = callable_or_default(
+            $tooltip,
+            function (Media $media) use ($tooltip): ?string {
+                return $media->{$tooltip};
+            }
+        );
+
+        return $this;
+    }
+
+    /**
+     * @param string|callable $title
+     */
+    public function title($title): self
+    {
+        validate_args();
+
+        $this->titleCallback = callable_or_default(
+            $title,
+            function (Media $media) use ($title): ?string {
+                return $media->{$title};
+            }
+        );
+
+        return $this;
+    }
+
+    /**
+     * @param string|array $conversion
+     * @param array|callable|null $options
+     */
+    public function croppable($conversion, $options = null): self
+    {
+        validate_args();
+
+        $this->cropperConversion = $conversion;
+
+        $this->cropperOptionsCallback = callable_or_default(
+            $options,
+            function () use ($options) {
+                return $options ?: [
+                    'viewMode' => 3,
+                ];
+            }
+        );
+
+        return $this;
+    }
+
+    public function single(bool $single = true): self
+    {
+        $this->single = $single;
+
+        return $this;
+    }
+
+    /**
+     * @param \Illuminate\Contracts\Validation\Rule|string|array $rules
+     */
+    public function attachRules($rules): self
+    {
+        $this->attachRules = ($rules instanceof Rule || is_string($rules)) ? func_get_args() : $rules;
+
+        return $this;
+    }
+
+    public function rules($rules): void
+    {
+        throw new \Exception('Not implemented. Try YourResource::afterValidation.');
+    }
+
+    public function creationRules($rules): void
+    {
+        throw new \Exception('Not implemented. Try YourResource::afterCreationValidation.');
+    }
+
+    public function updateRules($rules): void
+    {
+        throw new \Exception('Not implemented. Try YourResource::afterUpdateValidation.');
+    }
+
+    public function getAttachRules(NovaRequest $request): array
+    {
+        return is_callable($this->attachRules)
+            ? call_user_func($this->attachRules, $request)
+            : $this->attachRules;
     }
 
     public function accept(string $accept): self
     {
-        $this->accept = $accept;
-
-        return $this;
+        return $this->withMeta(['accept' => $accept]);
     }
 
-    public function croppable(): self
+    public function maxSizeInBytes(int $maxSize): self
     {
-        $this->croppable = true;
-
-        return $this;
+        return $this->withMeta(['maxSize' => $maxSize]);
     }
 
-    public function thumbnailSize(string $width, ?string $height = null): self
+    public function resolve($resource, $attribute = null): void
     {
-        return $this->withMeta([
-            'thumbnailWidth' => $width,
-            'thumbnailHeight' => $height ?: $width,
-        ]);
+        $this->value = Str::uuid();
     }
 
-    public function onlyOnForms()
+    public function resolveForDisplay($resource, $attribute = null): void
     {
-        throw new Exception('Medialibrary::onlyOnForms: can\'t be shown on forms.');
-    }
+        $indexControllerAction = 'Laravel\Nova\Http\Controllers\ResourceIndexController@handle';
 
-    /**
-     * Resolve the field's value.
-     *
-     * @param mixed       $resource
-     * @param string|null $attribute
-     *
-     * @return void
-     */
-    public function resolve($resource, $attribute = null)
-    {
-        $mediaItems = collect($resource->{$this->relationName});
-
-        $this->value = $this->filterMedia($mediaItems)->map([$this, 'serializeMedia']);
-    }
-
-    public function serializeMedia(MediaModel $media): array
-    {
-        return [
-            'id'                   => $media->id,
-            'order'                => $media->order_column,
-            'extension'            => $media->extension,
-            'labels'               => $this->resolveLabels($media),
-            'downloadUrl'          => $this->resolveDownloadUrl($media),
-            'thumbnailUrl'         => $this->resolveThumbnailUrl($media),
-            'thumbnailTitle'       => $this->resolveThumbnailTitle($media),
-            'thumbnailDescription' => $this->resolveThumbnailDescription($media),
-            'authorizedToView'     => $this->authorizedTo('view', $media),
-            'authorizedToUpdate'   => $this->authorizedTo('update', $media),
-            'authorizedToDelete'   => $this->authorizedTo('delete', $media),
-        ];
-    }
-
-    protected function resolveLabels(MediaModel $media): array
-    {
-        return $this->labels->map->resolve($media)->all();
-    }
-
-    protected function resolveDownloadUrl(MediaModel $media): string
-    {
-        if (is_callable($this->downloadUsingCallback)) {
-            return call_user_func($this->downloadUsingCallback, $media);
+        if (Route::current()->getActionName() === $indexControllerAction) {
+            $this->resolveForIndex($resource, $attribute);
         }
-
-        return $media->getFullUrl();
     }
 
-    protected function resolveThumbnailUrl(MediaModel $media): ?string
+    public function resolveForIndex($resource, $attribute = null): void
     {
-        return $this->isImage($media) ? call_user_func($this->thumbnailUrlCallback, $media) : null;
+        $this->value = call_user_func_array($this->mediaOnIndexCallback, [
+            $resource,
+            $this->collectionName,
+        ])->map(function (Media $media) {
+            return new MediaPresenter($media, $this);
+        });
     }
 
-    protected function resolveThumbnailTitle(MediaModel $media): ?string
+    protected function fillAttribute(NovaRequest $request, $requestAttribute, $model, $attribute): callable
     {
-        return call_user_func($this->thumbnailTitleCallback, $media);
-    }
+        return function () use ($request, $attribute, $model): void {
+            if (empty($uuid = $request->input($attribute))) {
+                return;
+            }
 
-    protected function resolveThumbnailDescription(MediaModel $media): ?string
-    {
-        return $this->showThumbnailDescription ? call_user_func($this->thumbnailDescriptionCallback, $media) : null;
-    }
+            $propertyName = TransientModel::getCustomPropertyName();
 
-    protected function authorizedTo(string $ability, MediaModel $media): bool
-    {
-        return Gate::getPolicyFor($media) ? Gate::check($ability, $media) : true;
+            foreach (TransientModel::make()->getMedia($uuid) as $media) {
+                $media
+                    ->forgetCustomProperty($propertyName)
+                    ->move($model, $this->collectionName, $this->diskName)
+                    ->update(['manipulations' => $media->manipulations]);
+            }
+        };
     }
 
     public function meta(): array
     {
         return array_merge([
-            'accept'         => $this->accept,
-            'croppable'      => $this->croppable,
-            'bigThumbnails'  => $this->bigThumbnails,
-            'mediaSortable'  => $this->mediaSortable,
             'collectionName' => $this->collectionName,
-            'resourceName'   => $this->resourceName,
-            'relationName'   => $this->relationName,
-            'multiple'       => $this->multiple,
+            'single' => $this->single,
         ], $this->meta);
-    }
-
-    protected function filterMedia(Collection $mediaItems): Collection
-    {
-        if ($this->collectionName) {
-            $mediaItems = $mediaItems->where('collection_name', $this->collectionName);
-        }
-
-        if ($this->showOnIndex && $this->isIndexView()) {
-            $mediaItems = call_user_func($this->mediaOnIndexCallback, $mediaItems);
-        }
-
-        return $mediaItems->sortBy('order_column')->values();
-    }
-
-    protected function isIndexView(): bool
-    {
-        return collect(
-            debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10)
-        )->map(function (array $trace) {
-            return $trace['function'] ?? '';
-        })->contains('indexFields');
-    }
-
-    protected function isImage(MediaModel $media): bool
-    {
-        return in_array($media->mime_type, $this->imageMimes);
-    }
-
-    protected function isMultiple(string $collectionName): bool
-    {
-        $resource = $this->resolveResourceClass();
-
-        $model = app($resource::$model);
-
-        $model->registerMediaCollections();
-
-        $collection = collect($model->mediaCollections)
-            ->where('name', $collectionName)
-            ->first();
-
-        $singleFile = $collection->singleFile ?? false;
-
-        return ! $singleFile;
-    }
-
-    protected function resolveResourceClass(): ?string
-    {
-        return collect(
-            debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 8)
-        )->map(function (array $trace) {
-            return $trace['class'] ?? '';
-        })->first(function (string $class) {
-            return is_subclass_of($class, Resource::class);
-        });
-    }
-
-    protected function validateStringOrCallable($value, string $method)
-    {
-        if (! is_callable($value) && ! is_string($value)) {
-            $this->invalidArgument($method, 'string or callable expected');
-        }
-    }
-
-    protected function guardMediaOnIndex($mediaOnIndex): void
-    {
-        if (! is_callable($mediaOnIndex) && ! is_numeric($mediaOnIndex)) {
-            $this->invalidArgument('mediaOnIndex', 'integer or callable expected');
-        }
-
-        if (is_numeric($mediaOnIndex) && (int) $mediaOnIndex <= 0) {
-            $this->invalidArgument('mediaOnIndex', 'the number of media must be positive');
-        }
-    }
-
-    protected function invalidArgument(string $method, string $message): void
-    {
-        throw new InvalidArgumentException("Medialibrary::{$method}: {$message}.");
-    }
-
-    protected function callback($value, callable $default): callable
-    {
-        return is_callable($value) ? $value : $default;
     }
 }

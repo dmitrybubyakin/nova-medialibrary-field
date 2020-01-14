@@ -1,47 +1,40 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace DmitryBubyakin\NovaMedialibraryField\Resources;
 
-use Laravel\Nova\Resource;
-use Laravel\Nova\Fields\ID;
+use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
-use Spatie\MediaLibrary\Models\Media as MediaModel;
+use Laravel\Nova\Nova;
+use Laravel\Nova\Resource;
 
 class Media extends Resource
 {
-    public static $model = MediaModel::class;
+    public static $model = 'Spatie\MediaLibrary\Models\Media';
 
     public static $displayInNavigation = false;
 
-    public static function singularLabel(): string
+    public static $globallySearchable = false;
+
+    public static $trafficCop = false;
+
+    public static function uriKey(): string
     {
-        return 'Media';
+        return 'dmitrybubyakin-nova-medialibrary-media';
     }
 
     public function fields(Request $request): array
     {
-        return [
-            ID::make(),
+        $resource = Nova::resourceInstanceForKey($request->input('viaResource'));
 
-            Text::make('Filename', 'file_name'),
+        $field = $resource
+                ->availableFields($request)
+                ->whereInstanceOf(Medialibrary::class)
+                ->findFieldByAttribute($request->input('viaField'));
 
-            Textarea::make('Description', 'custom_properties->description')->alwaysShow(),
+        if (is_null($field)) {
+            return [];
+        }
 
-            Text::make('Disk')->exceptOnForms(),
-
-            Text::make('Download Url', function () {
-                return $this->resource->exists ? $this->resource->getFullUrl() : null;
-            }),
-
-            Text::make('Size')->displayUsing(function () {
-                return $this->resource->humanReadableSize;
-            })->exceptOnForms(),
-
-            Text::make('Updated At')->displayUsing(function () {
-                return $this->resource->updated_at->diffForHumans();
-            })->exceptOnForms(),
-        ];
+        return call_user_func($field->fieldsCallback->bindTo($this), $request);
     }
 }

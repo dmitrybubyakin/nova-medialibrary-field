@@ -72,3 +72,7 @@
 ### Added
 
 - Add Nova 2.4 support
+
+## 2.0
+
+TODO
