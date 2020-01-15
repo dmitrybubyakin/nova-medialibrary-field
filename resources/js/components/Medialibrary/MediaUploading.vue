@@ -26,7 +26,7 @@
       {{ __('Upload') }}
     </progress-button>
 
-    <portal v-if="chooseExistingMediaModaOpen" to="modals">
+    <portal v-if="chooseExistingMediaModalOpen" to="modals">
       <ChooseExistingMediaModal
         :field="context.field"
         :resource-id="context.resourceId"
@@ -56,7 +56,7 @@ export default {
 
   data() {
     return {
-      chooseExistingMediaModaOpen: false,
+      chooseExistingMediaModalOpen: false,
       showFileInput: true,
       media: [],
     }
@@ -134,11 +134,11 @@ export default {
     },
 
     attachExisting() {
-      this.chooseExistingMediaModaOpen = true
+      this.chooseExistingMediaModalOpen = true
     },
 
     closeChooseExistingMediaModal() {
-      this.chooseExistingMediaModaOpen = false
+      this.chooseExistingMediaModalOpen = false
     },
 
     addChosenMedia(mediaItems) {
