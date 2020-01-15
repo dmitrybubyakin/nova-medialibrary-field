@@ -39,6 +39,7 @@ class FieldServiceProvider extends ServiceProvider
                 Route::post('{media}/crop', Http\Controllers\CropController::class);
                 Route::post('{media}/regenerate', Http\Controllers\RegenerateController::class);
                 Route::get('{resource}/{resourceId}/media/{field}', Http\Controllers\IndexController::class);
+                Route::get('{resource}/{resourceId}/media/{field}/attachable', Http\Controllers\AttachableController::class);
                 Route::post('{resource}/{resourceId}/media/{field}', Http\Controllers\AttachController::class);
             });
     }

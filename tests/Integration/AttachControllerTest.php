@@ -103,6 +103,22 @@ class AttachControllerTest extends TestCase
         $this->assertSame(['*' => ['with' => 100]], $post->media->first()->manipulations);
     }
 
+    /** @test */
+    public function existing_media_can_be_attached(): void
+    {
+        $this->createPostWithMedia();
+
+        $post = $this->createPost();
+
+        $this->withoutExceptionHandling();
+
+        $this
+            ->postJson("nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/{$post->id}/media/media_testing", ['media' => 1])
+            ->assertStatus(201);
+
+        $this->assertCount(1, $post->media);
+    }
+
     private function postWithFile(string $uri, array $parameters, UploadedFile $file): TestResponse
     {
         return $this->call('POST', $uri, $parameters, [], ['file' => $file]);

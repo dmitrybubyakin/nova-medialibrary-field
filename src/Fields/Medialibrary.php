@@ -8,6 +8,7 @@ use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaFields;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaPresenter;
 use DmitryBubyakin\NovaMedialibraryField\TransientModel;
 use function DmitryBubyakin\NovaMedialibraryField\validate_args;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -27,6 +28,8 @@ class Medialibrary extends Field
     public $fieldsCallback;
 
     public $attachCallback;
+
+    public $attachExistingCallback;
 
     public $mediaOnIndexCallback;
 
@@ -71,6 +74,25 @@ class Medialibrary extends Field
         $this->attachCallback = $callback;
 
         return $this;
+    }
+
+    /**
+     * @param string|callable|null $callback
+     */
+    public function attachExisting($callback = null): self
+    {
+        validate_args();
+
+        $this->attachExistingCallback = callable_or_default(
+            $callback,
+            function (Builder $query) use ($callback): void {
+                if ($callback) {
+                    $query->where('collection_name', $callback);
+                }
+            }
+        );
+
+        return $this->withMeta(['attachExisting' => true]);
     }
 
     /**

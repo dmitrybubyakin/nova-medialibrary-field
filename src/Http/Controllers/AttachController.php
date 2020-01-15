@@ -5,7 +5,10 @@ namespace DmitryBubyakin\NovaMedialibraryField\Http\Controllers;
 use DmitryBubyakin\NovaMedialibraryField\Http\Requests\MedialibraryRequest;
 use DmitryBubyakin\NovaMedialibraryField\TransientModel;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\UploadedFile;
+use Spatie\MediaLibrary\Filesystem\Filesystem;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\Helpers\TemporaryDirectory;
 use Spatie\MediaLibrary\Models\Media;
 
 class AttachController
@@ -17,6 +20,10 @@ class AttachController
                         : [TransientModel::make(), $request->fieldUuid()];
 
         $field = $request->medialibraryField();
+
+        if ($request->has('media')) {
+            $this->replaceFile($request);
+        }
 
         $request->validate(['file' => $field->getAttachRules($request)]);
 
@@ -31,6 +38,21 @@ class AttachController
         ]);
 
         return response()->json([], 201);
+    }
+
+    private function replaceFile(MedialibraryRequest $request): void
+    {
+        $media = Media::findOrFail($request->media);
+
+        $directory = TemporaryDirectory::create();
+
+        $temporaryFile = $directory->path('/').DIRECTORY_SEPARATOR.$media->file_name;
+
+        app(Filesystem::class)->copyFromMediaLibrary($media, $temporaryFile);
+
+        $request->replace([
+            'file' => new UploadedFile($temporaryFile, $media->file_name, $media->mime_type, null, true),
+        ]);
     }
 
     private function rememberTargetModel(MedialibraryRequest $request, HasMedia $model, string $collectionName): void

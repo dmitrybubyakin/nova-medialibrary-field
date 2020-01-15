@@ -6,8 +6,16 @@
   width: 8rem;
 }
 
+.w-24 {
+  width: 6rem;
+}
+
 .h-24 {
   height: 6rem;
+}
+
+.w-choose-existing-media {
+  width: 1024px;
 }
 
 .bg-overlay {
@@ -34,6 +42,14 @@
 
 .shadow-danger {
   box-shadow: 0 0 0 2px var(--danger);
+}
+
+.shadow-media-chosen {
+  box-shadow: 0 0 0 2px var(--info-dark);
+}
+
+.bg-info-dark-half {
+  background-color: rgba(49, 130, 206, .5);
 }
 
 .dragging {

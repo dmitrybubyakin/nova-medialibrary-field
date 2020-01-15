@@ -3,9 +3,11 @@
 namespace DmitryBubyakin\NovaMedialibraryField\Tests\Fixtures\Nova;
 
 use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Resource;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
 
 class TestPost extends Resource
 {
@@ -23,6 +25,11 @@ class TestPost extends Resource
                         Text::make('Disk')
                             ->onlyOnDetail(),
                     ];
+                })
+                ->attachExisting(function (Builder $query, Request $request, HasMedia $model) {
+                    if ($request->name) {
+                        return $query->where('name', $request->name);
+                    }
                 }),
 
             Medialibrary::make('Media testing', 'testing'),

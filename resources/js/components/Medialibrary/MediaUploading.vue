@@ -18,9 +18,23 @@
       {{ chooseButtonText }}
     </label>
 
+    <button v-if="attachExistingButtonVisible" type="button" class="btn btn-default btn-primary ml-3" @click="attachExisting">
+      {{ __('Use existing') }}
+    </button>
+
     <progress-button v-if="mediaToUpload.length" class="ml-3" @click.native="upload">
       {{ __('Upload') }}
     </progress-button>
+
+    <portal v-if="chooseExistingMediaModaOpen" to="modals">
+      <ChooseExistingMediaModal
+        :field="context.field"
+        :resource-id="context.resourceId"
+        :resource-name="context.resourceName"
+        @close="closeChooseExistingMediaModal"
+        @choose="addChosenMedia"
+      />
+    </portal>
   </div>
 </template>
 
@@ -28,9 +42,11 @@
 import { Errors } from 'laravel-nova'
 import MediaUploadingList from './MediaUploadingList'
 import { context } from './Context'
+import ChooseExistingMediaModal from './Modals/ChooseExistingMedia'
 
 export default {
   components: {
+    ChooseExistingMediaModal,
     MediaUploadingList,
   },
 
@@ -40,6 +56,7 @@ export default {
 
   data() {
     return {
+      chooseExistingMediaModaOpen: false,
       showFileInput: true,
       media: [],
     }
@@ -49,6 +66,7 @@ export default {
     mediaToUpload() {
       return this.media.filter(media => !media.uploading)
     },
+
     chooseButtonText() {
       if (this.context.media.length && this.context.field.single) {
         return this.__('Replace file')
@@ -57,6 +75,10 @@ export default {
       } else {
         return this.__('Choose Files')
       }
+    },
+
+    attachExistingButtonVisible() {
+      return this.context.field.attachExisting
     },
   },
 
@@ -85,22 +107,50 @@ export default {
         this.media = []
       }
 
-      this.media.push({
+      this.media.push(this.wrapMedia({
         file,
         id,
         size: file.size,
-        name: file.name,
+        fileName: file.name,
+        mimeType: file.type,
         extension: file.name.split('.').pop(),
+      }))
+    },
+
+    wrapMedia(media, existing = false) {
+      return {
+        ...media,
+        existing,
         uploading: false,
         uploadingFailed: false,
         uploadingProgress: 0,
         validationErrors: new Errors(),
-        remove: () => this.removeFileById(id),
-      })
+        remove: () => this.removeFileById(media.id),
+      }
     },
 
     removeFileById(id) {
       this.media = this.media.filter(media => media.id !== id)
+    },
+
+    attachExisting() {
+      this.chooseExistingMediaModaOpen = true
+    },
+
+    closeChooseExistingMediaModal() {
+      this.chooseExistingMediaModaOpen = false
+    },
+
+    addChosenMedia(mediaItems) {
+      this.closeChooseExistingMediaModal()
+
+      if (this.context.field.single) {
+        this.media = []
+      }
+
+      mediaItems.forEach(media => {
+        this.media.push(this.wrapMedia(media, true))
+      })
     },
 
     upload() {
@@ -109,7 +159,13 @@ export default {
 
       this.mediaToUpload.forEach(media => {
         const formData = new FormData()
-        formData.append('file', media.file)
+
+        if (media.existing) {
+          formData.append('media', media.id)
+        } else {
+          formData.append('file', media.file)
+        }
+
         formData.append('fieldUuid', this.context.field.value)
 
         const options = {

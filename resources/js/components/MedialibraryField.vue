@@ -2,7 +2,7 @@
   <Provider :field="field" :resource-name="resourceName" :resource-id="resourceId">
     <div>
       <MediaList />
-      <MediaUploadingButton v-if="addFiles" class="mt-2" />
+      <MediaUploading v-if="addFiles" class="mt-2" />
     </div>
   </Provider>
 </template>
@@ -10,13 +10,13 @@
 <script>
 import { Provider } from './Medialibrary/Context'
 import MediaList from './Medialibrary/MediaList'
-import MediaUploadingButton from './Medialibrary/MediaUploadingButton'
+import MediaUploading from './Medialibrary/MediaUploading'
 
 export default {
   components: {
     Provider,
     MediaList,
-    MediaUploadingButton,
+    MediaUploading,
   },
 
   props: {
