@@ -50,7 +50,7 @@ class AttachController
 
         app(Filesystem::class)->copyFromMediaLibrary($media, $temporaryFile);
 
-        $request->replace([
+        $request->merge([
             'file' => new UploadedFile($temporaryFile, $media->file_name, $media->mime_type, null, true),
         ]);
     }

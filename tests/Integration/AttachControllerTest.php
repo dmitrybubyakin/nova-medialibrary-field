@@ -117,6 +117,15 @@ class AttachControllerTest extends TestCase
             ->assertStatus(201);
 
         $this->assertCount(1, $post->media);
+
+        $fieldUuid = (string) Str::uuid();
+
+        $this
+            ->postJson('nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/undefined/media/media_testing', [
+                'media' => 1,
+                'fieldUuid' => $fieldUuid,
+            ])
+            ->assertStatus(201);
     }
 
     private function postWithFile(string $uri, array $parameters, UploadedFile $file): TestResponse
