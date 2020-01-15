@@ -20,7 +20,7 @@ TODO
 This package can be installed via command:
 
 ```bash
-composer require dmitrybubyakin/nova-medialibrary-field
+composer require dmitrybubyakin/nova-medialibrary-field:dev-feature/v2
 ```
 
 TODO
