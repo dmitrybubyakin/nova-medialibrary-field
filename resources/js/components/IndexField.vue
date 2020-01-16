@@ -32,8 +32,6 @@ export default {
           const standardThumbnailSize = 'w-8 h-8';
           const BigThumbnailSize = 'w-16 h-16';
 
-          console.log(this.field);
-
           return !this.field.bigIndexThumbnails ? standardThumbnailSize : BigThumbnailSize;
 
         },
