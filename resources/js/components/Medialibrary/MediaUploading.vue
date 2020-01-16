@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { Errors } from 'laravel-nova'
+import { UploadingFile, UploadingExistingMedia } from './UploadingMedia'
 import MediaUploadingList from './MediaUploadingList'
 import { context } from './Context'
 import ChooseExistingMediaModal from './Modals/ChooseExistingMedia'
@@ -85,52 +85,43 @@ export default {
   methods: {
     processFiles(event) {
       [...event.target.files].forEach(file => {
-        this.addFile(file)
+        this.addMedia(UploadingFile.create(file))
       })
 
       this.showFileInput = false
       this.$nextTick(() => this.showFileInput = true)
     },
 
-    addFile(file) {
-      if (this.context.field.maxSize && file.size > this.context.field.maxSize) {
-        Nova.error(this.__('File :filename must be less than :size kilobytes', {
-          filename: file.name,
-          size: this.context.field.maxSize / 1024,
-        }))
+    addMedia(media) {
+      if (this.validationFails(media)) {
         return
       }
 
-      const id = Math.random().toString(36).substr(-8)
+      media.onRemove(this.removeMedia)
 
       if (this.context.field.single) {
         this.media = []
       }
 
-      this.media.push(this.wrapMedia({
-        file,
-        id,
-        size: file.size,
-        fileName: file.name,
-        mimeType: file.type,
-        extension: file.name.split('.').pop(),
-      }))
+      this.media.push(media)
     },
 
-    wrapMedia(media, existing = false) {
-      return {
-        ...media,
-        existing,
-        uploading: false,
-        uploadingFailed: false,
-        uploadingProgress: 0,
-        validationErrors: new Errors(),
-        remove: () => this.removeFileById(media.id),
-      }
-    },
-
-    removeFileById(id) {
+    removeMedia({ id }) {
       this.media = this.media.filter(media => media.id !== id)
+    },
+
+    validationFails(media) {
+      const { field } = this.context
+
+      if (!media.hasValidSize(field)) {
+        Nova.error(this.__('File :filename must be less than :size kilobytes', {
+          filename: media.fileName,
+          size: field.maxSize / 1024,
+        }))
+        return true
+      }
+
+      return false
     },
 
     attachExisting() {
@@ -144,32 +135,24 @@ export default {
     addChosenMedia(mediaItems) {
       this.closeChooseExistingMediaModal()
 
-      if (this.context.field.single) {
-        this.media = []
-      }
-
       mediaItems.forEach(media => {
-        this.media.push(this.wrapMedia(media, true))
+        this.addMedia(UploadingExistingMedia.create(media))
       })
     },
 
     upload() {
-      const { attribute } = this.context.field
+      const { attribute, value } = this.context.field
       const { resourceName, resourceId } = this.context
 
       this.mediaToUpload.forEach(media => {
         const formData = new FormData()
 
-        if (media.existing) {
-          formData.append('media', media.id)
-        } else {
-          formData.append('file', media.file)
-        }
+        media.fillFormData(formData)
 
-        formData.append('fieldUuid', this.context.field.value)
+        formData.append('fieldUuid', value)
 
         const options = {
-          onUploadProgress: event => this.handleUploadingProgress(media, event),
+          onUploadProgress: event => media.handleUploadProgress(event),
         }
 
         media.uploading = true
@@ -177,29 +160,19 @@ export default {
         Nova
           .request()
           .post(`/nova-vendor/dmitrybubyakin/nova-medialibrary-field/${resourceName}/${resourceId}/media/${attribute}`, formData, options)
-          .then(() => this.handleUploaded(media))
-          .catch(error => this.handleUploadingFailed(media, error))
+          .then(() => this.handleUploadSucceeded(media))
+          .catch(error => this.handleUploadFailed(media, error))
       })
     },
 
-    handleUploadingProgress(media, event) {
-      media.uploadingProgress = Math.round(event.loaded / event.total * 100)
-    },
-
-    handleUploaded(media) {
+    handleUploadSucceeded(media) {
       Nova.$emit(`nova-medialibrary-field:refresh:${this.context.field.attribute}`, () => {
         media.remove()
       })
     },
 
-    handleUploadingFailed(media, error) {
-      media.uploading = false
-      media.uploadingFailed = true
-      media.uploadingProgress = 0
-
-      if (error.response && error.response.status === 422) {
-        media.validationErrors = new Errors(error.response.data.errors)
-      }
+    handleUploadFailed(media, error) {
+      media.handleUploadFailed(error)
     },
   },
 }

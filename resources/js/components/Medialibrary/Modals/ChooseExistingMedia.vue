@@ -69,8 +69,8 @@ export default {
       type: String,
       required: true,
     },
+    // eslint-disable-next-line
     resourceId: {
-      type: [Number, String],
       required: true,
     },
     field: {

@@ -97,10 +97,13 @@ export default {
 
   methods: {
     loadPreview() {
-      if (!/^image/.test(this.media.mimeType)) {
+      if (this.media.isImage) {
+        this.preview = this.media.previewUrl
+      } else {
         return
-      } else if (this.media.existing) {
-        this.preview  = this.media.previewUrl
+      }
+
+      if (this.preview) {
         return
       }
 
