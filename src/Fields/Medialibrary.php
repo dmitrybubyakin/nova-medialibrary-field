@@ -134,21 +134,21 @@ class Medialibrary extends Field
      *
      * @var bool
      */
-    public $bigThumbnails = FALSE;
+    public $bigThumbnails = false;
 
     /**
      * Indicates if thumbnails should be big.
      *
      * @var bool
      */
-    public $bigIndexThumbnails = FALSE;
+    public $bigIndexThumbnails = false;
 
     /**
      * Indicates if the thumbnail description should be shown.
      *
      * @var bool
      */
-    public $showThumbnailDescription = FALSE;
+    public $showThumbnailDescription = false;
 
     /**
      * Available mime types for file input.
@@ -162,7 +162,7 @@ class Medialibrary extends Field
      *
      * @var bool
      */
-    public $croppable = FALSE;
+    public $croppable = false;
 
     public function __construct(string $name = 'Media', string $collection = 'default', string $resource = MediaResource::class)
     {
@@ -189,7 +189,7 @@ class Medialibrary extends Field
         return $this;
     }
 
-    public function sortable($value = TRUE)
+    public function sortable($value = true)
     {
         $this->mediaSortable = $value;
 
@@ -275,7 +275,7 @@ class Medialibrary extends Field
     {
         $this->validateStringOrCallable($description, __METHOD__);
 
-        $this->showThumbnailDescription = TRUE;
+        $this->showThumbnailDescription = true;
 
         $this->thumbnailDescriptionCallback = $this->callback($description, function (MediaModel $media) use ($description, $limit) {
             return str_limit(data_get($media, str_replace('->', '.', $description)), $limit);
@@ -318,21 +318,21 @@ class Medialibrary extends Field
             return $mediaItems->take($mediaOnIndex);
         });
 
-        $this->showOnIndex = TRUE;
+        $this->showOnIndex = true;
 
         return $this;
     }
 
     public function bigThumbnails(): self
     {
-        $this->bigThumbnails = TRUE;
+        $this->bigThumbnails = true;
 
         return $this;
     }
 
     public function bigIndexThumbnails(): self
     {
-        $this->bigIndexThumbnails = TRUE;
+        $this->bigIndexThumbnails = true;
 
         return $this;
     }
@@ -346,12 +346,12 @@ class Medialibrary extends Field
 
     public function croppable(): self
     {
-        $this->croppable = TRUE;
+        $this->croppable = true;
 
         return $this;
     }
 
-    public function thumbnailSize(string $width, ?string $height = NULL): self
+    public function thumbnailSize(string $width, ?string $height = null): self
     {
         return $this->withMeta([
             'thumbnailWidth'  => $width,
@@ -372,7 +372,7 @@ class Medialibrary extends Field
      *
      * @return void
      */
-    public function resolve($resource, $attribute = NULL)
+    public function resolve($resource, $attribute = null)
     {
         $mediaItems = collect($resource->{$this->relationName});
 
@@ -415,7 +415,7 @@ class Medialibrary extends Field
 
     protected function resolveThumbnailUrl(MediaModel $media): ?string
     {
-        return $this->isImage($media) ? call_user_func($this->thumbnailUrlCallback, $media) : NULL;
+        return $this->isImage($media) ? call_user_func($this->thumbnailUrlCallback, $media) : null;
     }
 
     protected function resolveThumbnailTitle(MediaModel $media): ?string
@@ -425,12 +425,12 @@ class Medialibrary extends Field
 
     protected function resolveThumbnailDescription(MediaModel $media): ?string
     {
-        return $this->showThumbnailDescription ? call_user_func($this->thumbnailDescriptionCallback, $media) : NULL;
+        return $this->showThumbnailDescription ? call_user_func($this->thumbnailDescriptionCallback, $media) : null;
     }
 
     protected function authorizedTo(string $ability, MediaModel $media): bool
     {
-        return Gate::getPolicyFor($media) ? Gate::check($ability, $media) : TRUE;
+        return Gate::getPolicyFor($media) ? Gate::check($ability, $media) : true;
     }
 
     public function meta(): array
@@ -487,7 +487,7 @@ class Medialibrary extends Field
             ->where('name', $collectionName)
             ->first();
 
-        $singleFile = $collection->singleFile ?? FALSE;
+        $singleFile = $collection->singleFile ?? false;
 
         return ! $singleFile;
     }
