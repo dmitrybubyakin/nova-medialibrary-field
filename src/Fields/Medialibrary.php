@@ -134,21 +134,21 @@ class Medialibrary extends Field
      *
      * @var bool
      */
-    public $bigThumbnails = false;
+    public $bigThumbnails = FALSE;
 
     /**
      * Indicates if thumbnails should be big.
      *
      * @var bool
      */
-    public $bigIndexThumbnails = false;
+    public $bigIndexThumbnails = FALSE;
 
     /**
      * Indicates if the thumbnail description should be shown.
      *
      * @var bool
      */
-    public $showThumbnailDescription = false;
+    public $showThumbnailDescription = FALSE;
 
     /**
      * Available mime types for file input.
@@ -162,15 +162,15 @@ class Medialibrary extends Field
      *
      * @var bool
      */
-    public $croppable = false;
+    public $croppable = FALSE;
 
     public function __construct(string $name = 'Media', string $collection = 'default', string $resource = MediaResource::class)
     {
         parent::__construct($name);
 
         $this->resourceClass = $resource;
-        $this->resourceName = $resource::uriKey();
-        $this->labels = collect();
+        $this->resourceName  = $resource::uriKey();
+        $this->labels        = collect();
 
         $this
             ->relation('media')
@@ -189,7 +189,7 @@ class Medialibrary extends Field
         return $this;
     }
 
-    public function sortable($value = true)
+    public function sortable($value = TRUE)
     {
         $this->mediaSortable = $value;
 
@@ -275,7 +275,7 @@ class Medialibrary extends Field
     {
         $this->validateStringOrCallable($description, __METHOD__);
 
-        $this->showThumbnailDescription = true;
+        $this->showThumbnailDescription = TRUE;
 
         $this->thumbnailDescriptionCallback = $this->callback($description, function (MediaModel $media) use ($description, $limit) {
             return str_limit(data_get($media, str_replace('->', '.', $description)), $limit);
@@ -285,10 +285,10 @@ class Medialibrary extends Field
     }
 
     /**
-     * @param  string $title
-     * @param  string|callable $condition
-     * @param  string|null $trueColor
-     * @param  string|null $falseColor
+     * @param string $title
+     * @param string|callable $condition
+     * @param string|null $trueColor
+     * @param string|null $falseColor
      *
      * @return $this
      */
@@ -318,21 +318,21 @@ class Medialibrary extends Field
             return $mediaItems->take($mediaOnIndex);
         });
 
-        $this->showOnIndex = true;
+        $this->showOnIndex = TRUE;
 
         return $this;
     }
 
     public function bigThumbnails(): self
     {
-        $this->bigThumbnails = true;
+        $this->bigThumbnails = TRUE;
 
         return $this;
     }
 
     public function bigIndexThumbnails(): self
     {
-        $this->bigIndexThumbnails = true;
+        $this->bigIndexThumbnails = TRUE;
 
         return $this;
     }
@@ -346,15 +346,15 @@ class Medialibrary extends Field
 
     public function croppable(): self
     {
-        $this->croppable = true;
+        $this->croppable = TRUE;
 
         return $this;
     }
 
-    public function thumbnailSize(string $width, ?string $height = null): self
+    public function thumbnailSize(string $width, ?string $height = NULL): self
     {
         return $this->withMeta([
-            'thumbnailWidth' => $width,
+            'thumbnailWidth'  => $width,
             'thumbnailHeight' => $height ?: $width,
         ]);
     }
@@ -367,16 +367,19 @@ class Medialibrary extends Field
     /**
      * Resolve the field's value.
      *
-     * @param mixed       $resource
+     * @param mixed $resource
      * @param string|null $attribute
      *
      * @return void
      */
-    public function resolve($resource, $attribute = null)
+    public function resolve($resource, $attribute = NULL)
     {
         $mediaItems = collect($resource->{$this->relationName});
 
-        $this->value = $this->filterMedia($mediaItems)->map([$this, 'serializeMedia']);
+        $this->value = $this->filterMedia($mediaItems)->map([
+            $this,
+            'serializeMedia'
+        ]);
     }
 
     public function serializeMedia(MediaModel $media): array
@@ -412,7 +415,7 @@ class Medialibrary extends Field
 
     protected function resolveThumbnailUrl(MediaModel $media): ?string
     {
-        return $this->isImage($media) ? call_user_func($this->thumbnailUrlCallback, $media) : null;
+        return $this->isImage($media) ? call_user_func($this->thumbnailUrlCallback, $media) : NULL;
     }
 
     protected function resolveThumbnailTitle(MediaModel $media): ?string
@@ -422,25 +425,26 @@ class Medialibrary extends Field
 
     protected function resolveThumbnailDescription(MediaModel $media): ?string
     {
-        return $this->showThumbnailDescription ? call_user_func($this->thumbnailDescriptionCallback, $media) : null;
+        return $this->showThumbnailDescription ? call_user_func($this->thumbnailDescriptionCallback, $media) : NULL;
     }
 
     protected function authorizedTo(string $ability, MediaModel $media): bool
     {
-        return Gate::getPolicyFor($media) ? Gate::check($ability, $media) : true;
+        return Gate::getPolicyFor($media) ? Gate::check($ability, $media) : TRUE;
     }
 
     public function meta(): array
     {
         return array_merge([
-            'accept'         => $this->accept,
-            'croppable'      => $this->croppable,
-            'bigThumbnails'  => $this->bigThumbnails,
-            'mediaSortable'  => $this->mediaSortable,
-            'collectionName' => $this->collectionName,
-            'resourceName'   => $this->resourceName,
-            'relationName'   => $this->relationName,
-            'multiple'       => $this->multiple,
+            'accept'             => $this->accept,
+            'croppable'          => $this->croppable,
+            'bigThumbnails'      => $this->bigThumbnails,
+            'bigIndexThumbnails' => $this->bigIndexThumbnails,
+            'mediaSortable'      => $this->mediaSortable,
+            'collectionName'     => $this->collectionName,
+            'resourceName'       => $this->resourceName,
+            'relationName'       => $this->relationName,
+            'multiple'           => $this->multiple,
         ], $this->meta);
     }
 
@@ -483,7 +487,7 @@ class Medialibrary extends Field
             ->where('name', $collectionName)
             ->first();
 
-        $singleFile = $collection->singleFile ?? false;
+        $singleFile = $collection->singleFile ?? FALSE;
 
         return ! $singleFile;
     }
@@ -501,14 +505,14 @@ class Medialibrary extends Field
 
     protected function validateStringOrCallable($value, string $method)
     {
-        if (! is_callable($value) && ! is_string($value)) {
+        if ( ! is_callable($value) && ! is_string($value)) {
             $this->invalidArgument($method, 'string or callable expected');
         }
     }
 
     protected function guardMediaOnIndex($mediaOnIndex): void
     {
-        if (! is_callable($mediaOnIndex) && ! is_numeric($mediaOnIndex)) {
+        if ( ! is_callable($mediaOnIndex) && ! is_numeric($mediaOnIndex)) {
             $this->invalidArgument('mediaOnIndex', 'integer or callable expected');
         }
 

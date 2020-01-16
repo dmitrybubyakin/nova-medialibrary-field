@@ -2,7 +2,7 @@
     <p>
         <template v-if="everyFileHasThumbnail">
             <a v-for="file in files" :href="file.downloadUrl" target="_blank" :title="file.thumbnailDescription">
-                <img :src="file.thumbnailUrl" :class="thumbnailSize" class="rounded-full ml-2" style="object-fit: cover">
+                <img :src="file.thumbnailUrl" :class="thumbnailSizeClasses" class="rounded-full ml-2" style="object-fit: cover">
             </a>
         </template>
 
@@ -32,7 +32,10 @@ export default {
           const standardThumbnailSize = 'w-8 h-8';
           const BigThumbnailSize = 'w-16 h-16';
 
+          console.log(this.field);
+
           return !this.field.bigIndexThumbnails ? standardThumbnailSize : BigThumbnailSize;
+
         },
 
         everyFileHasThumbnail () {
