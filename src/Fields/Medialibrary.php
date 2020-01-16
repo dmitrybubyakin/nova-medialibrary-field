@@ -137,6 +137,13 @@ class Medialibrary extends Field
     public $bigThumbnails = false;
 
     /**
+     * Indicates if thumbnails should be big.
+     *
+     * @var bool
+     */
+    public $bigIndexThumbnails = false;
+
+    /**
      * Indicates if the thumbnail description should be shown.
      *
      * @var bool
@@ -319,6 +326,13 @@ class Medialibrary extends Field
     public function bigThumbnails(): self
     {
         $this->bigThumbnails = true;
+
+        return $this;
+    }
+
+    public function bigIndexThumbnails(): self
+    {
+        $this->bigIndexThumbnails = true;
 
         return $this;
     }
