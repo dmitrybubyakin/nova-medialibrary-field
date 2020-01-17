@@ -6,10 +6,17 @@ use Illuminate\Support\Collection;
 
 class PruneStaleMedia
 {
-    public function __invoke(): void
+    private $deleted;
+
+    public function __invoke(): int
     {
+        $this->deleted = 0;
+
         TransientModel::make()->staleMedia()->chunk(100, function (Collection $media): void {
             $media->each->delete();
+            $this->deleted += $media->count();
         });
+
+        return $this->deleted;
     }
 }

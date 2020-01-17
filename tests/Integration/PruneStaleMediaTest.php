@@ -21,7 +21,8 @@ class PruneStaleMediaTest extends TestCase
 
         Media::take(5)->update(['created_at' => now()->subDay()]);
 
-        call_user_func(new PruneStaleMedia);
+        $this->assertSame(5, call_user_func(new PruneStaleMedia));
+        $this->assertSame(0, call_user_func(new PruneStaleMedia));
 
         $this->assertCount(5, TransientModel::make()->media);
     }
