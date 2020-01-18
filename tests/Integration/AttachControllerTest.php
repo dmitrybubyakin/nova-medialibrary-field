@@ -21,7 +21,7 @@ class AttachControllerTest extends TestCase
     }
 
     /** @test */
-    public function media_are_validated_before_being_attached(): void
+    public function media_can_be_validated_before_being_attached(): void
     {
         $post = $this->createPost();
 
@@ -42,6 +42,41 @@ class AttachControllerTest extends TestCase
         }
 
         $this->assertSame('The file must be an image.', $errors['file'][0] ?? '');
+    }
+
+    /** @test */
+    public function media_collection_can_be_validated_before_creation(): void
+    {
+        $fieldUuid = (string) Str::uuid();
+
+        $this->postJson('/nova-api/test-posts', ['media_testing' => $fieldUuid])
+            ->assertJsonValidationErrors('media_testing'); // required
+
+        $this->addFileToTransientModel($this->getJpgFile(), $fieldUuid);
+
+        $this->postJson('/nova-api/test-posts', ['media_testing' => $fieldUuid])
+            ->assertCreated();
+    }
+
+    /** @test */
+    public function media_collection_can_be_validated_before_update(): void
+    {
+        $fieldUuid = (string) Str::uuid();
+
+        $post = $this->createPostWithMedia([
+            ['testing', $this->getJpgFile()],
+        ]);
+
+        $this->putJson("/nova-api/test-posts/{$post->id}", ['media_testing' => $fieldUuid])
+            ->assertJsonValidationErrors('media_testing'); // min:2
+
+        $post = $this->createPostWithMedia([
+            ['testing', $this->getJpgFile()],
+            ['testing', $this->getJpgFile()],
+        ]);
+
+        $this->putJson("/nova-api/test-posts/{$post->id}", ['media_testing' => $fieldUuid])
+            ->assertOk();
     }
 
     /** @test */
@@ -91,7 +126,7 @@ class AttachControllerTest extends TestCase
 
         // attach all stored media
         $this->postJson('/nova-api/test-posts', ['media_testing' => $fieldUuid])
-            ->assertStatus(201);
+            ->assertCreated();
 
         $post = TestPost::first();
 
@@ -142,5 +177,13 @@ class AttachControllerTest extends TestCase
             null,
             true,
         );
+    }
+
+    private function addFileToTransientModel(string $path, string $uuid): void
+    {
+        TransientModel::make()
+            ->addMedia($path)
+            ->preservingOriginal()
+            ->toMediaCollection($uuid);
     }
 }

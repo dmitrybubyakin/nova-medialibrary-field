@@ -4,6 +4,7 @@ namespace DmitryBubyakin\NovaMedialibraryField\Fields;
 
 use function DmitryBubyakin\NovaMedialibraryField\callable_or_default;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Support\AttachCallback;
+use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaCollectionRules;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaFields;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaPresenter;
 use DmitryBubyakin\NovaMedialibraryField\TransientModel;
@@ -212,6 +213,16 @@ class Medialibrary extends Field
         return $this;
     }
 
+    public function accept(string $accept): self
+    {
+        return $this->withMeta(['accept' => $accept]);
+    }
+
+    public function maxSizeInBytes(int $maxSize): self
+    {
+        return $this->withMeta(['maxSize' => $maxSize]);
+    }
+
     /**
      * @param \Illuminate\Contracts\Validation\Rule|string|array $rules
      */
@@ -222,21 +233,6 @@ class Medialibrary extends Field
         return $this;
     }
 
-    public function rules($rules): void
-    {
-        throw new \Exception('Not implemented. Try YourResource::afterValidation.');
-    }
-
-    public function creationRules($rules): void
-    {
-        throw new \Exception('Not implemented. Try YourResource::afterCreationValidation.');
-    }
-
-    public function updateRules($rules): void
-    {
-        throw new \Exception('Not implemented. Try YourResource::afterUpdateValidation.');
-    }
-
     public function getAttachRules(NovaRequest $request): array
     {
         return is_callable($this->attachRules)
@@ -244,14 +240,25 @@ class Medialibrary extends Field
             : $this->attachRules;
     }
 
-    public function accept(string $accept): self
+    public function getCreationRules(NovaRequest $request): array
     {
-        return $this->withMeta(['accept' => $accept]);
+        return $this->toMediaCollectionRules($request, parent::getCreationRules($request));
     }
 
-    public function maxSizeInBytes(int $maxSize): self
+    public function getUpdateRules(NovaRequest $request): array
     {
-        return $this->withMeta(['maxSize' => $maxSize]);
+        return $this->toMediaCollectionRules($request, parent::getUpdateRules($request));
+    }
+
+    public function toMediaCollectionRules(NovaRequest $request, array $rules): array
+    {
+        return [
+            $this->attribute => MediaCollectionRules::make(
+                $rules[$this->attribute],
+                $request,
+                $this->collectionName,
+            ),
+        ];
     }
 
     public function resolve($resource, $attribute = null): void

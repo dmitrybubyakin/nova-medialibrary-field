@@ -32,7 +32,10 @@ class TestPost extends Resource
                     }
                 }),
 
-            Medialibrary::make('Media testing', 'testing'),
+            Medialibrary::make('Media testing', 'testing')
+                ->rules('required', 'array')
+                ->creationRules('min:1')
+                ->updateRules('min:2'),
 
             Medialibrary::make('Media testing single', 'testing_single')
                 ->single(),
