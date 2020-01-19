@@ -29,7 +29,7 @@ class AttachController
 
         $this->rememberTargetModel($request, $model, $field->collectionName);
 
-        $media = call_user_func_array($field->attachCallback, [
+        call_user_func_array($field->attachCallback, [
             $model,
             $request->file,
             $field->collectionName,
