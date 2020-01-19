@@ -12,10 +12,32 @@ Features:
  - sort media
  - display on the index view
 
-## Contents
+## Table of Contents
 
  - [Screenshots](#screenshots)
  - [Installation](#installation)
+ - [Usage](#usage)
+    - [Methods](#methods)
+        - [Fields](#fields)
+        - [AttachUsing](#attachusing)
+        - [AttachExisting](#attachexisting)
+        - [MediaOnIndex](#mediaonindex)
+        - [DownloadUsing](#downloadusing)
+        - [PreviewUsing](#previewusing)
+        - [Tooltip](#tooltip)
+        - [Title](#title)
+        - [Croppable](#croppable)
+        - [Single](#single)
+        - [Accept](#accept)
+        - [MaxSizeInBytes](#maxsizeinbytes)
+        - [AttachRules](#attachrules)
+    - [Validation](#validation)
+    - [Sorting](#sorting)
+    - [Authorization Gates 'view', 'update' and 'delete'](#authorization-gates--view----update--and--delete-)
+ - [Translations](#translations)
+ - [Changelog](#changelog)
+ - [Alternatives](#alternatives)
+ - [License](#license)
 
 ## Screenshots
 
@@ -172,7 +194,7 @@ Medialibrary::make('Media')->accept('image/*');
 #### MaxSizeInBytes
 
 ```php
-Medialibrary::make('Media')->maxSizeInBytes(1024 * 1024);
+Medialibrary::make('Media')->maxSizeInBytes(1024 - 1024);
 ```
 
 #### AttachRules
