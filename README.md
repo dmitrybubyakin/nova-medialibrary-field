@@ -19,14 +19,14 @@ Features:
 
 ## Screenshots
 
-![index view](index.png?raw=true)
-![create view](create.png?raw=true)
-![details view](details.png?raw=true)
-![update view](update.png?raw=true)
-![media actions](actions.png?raw=true)
-![media crop dialog](crop-dialog.png?raw=true)
-![media details dialog](media-details-dialog.png?raw=true)
-![existing media dialog](existing-media-dialog.png?raw=true)
+![index view](docs/index.png?raw=true)
+![create view](docs/create.png?raw=true)
+![details view](docs/details.png?raw=true)
+![update view](docs/update.png?raw=true)
+![media actions](docs/actions.png?raw=true)
+![media crop dialog](docs/crop-dialog.png?raw=true)
+![media details dialog](docs/media-details-dialog.png?raw=true)
+![existing media dialog](docs/existing-media-dialog.png?raw=true)
 
 ## Installation
 
