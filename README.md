@@ -33,7 +33,7 @@ Features:
         - [AttachRules](#attachrules)
     - [Validation](#validation)
     - [Sorting](#sorting)
-    - [Authorization Gates 'view', 'update' and 'delete'](#authorization-gates--view----update--and--delete-)
+    - [Authorization Gates 'view', 'update' and 'delete'](#authorization-gates-view-update-and-delete)
  - [Translations](#translations)
  - [Changelog](#changelog)
  - [Alternatives](#alternatives)
