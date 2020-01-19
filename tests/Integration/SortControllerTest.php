@@ -10,11 +10,7 @@ class SortControllerTest extends TestCase
     /** @test */
     public function media_can_be_sorted(): void
     {
-        $this->createPostWithMedia([
-            ['testing', $this->getTextFile()],
-            ['testing', $this->getTextFile()],
-            ['testing', $this->getTextFile()],
-        ]);
+        $this->createPostWithMedia(3);
 
         $this->assertSame(['1', '2', '3'], Media::pluck('order_column')->all());
 

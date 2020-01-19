@@ -13,10 +13,7 @@ class PruneStaleMediaTest extends TestCase
     public function test_prune_stale_media(): void
     {
         foreach (range(1, 10) as $_) {
-            TransientModel::make()
-                ->addMedia($this->getTextFile())
-                ->preservingOriginal()
-                ->toMediaCollection();
+            $this->addMediaTo(TransientModel::make(), $this->getTextFile(), 'default');
         }
 
         Media::take(5)->update(['created_at' => now()->subDay()]);

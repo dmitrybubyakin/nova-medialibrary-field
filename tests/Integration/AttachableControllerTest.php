@@ -9,9 +9,7 @@ class AttachableControllerTest extends TestCase
     /** @test */
     public function test_can_retrieve_attachable_media(): void
     {
-        $post = $this->createPostWithMedia(array_pad([], 10, [
-            'default', $this->getTextFile(),
-        ]));
+        $post = $this->createPostWithMedia(10);
 
         $this
             ->getJson("nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/{$post->id}/media/media/attachable")
@@ -20,11 +18,9 @@ class AttachableControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_retrieve_attachable_media_pagination(): void
+    public function test_can_retrieve_attachable_media_with_pagination(): void
     {
-        $post = $this->createPostWithMedia(array_pad([], 10, [
-            'default', $this->getTextFile(),
-        ]));
+        $post = $this->createPostWithMedia(10);
 
         $this
             ->getJson("nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/{$post->id}/media/media/attachable?perPage=5")
@@ -38,15 +34,10 @@ class AttachableControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_retrieve_attachable_media_filtering(): void
+    public function test_can_retrieve_attachable_media_with_filtering(): void
     {
-        $this->createPostWithMedia([
-            ['default', $this->getJpgFile()],
-        ]);
-
-        $post = $this->createPostWithMedia(array_pad([], 9, [
-            'default', $this->getTextFile(),
-        ]));
+        $post = $this->createPostWithMedia(1, 'default', $this->getJpgFile());
+        $post = $this->createPostWithMedia(9, 'default', $this->getTextFile());
 
         $post->media()->take(2)->get()->each->update(['name' => 'xxx']);
 

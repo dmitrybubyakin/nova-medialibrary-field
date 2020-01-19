@@ -47,10 +47,7 @@ class IndexControllerTest extends TestCase
         $uuid = (string) Str::uuid();
 
         foreach (range(1, 5) as $_) {
-            TransientModel::make()
-                ->addMedia($this->getTextFile())
-                ->preservingOriginal()
-                ->toMediaCollection($uuid);
+            $this->addMediaTo(TransientModel::make(), $this->getTextFile(), $uuid);
         }
 
         $this

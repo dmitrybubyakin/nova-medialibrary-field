@@ -12,7 +12,9 @@ use Laravel\Nova\Nova;
 use Laravel\Nova\NovaServiceProvider;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\MediaLibraryServiceProvider;
+use Spatie\MediaLibrary\Models\Media;
 
 abstract class TestCase extends Orchestra
 {
@@ -105,24 +107,30 @@ abstract class TestCase extends Orchestra
         return TestPost::create();
     }
 
-    public function createPostWithMedia(array $media = []): TestPost
+    public function createPostWithMedia($media = 1, string $collectionName = 'default', string $file = null): TestPost
     {
         $post = $this->createPost();
 
-        $media = $media ?: [
-            ['default', $this->getJpgFile()],
-        ];
+        $media = is_array($media)
+            ? $media
+            : array_pad([], $media, [$collectionName, $file ?: $this->getJpgFile()]);
 
         foreach ($media as [$collectionName, $file]) {
-            $post->addMedia($file)
-                ->preservingOriginal()
-                ->toMediaCollection($collectionName);
+            $this->addMediaTo($post, $file, $collectionName);
         }
 
         return $post;
     }
 
-    protected function authenticate(): self
+    public function addMediaTo(HasMedia $model, string $file, string $collectionName): Media
+    {
+        return $model
+            ->addMedia($file)
+            ->preservingOriginal()
+            ->toMediaCollection($collectionName);
+    }
+
+    public function authenticate(): self
     {
         $this->actingAs($this->authenticatedAs = Mockery::mock(Authenticatable::class));
 

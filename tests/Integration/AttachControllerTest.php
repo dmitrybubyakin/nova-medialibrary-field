@@ -5,10 +5,10 @@ namespace DmitryBubyakin\NovaMedialibraryField\Tests\Integration;
 use DmitryBubyakin\NovaMedialibraryField\Tests\Fixtures\TestPost;
 use DmitryBubyakin\NovaMedialibraryField\Tests\TestCase;
 use DmitryBubyakin\NovaMedialibraryField\TransientModel;
+use Illuminate\Foundation\Testing\Assert as PHPUnit;
 use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 use Spatie\MediaLibrary\Models\Media;
 
 class AttachControllerTest extends TestCase
@@ -18,64 +18,97 @@ class AttachControllerTest extends TestCase
         parent::setUp();
 
         $this->authenticate();
+
+        TestResponse::macro('assertJsonValidationErrorMessage', function (string $key, string $message) {
+            $this->assertJsonValidationErrors($key);
+
+            $messages = $this->json()['errors'][$key] ?? [];
+
+            PHPUnit::assertContains($message, $messages);
+
+            return $this;
+        });
     }
 
     /** @test */
-    public function media_can_be_validated_before_being_attached(): void
+    public function media_can_be_validated_before_being_attached_to_an_existing_resource(): void
     {
         $post = $this->createPost();
+
+        $uri = "nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/{$post->id}/media/media_testing_validation";
+
+        $this
+            ->postJson($uri)
+            ->assertJsonValidationErrorMessage('file', 'The file field is required.');
 
         $file = $this->makeUploadedFile($this->getTextFile());
 
         $this
-            ->postJson("nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/{$post->id}/media/media_testing_validation")
-            ->assertJsonValidationErrors('file');
+            ->postJson($uri, ['file' => $file])
+            ->assertJsonValidationErrorMessage('file', 'The file must be an image.');
 
-        $errors = [];
+        $file = $this->makeUploadedFile($this->getJpgFile());
 
-        $this->withoutExceptionHandling();
-
-        try {
-            $this->postWithFile("nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/{$post->id}/media/media_testing_validation", [], $file);
-        } catch (ValidationException $exception) {
-            $errors = $exception->errors();
-        }
-
-        $this->assertSame('The file must be an image.', $errors['file'][0] ?? '');
-    }
-
-    /** @test */
-    public function media_collection_can_be_validated_before_creation(): void
-    {
-        $fieldUuid = (string) Str::uuid();
-
-        $this->postJson('/nova-api/test-posts', ['media_testing' => $fieldUuid])
-            ->assertJsonValidationErrors('media_testing'); // required
-
-        $this->addFileToTransientModel($this->getJpgFile(), $fieldUuid);
-
-        $this->postJson('/nova-api/test-posts', ['media_testing' => $fieldUuid])
+        $this
+            ->postJson($uri, ['file' => $file])
             ->assertCreated();
     }
 
     /** @test */
-    public function media_collection_can_be_validated_before_update(): void
+    public function media_can_be_validated_before_being_attached_to_a_non_existing_resource(): void
     {
-        $fieldUuid = (string) Str::uuid();
+        $uuid = (string) Str::uuid();
 
-        $post = $this->createPostWithMedia([
-            ['testing', $this->getJpgFile()],
-        ]);
+        $uri = 'nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/undefined/media/media_testing_validation';
 
-        $this->putJson("/nova-api/test-posts/{$post->id}", ['media_testing' => $fieldUuid])
-            ->assertJsonValidationErrors('media_testing'); // min:2
+        $this
+            ->postJson($uri, ['fieldUuid' => $uuid])
+            ->assertJsonValidationErrorMessage('file', 'The file field is required.');
 
-        $post = $this->createPostWithMedia([
-            ['testing', $this->getJpgFile()],
-            ['testing', $this->getJpgFile()],
-        ]);
+        $file = $this->makeUploadedFile($this->getTextFile());
 
-        $this->putJson("/nova-api/test-posts/{$post->id}", ['media_testing' => $fieldUuid])
+        $this
+            ->postJson($uri, ['fieldUuid' => $uuid, 'file' => $file])
+            ->assertJsonValidationErrorMessage('file', 'The file must be an image.');
+
+        $file = $this->makeUploadedFile($this->getJpgFile());
+
+        $this
+            ->postJson($uri, ['fieldUuid' => $uuid, 'file' => $file])
+            ->assertCreated();
+    }
+
+    /** @test */
+    public function media_collection_can_be_validated_before_resource_creation(): void
+    {
+        $uuid = (string) Str::uuid();
+
+        $this
+            ->postJson('/nova-api/test-posts', ['media_testing' => $uuid])
+            ->assertJsonValidationErrorMessage('media_testing', 'The media testing field is required.');
+
+        $this->addMediaTo(TransientModel::make(), $this->getJpgFile(), $uuid);
+
+        $this
+            ->postJson('/nova-api/test-posts', ['media_testing' => $uuid])
+            ->assertCreated();
+    }
+
+    /** @test */
+    public function media_collection_can_be_validated_before_resource_update(): void
+    {
+        $uuid = (string) Str::uuid();
+
+        $post = $this->createPostWithMedia(1, 'testing');
+
+        $this
+            ->putJson("/nova-api/test-posts/{$post->id}", ['media_testing' => $uuid])
+            ->assertJsonValidationErrorMessage('media_testing', 'The media testing must have at least 2 items.');
+
+        $post = $this->createPostWithMedia(2, 'testing');
+
+        $this
+            ->putJson("/nova-api/test-posts/{$post->id}", ['media_testing' => $uuid])
             ->assertOk();
     }
 
@@ -87,8 +120,8 @@ class AttachControllerTest extends TestCase
         $file = $this->makeUploadedFile($this->getJpgFile());
 
         $this
-            ->postWithFile("nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/{$post->id}/media/media_testing", [], $file)
-            ->assertStatus(201);
+            ->postJson("nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/{$post->id}/media/media_testing", ['file' => $file])
+            ->assertCreated();
 
         $this->assertCount(1, $post->media);
     }
@@ -96,26 +129,26 @@ class AttachControllerTest extends TestCase
     /** @test */
     public function media_can_be_attached_to_a_non_existing_resource(): void
     {
+        $uuid = (string) Str::uuid();
+
         $file = $this->makeUploadedFile($this->getJpgFile());
-        $fieldUuid = (string) Str::uuid();
 
         TestPost::$withConversions = true;
 
-        // store media
         $this
-            ->postWithFile('nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/undefined/media/media_testing', [
-                'fieldUuid' => $fieldUuid,
-            ], $file)
-            ->assertStatus(201);
+            ->postJson('nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/undefined/media/media_testing', [
+                'file' => $file,
+                'fieldUuid' => $uuid,
+            ])
+            ->assertCreated();
 
         TestPost::$withConversions = false;
 
         $media = Media::first();
-
         $media->setCustomProperty('a', 'b')->save();
         $media->update(['manipulations' => ['*' => ['with' => 100]]]);
 
-        $this->assertSame($fieldUuid, $media->collection_name);
+        $this->assertSame($uuid, $media->collection_name);
         $this->assertTrue($media->model->is(TransientModel::make()));
         $this->assertCount(1, TransientModel::make()->media);
         $this->assertSame(['preview' => true], $media->getGeneratedConversions()->all());
@@ -124,8 +157,9 @@ class AttachControllerTest extends TestCase
             'collectionName' => 'testing',
         ], $media->getCustomProperty(TransientModel::getCustomPropertyName()));
 
-        // attach all stored media
-        $this->postJson('/nova-api/test-posts', ['media_testing' => $fieldUuid])
+
+        $this
+            ->postJson('/nova-api/test-posts', ['media_testing' => $uuid])
             ->assertCreated();
 
         $post = TestPost::first();
@@ -139,33 +173,34 @@ class AttachControllerTest extends TestCase
     }
 
     /** @test */
-    public function existing_media_can_be_attached(): void
+    public function existing_media_can_be_attached_to_an_existing_resource(): void
     {
         $this->createPostWithMedia();
 
         $post = $this->createPost();
 
-        $this->withoutExceptionHandling();
-
         $this
             ->postJson("nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/{$post->id}/media/media_testing", ['media' => 1])
-            ->assertStatus(201);
+            ->assertCreated();
 
         $this->assertCount(1, $post->media);
+    }
 
-        $fieldUuid = (string) Str::uuid();
+    /** @test */
+    public function existing_media_can_be_attached_to_a_non_existing_resource(): void
+    {
+        $uuid = (string) Str::uuid();
+
+        $this->createPostWithMedia();
 
         $this
             ->postJson('nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/undefined/media/media_testing', [
                 'media' => 1,
-                'fieldUuid' => $fieldUuid,
+                'fieldUuid' => $uuid,
             ])
-            ->assertStatus(201);
-    }
+            ->assertCreated();
 
-    private function postWithFile(string $uri, array $parameters, UploadedFile $file): TestResponse
-    {
-        return $this->call('POST', $uri, $parameters, [], ['file' => $file]);
+        $this->assertCount(1, TransientModel::make()->media);
     }
 
     private function makeUploadedFile(string $path): UploadedFile
@@ -173,17 +208,9 @@ class AttachControllerTest extends TestCase
         return new UploadedFile(
             $path,
             basename($path),
-            mime_content_type($path),
+            null,
             null,
             true,
         );
-    }
-
-    private function addFileToTransientModel(string $path, string $uuid): void
-    {
-        TransientModel::make()
-            ->addMedia($path)
-            ->preservingOriginal()
-            ->toMediaCollection($uuid);
     }
 }

@@ -242,15 +242,15 @@ class Medialibrary extends Field
 
     public function getCreationRules(NovaRequest $request): array
     {
-        return $this->toMediaCollectionRules($request, parent::getCreationRules($request));
+        return $this->makeMediaCollectionRules($request, parent::getCreationRules($request));
     }
 
     public function getUpdateRules(NovaRequest $request): array
     {
-        return $this->toMediaCollectionRules($request, parent::getUpdateRules($request));
+        return $this->makeMediaCollectionRules($request, parent::getUpdateRules($request));
     }
 
-    public function toMediaCollectionRules(NovaRequest $request, array $rules): array
+    protected function makeMediaCollectionRules(NovaRequest $request, array $rules): array
     {
         return [
             $this->attribute => MediaCollectionRules::make(
