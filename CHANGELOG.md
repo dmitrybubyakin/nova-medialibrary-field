@@ -73,6 +73,31 @@
 
 - Add Nova 2.4 support
 
-## 2.0
+## [2.0 (2020-01-19)](https://github.com/dmitrybubyakin/nova-medialibrary-field/compare/1.1.10...2.0)
+
+### Upgrade guide
+
+Remove `\DmitryBubyakin\NovaMedialibraryField\Resources\Media::class` from your NovaServiceProvider. [Media](src/Resources/Media.php) is used by default.
 
 TODO
+
+### Added
+ - support create/edit views
+ - use existing media
+ - [GeneratedConversions](src/Fields/GeneratedConversions.php) field (can be used only with media)
+
+TODO
+
+### Changed
+ - thumbnailTitle -> title
+ - storeUsing, replaceUsing -> attachUsing
+ - rules is now applied to a media collection, attachRules is applied to media
+
+TODO
+
+### Removed
+ - labels are not supported, let me know if they are needed
+ - imageMimes
+ - thumbnailSize
+ - bigThumbnails
+ - thumbnailDescription (try new `tooltip` method)
