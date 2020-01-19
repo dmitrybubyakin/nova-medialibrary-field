@@ -194,7 +194,7 @@ Medialibrary::make('Media')->accept('image/*');
 #### MaxSizeInBytes
 
 ```php
-Medialibrary::make('Media')->maxSizeInBytes(1024 - 1024);
+Medialibrary::make('Media')->maxSizeInBytes(1024 * 1024);
 ```
 
 #### AttachRules
