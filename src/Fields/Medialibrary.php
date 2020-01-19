@@ -185,7 +185,7 @@ class Medialibrary extends Field
     }
 
     /**
-     * @param string|array $conversion
+     * @param string $conversion
      * @param array|callable|null $options
      */
     public function croppable($conversion, $options = null): self
