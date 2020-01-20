@@ -1,6 +1,6 @@
 <template>
   <div class="group relative">
-    <MediaPreview :media="media" class="w-32 h-24 rounded-b" />
+    <MediaPreview :media="media" class="medialibrary-preview-detail w-32 h-24 rounded-b" />
     <slot />
   </div>
 </template>

@@ -8,7 +8,7 @@
       target="_blank"
       class="no-underline"
     >
-      <MediaPreview :media="media" class="rounded-full w-8 h-8 ml-2">
+      <MediaPreview :media="media" class="medialibrary-preview-index rounded-full w-8 h-8 ml-2">
         <span slot="fallback" class="text-90 text-xs truncate select-none">
           {{ media.extension.toUpperCase() }}
         </span>
