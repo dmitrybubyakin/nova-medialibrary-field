@@ -1,6 +1,6 @@
 name: run-tests
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   tests:
@@ -28,5 +28,5 @@ jobs:
         COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
 
-    - name: Execute tests via PHPUnit
-      run: vendor/bin/phpunit
+    - name: Execute tests
+      run: vendor/bin/phpunit tests
