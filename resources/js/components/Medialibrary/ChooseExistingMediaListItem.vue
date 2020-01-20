@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { tooltip } from './Utils'
 import MediaPreview from './MediaPreview'
 
 export default {
@@ -55,12 +56,7 @@ export default {
 
   computed: {
     tooltip() {
-      return {
-        classes: 'medialibrary-tooltip bg-white p-2 rounded border border-50 shadow text-sm leading-normal',
-        content: `${this.media.collectionName}: ${this.media.fileName}`,
-        offset: 10,
-        placement: 'bottom',
-      }
+      return tooltip(`${this.media.collectionName}: ${this.media.fileName}`)
     },
   },
 }

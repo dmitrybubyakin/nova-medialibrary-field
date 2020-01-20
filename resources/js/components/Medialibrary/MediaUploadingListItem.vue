@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import { tooltip } from './Utils'
+
 export default {
   props: {
     media: {
@@ -66,13 +68,9 @@ export default {
     tooltip() {
       const invalid = this.media.validationErrors.has('file')
 
-      return {
+      return tooltip(`${this.tooltipHtml}<br>${this.errorsHtml}`, {
         classes: `bg-white p-2 rounded border border-${invalid ? 'danger' : '50'} shadow text-sm leading-normal`,
-        content: `${this.tooltipHtml}<br>${this.errorsHtml}`,
-        offset: 10,
-        html: true,
-        placement: 'bottom',
-      }
+      })
     },
 
     progressCircleRadius() {

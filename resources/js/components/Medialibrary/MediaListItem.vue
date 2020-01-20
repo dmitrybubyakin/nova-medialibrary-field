@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { tooltip } from './Utils'
 import MediaListItemActions from './MediaListItemActions'
 import MediaListItemPreview from './MediaListItemPreview'
 import MediaListItemModals from './MediaListItemModals'
@@ -46,12 +47,7 @@ export default {
 
   computed: {
     tooltip() {
-      return this.media.tooltip ? {
-        classes: 'medialibrary-tooltip bg-white p-2 rounded border border-50 shadow text-sm leading-normal',
-        content: this.media.tooltip,
-        offset: 10,
-        placement: 'bottom',
-      } : null
+      return tooltip(this.media.tooltip)
     },
   },
 }
