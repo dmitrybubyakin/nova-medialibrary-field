@@ -8,7 +8,7 @@
       target="_blank"
       class="no-underline"
     >
-      <MediaPreview :media="media" class="medialibrary-preview-index rounded-full w-8 h-8 ml-2">
+      <MediaPreview :media="media" :class="previewClassList">
         <span slot="fallback" class="text-90 text-xs truncate select-none">
           {{ media.extension.toUpperCase() }}
         </span>
@@ -32,6 +32,9 @@ export default {
   computed: {
     mediaList() {
       return this.field.value || []
+    },
+    previewClassList() {
+      return this.field.indexPreviewClassList || 'rounded-full w-8 h-8 ml-2'
     },
   },
 

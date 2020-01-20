@@ -31,6 +31,7 @@ Features:
         - [Accept](#accept)
         - [MaxSizeInBytes](#maxsizeinbytes)
         - [AttachRules](#attachrules)
+    - [Preview Customization](#preview-customization)
     - [Validation](#validation)
     - [Sorting](#sorting)
     - [Authorization Gates 'view', 'update' and 'delete'](#authorization-gates-view-update-and-delete)
@@ -201,6 +202,15 @@ Medialibrary::make('Media')->maxSizeInBytes(1024 * 1024);
 
 ```php
 Medialibrary::make('Media')->attachRules('image', 'dimensions:min_width=500,min_height=500');
+```
+
+#### Preview Customization
+
+```php
+Medialibrary::make('Media')->withMeta([
+    'indexPreviewClassList' => 'rounded w-8 h-8 ml-2',
+    'detailsPreviewClassList' => 'w-32 h-24 rounded-b',
+]);
 ```
 
 ### Validation
