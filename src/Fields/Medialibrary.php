@@ -223,6 +223,11 @@ class Medialibrary extends Field
         return $this->withMeta(['maxSize' => $maxSize]);
     }
 
+    public function attachOnDetails(): self
+    {
+        return $this->withMeta(['attachOnDetails' => true]);
+    }
+
     /**
      * @param \Illuminate\Contracts\Validation\Rule|string|array $rules
      */

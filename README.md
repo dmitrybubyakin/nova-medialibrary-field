@@ -30,6 +30,7 @@ Features:
         - [Single](#single)
         - [Accept](#accept)
         - [MaxSizeInBytes](#maxsizeinbytes)
+        - [AttachOnDetails](#attachondetails)
         - [AttachRules](#attachrules)
     - [Preview Customization](#preview-customization)
     - [Validation](#validation)
@@ -196,6 +197,14 @@ Medialibrary::make('Media')->accept('image/*');
 
 ```php
 Medialibrary::make('Media')->maxSizeInBytes(1024 * 1024);
+```
+
+#### AttachOnDetails
+
+Allows attaching files on the details view.
+
+```php
+Medialibrary::make('Media')->attachOnDetails();
 ```
 
 #### AttachRules
