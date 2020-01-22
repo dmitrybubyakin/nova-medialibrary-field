@@ -43,14 +43,14 @@ Features:
 
 ## Screenshots
 
-![index view](docs/index.png?raw=true)
-![create view](docs/create.png?raw=true)
-![details view](docs/details.png?raw=true)
-![update view](docs/update.png?raw=true)
-![media actions](docs/actions.png?raw=true)
-![media crop dialog](docs/crop-dialog.png?raw=true)
-![media details dialog](docs/media-details-dialog.png?raw=true)
-![existing media dialog](docs/existing-media-dialog.png?raw=true)
+![index view](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/index.png)
+![create view](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/create.png)
+![details view](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/details.png)
+![update view](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/update.png)
+![media actions](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/actions.png)
+![media crop dialog](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/crop-dialog)
+![media details dialog](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/media-details)
+![existing media dialog](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/existing-media)
 
 ## Installation
 
