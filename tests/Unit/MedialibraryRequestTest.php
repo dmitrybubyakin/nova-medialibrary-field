@@ -2,12 +2,37 @@
 
 namespace DmitryBubyakin\NovaMedialibraryField\Tests\Unit;
 
+use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
 use DmitryBubyakin\NovaMedialibraryField\Http\Requests\MedialibraryRequest;
+use DmitryBubyakin\NovaMedialibraryField\MedialibraryFieldResolver;
+use DmitryBubyakin\NovaMedialibraryField\Tests\Fixtures\Nova\ContainerField;
 use DmitryBubyakin\NovaMedialibraryField\Tests\TestCase;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Resource;
 use TypeError;
 
 class MedialibraryRequestTest extends TestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        MedialibraryFieldResolver::using(function (NovaRequest $request, Resource $resource, string $attribute) {
+            return $resource
+                    ->availableFields($request)
+                    ->map(function ($field) {
+                        if ($field instanceof ContainerField) {
+                            return $field->meta['fields'];
+                        }
+
+                        return $field;
+                    })
+                    ->flatten(1)
+                    ->whereInstanceOf(Medialibrary::class)
+                    ->findFieldByAttribute($attribute);
+        });
+    }
+
     /** @test */
     public function test_medialibrary_field(): void
     {
@@ -16,6 +41,12 @@ class MedialibraryRequestTest extends TestCase
 
         $request = $this->createRequest('nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/1/media/media_testing_single');
         $this->assertSame('media_testing_single', $request->medialibraryField()->attribute);
+
+        $request = $this->createRequest('nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/1/media/media_testing_panel');
+        $this->assertSame('media_testing_panel', $request->medialibraryField()->attribute);
+
+        $request = $this->createRequest('nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/1/media/media_testing_container');
+        $this->assertSame('media_testing_container', $request->medialibraryField()->attribute);
     }
 
     /** @test */

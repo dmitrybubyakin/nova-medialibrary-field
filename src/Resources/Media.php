@@ -2,7 +2,7 @@
 
 namespace DmitryBubyakin\NovaMedialibraryField\Resources;
 
-use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
+use DmitryBubyakin\NovaMedialibraryField\MedialibraryFieldResolver;
 use Illuminate\Http\Request;
 use Laravel\Nova\Nova;
 use Laravel\Nova\Resource;
@@ -26,10 +26,11 @@ class Media extends Resource
     {
         $resource = Nova::resourceInstanceForKey($request->input('viaResource'));
 
-        $field = $resource
-                ->availableFields($request)
-                ->whereInstanceOf(Medialibrary::class)
-                ->findFieldByAttribute($request->input('viaField'));
+        $field = call_user_func(new MedialibraryFieldResolver(
+            $request,
+            $resource,
+            $request->input('viaField'),
+        ));
 
         if (is_null($field)) {
             return [];

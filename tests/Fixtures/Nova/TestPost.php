@@ -6,6 +6,7 @@ use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Panel;
 use Laravel\Nova\Resource;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 
@@ -42,6 +43,14 @@ class TestPost extends Resource
 
             Medialibrary::make('Media testing validation', 'testing_validation')
                 ->attachRules('required', 'image'),
+
+            new Panel('Panel', [
+                Medialibrary::make('Media testing panel', 'testing_panel'),
+            ]),
+
+            ContainerField::make('Container', [
+                Medialibrary::make('Media testing container', 'testing_container'),
+            ]),
         ];
     }
 }
