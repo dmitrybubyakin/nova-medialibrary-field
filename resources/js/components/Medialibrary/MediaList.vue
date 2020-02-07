@@ -41,7 +41,9 @@ export default {
       },
     },
     sortingDisabled() {
-      return this.mediaList.length <= 1 || !this.context.field.sortable
+      return this.mediaList.length <= 1
+        || this.context.field.readonly
+        || this.context.field.sortable !== true
     },
   },
 

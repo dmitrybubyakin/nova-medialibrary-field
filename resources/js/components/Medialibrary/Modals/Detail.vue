@@ -8,11 +8,11 @@
           </h4>
 
           <div class="ml-3 w-full flex items-center justify-end">
-            <button v-if="resource.authorizedToDelete" class="btn btn-default btn-icon btn-white" :title="__('Delete')" @click="handleDelete">
+            <button v-if="canDelete" class="btn btn-default btn-icon btn-white" :title="__('Delete')" @click="handleDelete">
               <icon type="delete" class="text-80" />
             </button>
 
-            <button v-if="resource.authorizedToUpdate" class="btn btn-default btn-icon bg-primary ml-3" :title="__('Edit')" @click="handleEdit">
+            <button v-if="canEdit" class="btn btn-default btn-icon bg-primary ml-3" :title="__('Edit')" @click="handleEdit">
               <icon type="edit" class="text-white" style="margin-top: -2px; margin-left: 3px" />
             </button>
           </div>
@@ -47,6 +47,19 @@ export default {
     resource: {
       type: Object,
       required: true,
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
+  computed: {
+    canDelete() {
+      return this.resource.authorizedToDelete && !this.readonly
+    },
+    canEdit() {
+      return this.resource.authorizedToUpdate && !this.readonly
     },
   },
 

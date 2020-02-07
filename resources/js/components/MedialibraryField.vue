@@ -2,7 +2,7 @@
   <Provider :field="field" :resource-name="resourceName" :resource-id="resourceId">
     <div>
       <MediaList />
-      <MediaUploading v-if="addFiles" class="mt-2" />
+      <MediaUploading v-if="addFiles && !field.readonly" class="mt-2" />
     </div>
   </Provider>
 </template>

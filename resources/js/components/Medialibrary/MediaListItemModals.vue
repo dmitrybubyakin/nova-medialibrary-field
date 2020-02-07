@@ -31,6 +31,7 @@
       :resource-name="media.resourceName"
       :resource-id="media.resourceId"
       :resource="media.resource"
+      :readonly="context.field.readonly"
       @close="media.closeDetailModal()"
       @delete="media.openDeleteModal()"
       @edit="media.edit()"
@@ -39,6 +40,7 @@
 </template>
 
 <script>
+import { context } from './Context'
 import CropperModal from './Modals/Cropper'
 import DetailModal from './Modals/Detail'
 import EditModal from './Modals/Edit'
@@ -48,6 +50,10 @@ export default {
     CropperModal,
     DetailModal,
     EditModal,
+  },
+
+  inject: {
+    context,
   },
 
   props: {
