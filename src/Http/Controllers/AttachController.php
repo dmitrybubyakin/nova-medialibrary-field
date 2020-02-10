@@ -42,7 +42,7 @@ class AttachController
 
     private function replaceFile(MedialibraryRequest $request): void
     {
-        $media = Media::findOrFail($request->media);
+        $media = config('medialibrary.media_model')::findOrFail($request->media);
 
         $directory = TemporaryDirectory::create();
 
@@ -61,7 +61,7 @@ class AttachController
             return;
         }
 
-        Media::creating(function (Media $media) use ($request, $model, $collectionName): void {
+        config('medialibrary.media_model')::creating(function (Media $media) use ($request, $model, $collectionName): void {
             if ($model instanceof TransientModel && $media->collection_name === $request->fieldUuid()) {
                 TransientModel::setCustomPropertyValue(
                     $media,

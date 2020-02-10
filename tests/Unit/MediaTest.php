@@ -25,4 +25,5 @@ class MediaTest extends TestCase
 
 class TestMedia extends Media
 {
+    public $table = 'media';
 }
