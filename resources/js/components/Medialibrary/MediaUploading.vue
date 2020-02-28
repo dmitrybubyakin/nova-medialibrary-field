@@ -90,6 +90,10 @@ export default {
 
       this.showFileInput = false
       this.$nextTick(() => this.showFileInput = true)
+
+      if (this.context.field.autouploading) {
+        this.upload()
+      }
     },
 
     addMedia(media) {

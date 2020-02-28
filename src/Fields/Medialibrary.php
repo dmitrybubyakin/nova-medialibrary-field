@@ -228,6 +228,11 @@ class Medialibrary extends Field
         return $this->withMeta(['attachOnDetails' => true]);
     }
 
+    public function autouploading(): self
+    {
+        return $this->withMeta(['autouploading' => true]);
+    }
+
     /**
      * @param \Illuminate\Contracts\Validation\Rule|string|array $rules
      */
