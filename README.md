@@ -32,6 +32,7 @@ Features:
         - [MaxSizeInBytes](#maxsizeinbytes)
         - [AttachOnDetails](#attachondetails)
         - [AttachRules](#attachrules)
+        - [Autouploading](#autouploading)
     - [Preview Customization](#preview-customization)
     - [Validation](#validation)
     - [Sorting](#sorting)
@@ -211,6 +212,12 @@ Medialibrary::make('Media')->attachOnDetails();
 
 ```php
 Medialibrary::make('Media')->attachRules('image', 'dimensions:min_width=500,min_height=500');
+```
+
+#### Autouploading
+
+```php
+Medialibrary::make('Media')->autouploading();
 ```
 
 #### Preview Customization
