@@ -175,6 +175,11 @@ https://github.com/fengyuanchen/cropperjs#options
 ```php
 Medialibrary::make('Media')->croppable('conversionName');
 Medialibrary::make('Media')->croppable('conversionName', ['viewMode' => 3]);
+Medialibrary::make('Media')->croppable('conversionName', [
+    'rotatable' => false,
+    'zoomable' => false,
+    'cropBoxResizable' => false,
+]);
 Medialibrary::make('Media')->croppable('conversionName', function (Media $media) {
     return $media->getCustomProperty('croppable') ? ['viewMode' => 3] : null;
 });
