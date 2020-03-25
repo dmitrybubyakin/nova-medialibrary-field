@@ -9,7 +9,7 @@
         <VueCropper ref="cropper" :src="media.cropperMediaUrl" :data="media.cropperData" v-bind="media.cropperOptions" style="max-height: 500px" />
 
         <div class="flex justify-end mt-6">
-          <button v-if="cropBoxResizable" type="button" class="flex items-center ml-3 text-70 hover:text-primary focus:outline-none" @click="toggleAspectRatio">
+          <button v-if="resizable" type="button" class="flex items-center ml-3 text-70 hover:text-primary focus:outline-none" @click="toggleAspectRatio">
             <icon v-if="locked" type="cropper-lock" width="16" height="16" view-box="-64 0 512 512" />
             <icon v-else type="cropper-unlock" width="16" height="16" view-box="-64 0 512 512" />
           </button>
@@ -68,15 +68,21 @@ export default {
   data() {
     return {
       locked: !!this.media.cropperOptions.aspectRatio,
-      rotatable: !(this.media.cropperOptions.rotatable === false),
-      zoomable: !(this.media.cropperOptions.rotatable === false),
-      cropBoxResizable: !(this.media.cropperOptions.cropBoxResizable === false),
     }
   },
 
   computed: {
     cropper() {
       return this.$refs.cropper && this.$refs.cropper.cropper
+    },
+    rotatable() {
+      return this.media.cropperOptions.rotatable !== false
+    },
+    zoomable() {
+      return this.media.cropperOptions.zoomable !== false
+    },
+    resizable() {
+      return this.media.cropperOptions.cropBoxResizable !== false
     },
   },
 
