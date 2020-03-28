@@ -266,7 +266,7 @@ class Medialibrary extends Field
             $this->attribute => MediaCollectionRules::make(
                 $rules[$this->attribute],
                 $request,
-                $this->collectionName,
+                $this->collectionName
             ),
         ];
     }
