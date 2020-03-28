@@ -66,7 +66,7 @@ class AttachController
                 TransientModel::setCustomPropertyValue(
                     $media,
                     $request->resource()::$model,
-                    $collectionName,
+                    $collectionName
                 );
             }
         });
