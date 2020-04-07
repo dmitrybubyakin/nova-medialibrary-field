@@ -6,27 +6,27 @@
       </h4>
 
       <div class="px-8 py-6">
-        <VueCropper ref="cropper" :src="media.cropperMediaUrl" :data="media.cropperData" :v-bind="media.cropperOptions" style="max-height: 500px" />
+        <VueCropper ref="cropper" :src="media.cropperMediaUrl" :data="media.cropperData" v-bind="media.cropperOptions" style="max-height: 500px" />
 
         <div class="flex justify-end mt-6">
-          <button type="button" class="flex items-center ml-3 text-70 hover:text-primary focus:outline-none" @click="toggleAspectRatio">
+          <button v-if="resizable" type="button" class="flex items-center ml-3 text-70 hover:text-primary focus:outline-none" @click="toggleAspectRatio">
             <icon v-if="locked" type="cropper-lock" width="16" height="16" view-box="-64 0 512 512" />
             <icon v-else type="cropper-unlock" width="16" height="16" view-box="-64 0 512 512" />
           </button>
 
-          <button type="button" class="flex items-center ml-3 text-70 hover:text-primary focus:outline-none" @click="rotate(-90)">
+          <button v-if="rotatable" type="button" class="flex items-center ml-3 text-70 hover:text-primary focus:outline-none" @click="rotate(-90)">
             <icon type="cropper-rotate" width="16" height="16" view-box="0 0 426.667 426.667" />
           </button>
 
-          <button type="button" class="flex items-center ml-3 text-70 hover:text-primary focus:outline-none" @click="rotate(90)">
+          <button v-if="rotatable" type="button" class="flex items-center ml-3 text-70 hover:text-primary focus:outline-none" @click="rotate(90)">
             <icon type="cropper-rotate" width="16" height="16" view-box="0 0 426.667 426.667" style="transform: rotateY(180deg)" />
           </button>
 
-          <button type="button" class="flex items-center ml-3 text-70 hover:text-primary focus:outline-none" @click="zoom(0.15)">
+          <button v-if="zoomable" type="button" class="flex items-center ml-3 text-70 hover:text-primary focus:outline-none" @click="zoom(0.15)">
             <icon type="cropper-zoom-in" width="16" height="16" view-box="0 0 512 512" />
           </button>
 
-          <button type="button" class="flex items-center ml-3 text-70 hover:text-primary focus:outline-none" @click="zoom(-0.15)">
+          <button v-if="zoomable" type="button" class="flex items-center ml-3 text-70 hover:text-primary focus:outline-none" @click="zoom(-0.15)">
             <icon type="cropper-zoom-out" width="16" height="16" view-box="0 0 512 512" />
           </button>
         </div>
@@ -74,6 +74,15 @@ export default {
   computed: {
     cropper() {
       return this.$refs.cropper && this.$refs.cropper.cropper
+    },
+    rotatable() {
+      return this.media.cropperOptions.rotatable !== false
+    },
+    zoomable() {
+      return this.media.cropperOptions.zoomable !== false
+    },
+    resizable() {
+      return this.media.cropperOptions.cropBoxResizable !== false
     },
   },
 

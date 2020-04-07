@@ -77,7 +77,7 @@ export default {
       return this.media.authorizedToDelete && !this.readonly
     },
     canCrop() {
-      return !this.readonly
+      return this.media.cropperEnabled && !this.readonly
     },
     canRegenerate() {
       return !this.readonly

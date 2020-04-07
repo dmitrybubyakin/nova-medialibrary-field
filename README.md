@@ -5,6 +5,8 @@
 
 Laravel Nova field for managing the Spatie media library.
 
+This is the documentation for v2. For v1 follow this [link](https://github.com/dmitrybubyakin/nova-medialibrary-field/tree/1.2.2)
+
 Features:
  - add media on update/create views
  - add existing media
@@ -175,6 +177,11 @@ https://github.com/fengyuanchen/cropperjs#options
 ```php
 Medialibrary::make('Media')->croppable('conversionName');
 Medialibrary::make('Media')->croppable('conversionName', ['viewMode' => 3]);
+Medialibrary::make('Media')->croppable('conversionName', [
+    'rotatable' => false,
+    'zoomable' => false,
+    'cropBoxResizable' => false,
+]);
 Medialibrary::make('Media')->croppable('conversionName', function (Media $media) {
     return $media->getCustomProperty('croppable') ? ['viewMode' => 3] : null;
 });
