@@ -22,8 +22,8 @@
     ],
     "require": {
         "php": "^7.3",
-        "laravel/nova": "^2.9|^3.0",
-        "spatie/laravel-medialibrary": "^7.18|^8.0.0"
+        "laravel/nova": "^3.0",
+        "spatie/laravel-medialibrary": "^8.0.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
