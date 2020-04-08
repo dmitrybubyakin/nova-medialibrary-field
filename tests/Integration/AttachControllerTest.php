@@ -210,7 +210,7 @@ class AttachControllerTest extends TestCase
             basename($path),
             null,
             null,
-            true,
+            true
         );
     }
 }

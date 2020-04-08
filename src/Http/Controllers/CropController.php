@@ -18,7 +18,7 @@ class CropController
                     (int) $request->width,
                     (int) $request->height,
                     (int) $request->x,
-                    (int) $request->y,
+                    (int) $request->y
                 ),
                 'orientation' => $this->orientation((int) $request->rotate),
             ],

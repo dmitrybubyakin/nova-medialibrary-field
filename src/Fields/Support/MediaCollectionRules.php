@@ -21,7 +21,7 @@ class MediaCollectionRules
 
             $validator = Validator::make(
                 [$attribute => $media],
-                [$attribute => $rules],
+                [$attribute => $rules]
             );
 
             if ($validator->fails()) {

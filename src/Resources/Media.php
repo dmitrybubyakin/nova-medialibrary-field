@@ -29,7 +29,7 @@ class Media extends Resource
         $field = call_user_func(new MedialibraryFieldResolver(
             $request,
             $resource,
-            $request->input('viaField'),
+            $request->input('viaField')
         ));
 
         if (is_null($field)) {
