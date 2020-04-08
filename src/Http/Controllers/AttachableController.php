@@ -32,7 +32,7 @@ class AttachableController
 
     private function buildQuery(MedialibraryRequest $request): Builder
     {
-        return config('medialibrary.media_model')::query()->when($request->input('name'), function (Builder $query, string $name): void {
+        return config('media-library.media_model')::query()->when($request->input('name'), function (Builder $query, string $name): void {
             $query->where(function (Builder $query) use ($name): void {
                 $query
                     ->where('name', 'like', "%{$name}%")

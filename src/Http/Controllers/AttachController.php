@@ -7,9 +7,9 @@ use DmitryBubyakin\NovaMedialibraryField\TransientModel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
 use Spatie\MediaLibrary\Filesystem\Filesystem;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\Helpers\TemporaryDirectory;
-use Spatie\MediaLibrary\Models\Media;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\Support\TemporaryDirectory;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class AttachController
 {
@@ -42,7 +42,7 @@ class AttachController
 
     private function replaceFile(MedialibraryRequest $request): void
     {
-        $media = config('medialibrary.media_model')::findOrFail($request->media);
+        $media = config('media-library.media_model')::findOrFail($request->media);
 
         $directory = TemporaryDirectory::create();
 
@@ -61,7 +61,7 @@ class AttachController
             return;
         }
 
-        config('medialibrary.media_model')::creating(function (Media $media) use ($request, $model, $collectionName): void {
+        config('media-library.media_model')::creating(function (Media $media) use ($request, $model, $collectionName): void {
             if ($model instanceof TransientModel && $media->collection_name === $request->fieldUuid()) {
                 TransientModel::setCustomPropertyValue(
                     $media,
