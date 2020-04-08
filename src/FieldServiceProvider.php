@@ -17,7 +17,7 @@ class FieldServiceProvider extends ServiceProvider
             Nova::style('nova-medialibrary-field', __DIR__.'/../dist/css/field.css');
         });
 
-        Media::$model = config('medialibrary.media_model');
+        Media::$model = config('media-library.media_model');
 
         Nova::resources([
             Media::class,
