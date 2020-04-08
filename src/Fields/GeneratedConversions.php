@@ -3,7 +3,7 @@
 namespace DmitryBubyakin\NovaMedialibraryField\Fields;
 
 use Laravel\Nova\Fields\Field;
-use Spatie\MediaLibrary\Models\Media;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class GeneratedConversions extends Field
 {

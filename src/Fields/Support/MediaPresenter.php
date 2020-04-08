@@ -8,7 +8,7 @@ use DmitryBubyakin\NovaMedialibraryField\TransientModel;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
-use Spatie\MediaLibrary\Models\Media;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class MediaPresenter implements Arrayable
 {

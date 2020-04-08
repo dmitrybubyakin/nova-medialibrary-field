@@ -3,7 +3,7 @@
 namespace DmitryBubyakin\NovaMedialibraryField\Fields\Support;
 
 use Illuminate\Contracts\Support\Arrayable;
-use Spatie\MediaLibrary\Models\Media;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class AttachableMediaPresenter implements Arrayable
 {

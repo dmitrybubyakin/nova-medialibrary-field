@@ -4,8 +4,8 @@ namespace DmitryBubyakin\NovaMedialibraryField\Fields\Support;
 
 use DmitryBubyakin\NovaMedialibraryField\TransientModel;
 use Illuminate\Http\UploadedFile;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\Models\Media;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class AttachCallback
 {

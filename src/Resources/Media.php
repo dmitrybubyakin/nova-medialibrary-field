@@ -9,7 +9,7 @@ use Laravel\Nova\Resource;
 
 class Media extends Resource
 {
-    public static $model = 'Spatie\MediaLibrary\Models\Media';
+    public static $model = \Spatie\MediaLibrary\MediaCollections\Models\Media::class;
 
     public static $displayInNavigation = false;
 

@@ -8,6 +8,6 @@ class SortController
 {
     public function __invoke(Request $request): void
     {
-        config('medialibrary.media_model')::setNewOrder($request->input('media', []));
+        config('media-library.media_model')::setNewOrder($request->input('media', []));
     }
 }

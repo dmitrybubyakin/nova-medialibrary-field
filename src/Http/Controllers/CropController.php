@@ -10,7 +10,7 @@ class CropController
 {
     public function __invoke(Request $request): JsonResponse
     {
-        $media = config('medialibrary.media_model')::findOrFail($request->route('media'));
+        $media = config('media-library.media_model')::findOrFail($request->route('media'));
 
         $media->manipulations = [
             $this->conversion($request) => [
