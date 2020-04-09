@@ -6,10 +6,10 @@ use DmitryBubyakin\NovaMedialibraryField\Http\Requests\MedialibraryRequest;
 use DmitryBubyakin\NovaMedialibraryField\TransientModel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
-use Spatie\MediaLibrary\Filesystem\Filesystem;
 use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\Support\TemporaryDirectory;
+use Spatie\MediaLibrary\MediaCollections\Filesystem;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\MediaLibrary\Support\TemporaryDirectory;
 
 class AttachController
 {

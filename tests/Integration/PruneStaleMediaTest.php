@@ -5,7 +5,7 @@ namespace DmitryBubyakin\NovaMedialibraryField\Tests\Integration;
 use DmitryBubyakin\NovaMedialibraryField\PruneStaleMedia;
 use DmitryBubyakin\NovaMedialibraryField\Tests\TestCase;
 use DmitryBubyakin\NovaMedialibraryField\TransientModel;
-use Spatie\MediaLibrary\Models\Media;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class PruneStaleMediaTest extends TestCase
 {

@@ -3,7 +3,7 @@
 namespace DmitryBubyakin\NovaMedialibraryField\Tests\Integration;
 
 use DmitryBubyakin\NovaMedialibraryField\Tests\TestCase;
-use Spatie\MediaLibrary\Models\Media;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class SortControllerTest extends TestCase
 {

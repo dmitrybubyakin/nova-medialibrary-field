@@ -21,13 +21,13 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "laravel/nova": "^3.0",
         "spatie/laravel-medialibrary": "^8.0.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
-        "orchestra/testbench": "^4.0",
+        "orchestra/testbench": "^5.0",
         "phpunit/phpunit": "^8.5"
     },
     "autoload": {

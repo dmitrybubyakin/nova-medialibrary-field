@@ -12,9 +12,9 @@ use Laravel\Nova\Nova;
 use Laravel\Nova\NovaServiceProvider;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\MediaLibrary\MediaLibraryServiceProvider;
-use Spatie\MediaLibrary\Models\Media;
 
 abstract class TestCase extends Orchestra
 {

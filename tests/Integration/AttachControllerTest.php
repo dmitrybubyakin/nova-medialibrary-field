@@ -5,11 +5,11 @@ namespace DmitryBubyakin\NovaMedialibraryField\Tests\Integration;
 use DmitryBubyakin\NovaMedialibraryField\Tests\Fixtures\TestPost;
 use DmitryBubyakin\NovaMedialibraryField\Tests\TestCase;
 use DmitryBubyakin\NovaMedialibraryField\TransientModel;
-use Illuminate\Foundation\Testing\Assert as PHPUnit;
-use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
-use Spatie\MediaLibrary\Models\Media;
+use Illuminate\Testing\Assert as PHPUnit;
+use Illuminate\Testing\TestResponse;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class AttachControllerTest extends TestCase
 {
