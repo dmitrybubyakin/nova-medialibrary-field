@@ -26,8 +26,8 @@ class IndexControllerTest extends TestCase
     {
         return [
             ['media', 2, [
-                ['default', $this->getJpgFile()],
-                ['default', $this->getJpgFile()],
+                ['', $this->getJpgFile()],
+                ['', $this->getJpgFile()],
             ]],
             ['media_testing', 3, [
                 ['testing', $this->getTextFile()],
