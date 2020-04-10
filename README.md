@@ -5,7 +5,7 @@
 
 Laravel Nova field for managing the Spatie media library.
 
-This is the documentation for v2. For v1 follow this [link](https://github.com/dmitrybubyakin/nova-medialibrary-field/tree/1.2.2)
+This is the documentation for v2 and v3. For v1 follow this [link](https://github.com/dmitrybubyakin/nova-medialibrary-field/tree/1.2.2)
 
 Features:
  - add media on update/create views
