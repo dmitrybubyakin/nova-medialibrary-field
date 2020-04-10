@@ -61,6 +61,7 @@ class Medialibrary extends Field
         $this->single(false);
         $this->mediaOnIndex(1);
         $this->attachRules([]);
+        $this->resolve(null);
     }
 
     public function fields(callable $callback): self

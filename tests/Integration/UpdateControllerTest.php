@@ -35,8 +35,6 @@ class UpdateControllerTest extends TestCase
 
         $media = $post->media->first();
 
-        $this->withoutExceptionHandling();
-
         $this
             ->putJson("nova-api/dmitrybubyakin-nova-medialibrary-media/{$media->id}?viaResource=test-posts&viaField=media", ['file_name' => 'Testing'])
             ->assertOk();
