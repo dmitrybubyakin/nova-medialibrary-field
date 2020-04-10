@@ -4,7 +4,7 @@ namespace DmitryBubyakin\NovaMedialibraryField\Tests\Integration;
 
 use DmitryBubyakin\NovaMedialibraryField\Tests\TestCase;
 
-class StoreControllerTest extends TestCase
+class CreationFieldControllerTest extends TestCase
 {
     /** @test */
     public function test_can_retrieve_resource_creation_fields(): void
