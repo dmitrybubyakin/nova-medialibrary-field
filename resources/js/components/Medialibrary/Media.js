@@ -145,7 +145,7 @@ export default class Media {
 
   async edit() {
     this.__errors = new Errors()
-    this.__fields = await this.fetch(`${this.id}/update-fields`).then(response => response.fields)
+    this.__fields = await this.fetch(`${this.id}/update-fields`).then(response => Object.values(response.fields))
 
     this.openUpdateModal()
   }
