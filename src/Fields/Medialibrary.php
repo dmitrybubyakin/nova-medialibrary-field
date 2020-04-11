@@ -309,7 +309,27 @@ class Medialibrary extends Field
 
     protected function fillAttribute(NovaRequest $request, $requestAttribute, $model, $attribute): callable
     {
-        return function () use ($request, $attribute, $model): void {
+        $callback = null;
+
+        if (is_callable($this->fillCallback)) {
+            $callback = call_user_func(
+                $this->fillCallback,
+                $request,
+                $model,
+                $attribute,
+                $requestAttribute
+            );
+        }
+
+        if (is_a($model, \Whitecube\NovaFlexibleContent\Layouts\Layout::class)) {
+            $model = \Whitecube\NovaFlexibleContent\Flexible::getOriginModel();
+        }
+
+        return function () use ($request, $attribute, $model, $callback): void {
+            if (is_callable($callback)) {
+                $callback();
+            }
+
             if (empty($uuid = $request->input($attribute))) {
                 return;
             }
