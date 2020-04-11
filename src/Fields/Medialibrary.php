@@ -7,6 +7,7 @@ use DmitryBubyakin\NovaMedialibraryField\Fields\Support\AttachCallback;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaCollectionRules;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaFields;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaPresenter;
+use DmitryBubyakin\NovaMedialibraryField\Fields\Support\ResolveMediaCallback;
 use DmitryBubyakin\NovaMedialibraryField\TransientModel;
 use function DmitryBubyakin\NovaMedialibraryField\validate_args;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,6 +33,8 @@ class Medialibrary extends Field
 
     public $attachExistingCallback;
 
+    public $resolveMediaUsingCallback;
+
     public $mediaOnIndexCallback;
 
     public $downloadCallback;
@@ -56,8 +59,9 @@ class Medialibrary extends Field
 
         $this->collectionName = $collectionName;
         $this->diskName = $diskName;
-        $this->fieldsCallback = MediaFields::make();
-        $this->attachCallback = new AttachCallback;
+        $this->fields(MediaFields::make());
+        $this->attachUsing(new AttachCallback);
+        $this->resolveMediaUsing(new ResolveMediaCallback);
         $this->single(false);
         $this->mediaOnIndex(1);
         $this->attachRules([]);
@@ -95,6 +99,13 @@ class Medialibrary extends Field
         );
 
         return $this->withMeta(['attachExisting' => true]);
+    }
+
+    public function resolveMediaUsing(callable $mediaCallback): self
+    {
+        $this->resolveMediaUsingCallback = $mediaCallback;
+
+        return $this;
     }
 
     /**

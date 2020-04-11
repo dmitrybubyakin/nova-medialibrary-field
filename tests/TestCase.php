@@ -97,6 +97,11 @@ abstract class TestCase extends Orchestra
         return $this->getSupportPath('tmp/test.txt');
     }
 
+    public function getIgnoredTextFile(): string
+    {
+        return $this->getSupportPath('tmp/ignored.txt');
+    }
+
     public function getJpgFile(): string
     {
         return $this->getSupportPath('tmp/test.jpg');

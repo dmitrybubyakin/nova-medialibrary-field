@@ -22,6 +22,7 @@ Features:
     - [Methods](#methods)
         - [Fields](#fields)
         - [AttachUsing](#attachusing)
+        - [ResolveMediaUsing](#resolvemediausing)
         - [AttachExisting](#attachexisting)
         - [MediaOnIndex](#mediaonindex)
         - [DownloadUsing](#downloadusing)
@@ -87,7 +88,14 @@ Medialibrary::make('Media')->fields(function () {
         GeneratedConversions::make('Conversions')
             ->withTooltips(),
     ];
-})
+});
+```
+#### ResolveMediaUsing
+
+```php
+Medialibrary::make('Media')->resolveMediaUsing(function (HasMedia $model, string $collectionName) {
+    return $model->getMedia($collectionName);
+});
 ```
 
 #### AttachUsing
