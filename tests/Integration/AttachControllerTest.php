@@ -85,7 +85,7 @@ class AttachControllerTest extends TestCase
 
         $this
             ->postJson('/nova-api/test-posts', ['media_testing' => $uuid])
-            ->assertJsonValidationErrorMessage('media_testing', 'The media testing field is required.');
+            ->assertJsonValidationErrorMessage('media_testing', 'The media_testing field is required.');
 
         $this->addMediaTo(TransientModel::make(), $this->getJpgFile(), $uuid);
 
@@ -103,7 +103,7 @@ class AttachControllerTest extends TestCase
 
         $this
             ->putJson("/nova-api/test-posts/{$post->id}", ['media_testing' => $uuid])
-            ->assertJsonValidationErrorMessage('media_testing', 'The media testing must have at least 2 items.');
+            ->assertJsonValidationErrorMessage('media_testing', 'The media_testing must have at least 2 items.');
 
         $post = $this->createPostWithMedia(2, 'testing');
 
