@@ -12,11 +12,11 @@
       <icon type="delete" view-box="0 0 20 20" width="14" height="14" />
     </button>
 
-    <v-popover class="flex ml-auto">
+    <v-popover class="flex ml-auto" popover-base-class="" popover-class="bg-white rounded shadow border border-30">
       <button type="button" class="flex text-70 hover:text-primary focus:outline-none">
         <icon type="more" view-box="0 0 24 24" width="14" height="14" />
       </button>
-      <div slot="popover" class="bg-white rounded shadow border border-30">
+      <div slot="popover">
         <button v-close-popover type="button" class="w-full flex px-4 py-2 hover:bg-30 focus:outline-none" @click="media.copyUrl()">
           <span class="text-80">
             <icon type="link" view-box="0 0 20 20" width="14" height="14" />
