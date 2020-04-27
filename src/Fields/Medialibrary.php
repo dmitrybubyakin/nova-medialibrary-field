@@ -38,6 +38,8 @@ class Medialibrary extends Field
 
     public $previewCallback;
 
+    public $appendTimestampToPreview = false;
+
     public $tooltipCallback;
 
     public $titleCallback;
@@ -151,6 +153,13 @@ class Medialibrary extends Field
         return $this;
     }
 
+    public function appendTimestampToPreview(bool $append = true): self
+    {
+        $this->appendTimestampToPreview = $append;
+
+        return $this;
+    }
+
     /**
      * @param string|callable $tooltip
      */
@@ -203,6 +212,8 @@ class Medialibrary extends Field
                 ];
             }
         );
+
+        $this->appendTimestampToPreview(true);
 
         return $this;
     }
