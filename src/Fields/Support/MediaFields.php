@@ -35,7 +35,7 @@ class MediaFields
                     return $this->resource->updated_at->diffForHumans();
                 })->exceptOnForms(),
 
-                GeneratedConversions::make('Conversions'),
+                GeneratedConversions::make(__('Media Conversions')),
             ];
         };
     }
