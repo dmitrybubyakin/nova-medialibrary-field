@@ -16,22 +16,22 @@ class MediaFields
             return [
                 ID::make(),
 
-                Text::make('Filename', 'file_name')
+                Text::make(__('Media Filename'), 'file_name')
                     ->rules('required', 'min:2'),
 
-                Textarea::make('Description', 'custom_properties->description')->alwaysShow(),
+                Textarea::make(__('Media Description'), 'custom_properties->description')->alwaysShow(),
 
-                Text::make('Disk')->exceptOnForms(),
+                Text::make(__('Media Disk'))->exceptOnForms(),
 
-                Text::make('Download Url', function () {
+                Text::make(__('Media Download Url'), function () {
                     return $this->resource->exists ? $this->resource->getFullUrl() : null;
                 }),
 
-                Text::make('Size')->displayUsing(function () {
+                Text::make(__('Media Size'))->displayUsing(function () {
                     return $this->resource->humanReadableSize;
                 })->exceptOnForms(),
 
-                Text::make('Updated At')->displayUsing(function () {
+                Text::make(__('Media Updated At'))->displayUsing(function () {
                     return $this->resource->updated_at->diffForHumans();
                 })->exceptOnForms(),
 

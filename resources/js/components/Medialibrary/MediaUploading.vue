@@ -72,9 +72,9 @@ export default {
 
     chooseButtonText() {
       if (this.context.media.length && this.context.field.single) {
-        return this.__('Replace file')
+        return this.__('Replace File')
       } else if (this.context.field.single) {
-        return this.__('Choose file')
+        return this.__('Choose File')
       } else {
         return this.__('Choose Files')
       }
