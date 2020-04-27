@@ -2,7 +2,7 @@
   <modal class="select-text" @modal-close="handleClose">
     <card class="w-action-fields overflow-hidden">
       <h4 class="text-90 font-normal text-2xl flex-no-shrink px-8 pt-6">
-        {{ __('Crop') }}
+        {{ __('Crop Media') }}
       </h4>
 
       <div class="px-8 py-6">

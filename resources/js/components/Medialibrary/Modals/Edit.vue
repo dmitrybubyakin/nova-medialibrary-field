@@ -2,7 +2,7 @@
   <modal class="select-text" @modal-close="handleClose">
     <card class="w-action-fields overflow-hidden">
       <h4 class="text-90 font-normal text-2xl flex-no-shrink px-8 pt-6">
-        {{ __('Edit') }} {{ singularName }}
+        {{ __('Edit Media') }}
       </h4>
 
       <form v-if="fields" autocomplete="off" @submit.prevent="handleSubmit">
