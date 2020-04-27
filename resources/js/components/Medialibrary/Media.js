@@ -167,7 +167,7 @@ export default class Media {
       this.closeAllModals()
       this.refresh()
 
-      Nova.success(Nova.app.__('The :resource was updated!', { resource: this.singularLabel.toLowerCase() }))
+      Nova.success(Nova.app.__('Media was updated!', { resource: this.singularLabel.toLowerCase() }))
     } catch (error) {
       if (!error.response) {
         throw error
@@ -188,13 +188,13 @@ export default class Media {
     this.closeAllModals()
     this.refresh()
 
-    Nova.success(Nova.app.__('The :resource was deleted!', { resource: this.singularLabel.toLowerCase() }))
+    Nova.success(Nova.app.__('Media was deleted!', { resource: this.singularLabel.toLowerCase() }))
   }
 
   async regenerate() {
     await Nova.request().post(`/nova-vendor/dmitrybubyakin/nova-medialibrary-field/${this.id}/regenerate`)
 
-    Nova.success(Nova.app.__('The :resource was regenerated!', { resource: this.singularLabel.toLowerCase() }))
+    Nova.success(Nova.app.__('Media was regenerated!', { resource: this.singularLabel.toLowerCase() }))
 
     this.refresh()
   }
@@ -217,7 +217,7 @@ export default class Media {
     this.closeAllModals()
     this.refresh()
 
-    Nova.success(Nova.app.__('The :resource was cropped!', { resource: this.singularLabel.toLowerCase() }))
+    Nova.success(Nova.app.__('Media was cropped!', { resource: this.singularLabel.toLowerCase() }))
   }
 
   refresh() {
