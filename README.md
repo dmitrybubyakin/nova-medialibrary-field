@@ -313,7 +313,7 @@ class AuthServiceProvider extends ServiceProvider
 
 ## Translations
 
-TODO
+ - [en](resources/lang/en.json)
 
 ## Changelog
 

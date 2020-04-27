@@ -30,10 +30,16 @@ class MediaPresenter implements Arrayable
 
     public function previewUrl(): ?string
     {
-        return call_or_default($this->field->previewCallback, [$this->media], function () {
+        return transform(call_or_default($this->field->previewCallback, [$this->media], function () {
             return Str::is('image/*', $this->media->mime_type)
                 ? $this->media->getFullUrl()
                 : null;
+        }), function (string $url): string {
+            if ($this->field->appendTimestampToPreview) {
+                return $url . '?timestamp=' . $this->media->updated_at->getTimestamp();
+            }
+
+            return $url;
         });
     }
 
@@ -65,7 +71,7 @@ class MediaPresenter implements Arrayable
             'fileName' => $this->media->file_name,
             'extension' => $this->media->extension,
             'downloadUrl' => $this->downloadUrl(),
-            'previewUrl' => $this->appendTimestamp($this->previewUrl()),
+            'previewUrl' => $this->previewUrl(),
             'tooltip' => $this->tooltip(),
             'title' => $this->title(),
             'attached' => $this->attached(),
@@ -103,14 +109,5 @@ class MediaPresenter implements Arrayable
             'x' => $manualCrop[2] ?? null,
             'y' => $manualCrop[3] ?? null,
         ], 'is_numeric'));
-    }
-
-    private function appendTimestamp(?string $url): ?string
-    {
-        if ($url) {
-            return $url . '?timestamp=' . $this->media->updated_at->getTimestamp();
-        }
-
-        return null;
     }
 }

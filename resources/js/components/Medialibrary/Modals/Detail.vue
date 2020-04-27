@@ -4,7 +4,7 @@
       <div class="px-8 py-6">
         <div class="flex items-center">
           <h4 class="text-90 font-normal text-2xl flex-no-shrink">
-            {{ resource.id.panel }}
+            {{ __('Media Details') }}
           </h4>
 
           <div class="ml-3 w-full flex items-center justify-end">
