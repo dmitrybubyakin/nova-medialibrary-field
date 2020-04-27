@@ -186,6 +186,12 @@ Medialibrary::make('Media')->croppable('conversionName', function (Media $media)
     return $media->getCustomProperty('croppable') ? ['viewMode' => 3] : null;
 });
 ```
+https://docs.spatie.be/laravel-medialibrary/v8/converting-images/defining-conversions/#performing-conversions-on-specific-collections
+> {note} If your media in different collection, make sure pass your collectionName to `performOnCollections`
+
+```php
+$this->addMediaConversion('conversionName')->performOnCollections('collectionName')
+```
 
 #### Single
 
