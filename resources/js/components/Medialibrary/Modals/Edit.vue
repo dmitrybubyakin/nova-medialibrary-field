@@ -24,7 +24,7 @@
           </button>
 
           <progress-button type="submit" :disabled="updating" :processing="updating">
-            {{ __('Update') }} {{ singularName }}
+            {{ __('Update Media') }}
           </progress-button>
         </div>
       </form>
@@ -58,12 +58,6 @@ export default {
     updating: {
       type: Boolean,
       required: true,
-    },
-  },
-
-  computed: {
-    singularName() {
-      return this.resourceInformation.singularLabel
     },
   },
 
