@@ -3,13 +3,16 @@
 namespace DmitryBubyakin\NovaMedialibraryField;
 
 use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
+use DmitryBubyakin\NovaMedialibraryField\Integrations\NovaFlexibleContent\ResolveFromFlexibleLayoutFields;
 use Exception;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Resource;
 
 class MedialibraryFieldResolver
 {
-    private static $callback;
+    public static $resolvers = [
+        ResolveFromFlexibleLayoutFields::class,
+    ];
 
     private $request;
     private $resource;
@@ -24,35 +27,20 @@ class MedialibraryFieldResolver
 
     public function __invoke(): Medialibrary
     {
-        return call_user_func_array(static::$callback ?? $this->getDefaultResolver(), [
-            $this->request,
-            $this->resource,
-            $this->attribute,
-        ]);
-    }
+        $fields = $this->resource->availableFields($this->request);
 
-    private function getDefaultResolver(): callable
-    {
-        return function (NovaRequest $request, Resource $resource, string $attribute) {
-            $field = $resource
-                    ->availableFields($request)
-                    ->whereInstanceOf(Medialibrary::class)
-                    ->findFieldByAttribute($attribute);
+        foreach (static::$resolvers as $className) {
+            $resolver = new $className;
 
-            if (is_null($field)) {
-                throw new Exception(sprintf(
-                    'Field `%s` is not found. In case you are using Panel or Field which contains Medialibrary field, check out %s::using() method',
-                    $attribute,
-                    static::class
-                ));
+            if ($field = $resolver($fields, $this->attribute)) {
+                return $field;
             }
+        }
 
-            return $field;
-        };
-    }
-
-    public static function using(callable $callback): void
-    {
-        static::$callback = $callback;
+        return $fields
+            ->whereInstanceOf(Medialibrary::class)
+            ->findFieldByAttribute($this->attribute, function (): void {
+                throw new Exception("Field with attribute `{$this->attribute}` is not found.");
+            });
     }
 }

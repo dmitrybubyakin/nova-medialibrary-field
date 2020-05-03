@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace DmitryBubyakin\NovaMedialibraryField\Bridge\Flexible;
+namespace DmitryBubyakin\NovaMedialibraryField\Integrations\NovaFlexibleContent;
 
 use Whitecube\NovaFlexibleContent\Layouts\Layout;
 
