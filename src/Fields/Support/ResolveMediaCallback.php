@@ -3,7 +3,7 @@
 namespace DmitryBubyakin\NovaMedialibraryField\Fields\Support;
 
 use Illuminate\Support\Collection;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia;
 
 class ResolveMediaCallback
 {

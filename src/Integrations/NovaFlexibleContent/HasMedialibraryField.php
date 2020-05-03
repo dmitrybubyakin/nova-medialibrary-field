@@ -20,7 +20,7 @@ trait HasMedialibraryField
         foreach ($this->fields->whereInstanceOf(Medialibrary::class) as $field) {
             $field->fillUsing(function ($request, $model): void {
                 if ($model instanceof Layout) {
-                    config('medialibrary.media_model')::query()
+                    config('media-library.media_model')::query()
                         ->where('custom_properties->flexibleKey', $model->_key)
                         ->update(['custom_properties->flexibleKey' => $model->key]);
                 }

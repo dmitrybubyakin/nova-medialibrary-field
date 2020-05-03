@@ -7,7 +7,7 @@ use DmitryBubyakin\NovaMedialibraryField\TransientModel;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Laravel\Nova\Fields\FieldCollection;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia;
 
 class ResolveFromFlexibleLayoutFields
 {
