@@ -15,11 +15,11 @@ class MedialibraryRequest extends NovaRequest
 
     public function resourceExists(): bool
     {
-        return $this->route('resourceId') !== 'undefined';
+        return is_numeric($this->route('resourceId'));
     }
 
     public function fieldUuid(): string
     {
-        return $this->fieldUuid;
+        return $this->input('fieldUuid');
     }
 }

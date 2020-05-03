@@ -27,10 +27,13 @@ class TestPost extends Resource
                             ->onlyOnDetail(),
                     ];
                 })
-                ->attachExisting(function (Builder $query, Request $request, HasMedia $model) {
+                ->attachExisting(function (Builder $query, Request $request, HasMedia $model): void {
                     if ($request->name) {
-                        return $query->where('name', $request->name);
+                        $query->where('name', $request->name);
                     }
+                })
+                ->resolveMediaUsing(function (HasMedia $media, string $collectionName) {
+                    return $media->getMedia($collectionName)->where('file_name', '!=', 'ignored.txt');
                 }),
 
             Medialibrary::make('Media testing', 'testing')
