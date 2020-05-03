@@ -3,6 +3,7 @@
 namespace DmitryBubyakin\NovaMedialibraryField;
 
 use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
+use DmitryBubyakin\NovaMedialibraryField\Integrations\NovaDependencyContainer\ResolveFromDependencyContainerFields;
 use DmitryBubyakin\NovaMedialibraryField\Integrations\NovaFlexibleContent\ResolveFromFlexibleLayoutFields;
 use Exception;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -12,6 +13,7 @@ class MedialibraryFieldResolver
 {
     public static $resolvers = [
         ResolveFromFlexibleLayoutFields::class,
+        ResolveFromDependencyContainerFields::class,
     ];
 
     private $request;
