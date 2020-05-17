@@ -20,6 +20,7 @@ Features:
  - [Installation](#installation)
  - [Usage](#usage)
     - [Methods](#methods)
+        - [Attribute](#attribute)
         - [Fields](#fields)
         - [AttachUsing](#attachusing)
         - [AttachExisting](#attachexisting)
@@ -66,10 +67,20 @@ composer require dmitrybubyakin/nova-medialibrary-field
 ## Usage
 
 ```php
-Medialibrary::make($name, $collectionName = 'default', $diskName = ''),
+Medialibrary::make($name, $collectionName = '', $diskName = '', $attribute = null),
 ```
 
 ### Methods
+
+#### Attribute
+
+Sometimes you may need to use the same field label (duplicated sections, etc). The attribute must be unique. In this case you can change the default behaviour using the `attribute()` method.
+
+```php
+Medialibrary::make('name', 'collection name', 'disk name', 'custom_attribute');
+// or
+Medialibrary::make('name', 'collection name', 'disk name')->attribute('custom_attribute');
+```
 
 #### Fields
 

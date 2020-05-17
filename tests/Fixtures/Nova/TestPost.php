@@ -36,7 +36,8 @@ class TestPost extends Resource
             Medialibrary::make('Media testing', 'testing')
                 ->rules('required', 'array')
                 ->creationRules('min:1')
-                ->updateRules('min:2'),
+                ->updateRules('min:2')
+                ->attribute('media_testing_custom_attribute'),
 
             Medialibrary::make('Media testing single', 'testing_single')
                 ->single(),
