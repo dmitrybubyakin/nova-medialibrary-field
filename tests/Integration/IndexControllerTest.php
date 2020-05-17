@@ -30,7 +30,7 @@ class IndexControllerTest extends TestCase
                 ['default', $this->getJpgFile()],
                 ['testing', $this->getIgnoredTextFile()],
             ]],
-            ['media_testing', 3, [
+            ['media_testing_custom_attribute', 3, [
                 ['testing', $this->getTextFile()],
                 ['testing', $this->getTextFile()],
                 ['testing', $this->getTextFile()],

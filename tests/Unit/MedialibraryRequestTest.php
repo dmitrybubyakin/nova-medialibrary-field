@@ -24,8 +24,8 @@ class MedialibraryRequestTest extends TestCase
     /** @test */
     public function test_medialibrary_field(): void
     {
-        $request = $this->createRequest('nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/1/media/media_testing');
-        $this->assertSame('media_testing', $request->medialibraryField()->attribute);
+        $request = $this->createRequest('nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/1/media/media_testing_custom_attribute');
+        $this->assertSame('media_testing_custom_attribute', $request->medialibraryField()->attribute);
 
         $request = $this->createRequest('nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/1/media/media_testing_single');
         $this->assertSame('media_testing_single', $request->medialibraryField()->attribute);

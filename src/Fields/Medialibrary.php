@@ -10,6 +10,7 @@ use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaPresenter;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Support\ResolveMediaCallback;
 use DmitryBubyakin\NovaMedialibraryField\TransientModel;
 use function DmitryBubyakin\NovaMedialibraryField\validate_args;
+use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
@@ -55,9 +56,9 @@ class Medialibrary extends Field
 
     public $attachRules;
 
-    public function __construct(string $name, string $collectionName = 'default', string $diskName = '')
+    public function __construct(string $name, string $collectionName = 'default', string $diskName = '', string $attribute = null)
     {
-        parent::__construct($name);
+        parent::__construct($name, $attribute);
 
         $this->collectionName = $collectionName;
         $this->diskName = $diskName;
@@ -68,6 +69,13 @@ class Medialibrary extends Field
         $this->mediaOnIndex(1);
         $this->attachRules([]);
         $this->resolve(null);
+    }
+
+    public function attribute(string $attribute): self
+    {
+        $this->attribute = $attribute;
+
+        return $this;
     }
 
     public function fields(callable $callback): self
