@@ -20,6 +20,7 @@ Features:
  - [Installation](#installation)
  - [Usage](#usage)
     - [Methods](#methods)
+        - [Attribute](#attribute)
         - [Fields](#fields)
         - [AttachUsing](#attachusing)
         - [ResolveMediaUsing](#resolvemediausing)
@@ -52,9 +53,9 @@ Features:
 ![details view](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/details.png)
 ![update view](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/update.png)
 ![media actions](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/actions.png)
-![media crop dialog](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/crop-dialog)
-![media details dialog](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/media-details)
-![existing media dialog](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/existing-media)
+![media crop dialog](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/crop-dialog.png)
+![media details dialog](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/media-details.png)
+![existing media dialog](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/existing-media.png)
 
 ## Installation
 
@@ -67,10 +68,20 @@ composer require dmitrybubyakin/nova-medialibrary-field
 ## Usage
 
 ```php
-Medialibrary::make($name, $collectionName = 'default', $diskName = ''),
+Medialibrary::make($name, $collectionName = '', $diskName = '', $attribute = null),
 ```
 
 ### Methods
+
+#### Attribute
+
+Sometimes you may need to use the same field label (duplicated sections, etc). The attribute must be unique. In this case you can change the default behaviour using the `attribute()` method.
+
+```php
+Medialibrary::make('name', 'collection name', 'disk name', 'custom_attribute');
+// or
+Medialibrary::make('name', 'collection name', 'disk name')->attribute('custom_attribute');
+```
 
 #### Fields
 
@@ -193,6 +204,12 @@ Medialibrary::make('Media')->croppable('conversionName', [
 Medialibrary::make('Media')->croppable('conversionName', function (Media $media) {
     return $media->getCustomProperty('croppable') ? ['viewMode' => 3] : null;
 });
+```
+https://docs.spatie.be/laravel-medialibrary/v8/converting-images/defining-conversions/#performing-conversions-on-specific-collections
+> {note} If your media in different collection, make sure pass your collectionName to `performOnCollections`
+
+```php
+$this->addMediaConversion('conversionName')->performOnCollections('collectionName')
 ```
 
 #### Single
