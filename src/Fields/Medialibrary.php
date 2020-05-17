@@ -9,6 +9,7 @@ use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaFields;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaPresenter;
 use DmitryBubyakin\NovaMedialibraryField\TransientModel;
 use function DmitryBubyakin\NovaMedialibraryField\validate_args;
+use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
