@@ -84,13 +84,13 @@ class AttachControllerTest extends TestCase
         $uuid = (string) Str::uuid();
 
         $this
-            ->postJson('/nova-api/test-posts', ['media_testing' => $uuid])
-            ->assertJsonValidationErrorMessage('media_testing', 'The media testing field is required.');
+            ->postJson('/nova-api/test-posts', ['media_testing_custom_attribute' => $uuid])
+            ->assertJsonValidationErrorMessage('media_testing_custom_attribute', 'The media testing custom attribute field is required.');
 
         $this->addMediaTo(TransientModel::make(), $this->getJpgFile(), $uuid);
 
         $this
-            ->postJson('/nova-api/test-posts', ['media_testing' => $uuid])
+            ->postJson('/nova-api/test-posts', ['media_testing_custom_attribute' => $uuid])
             ->assertCreated();
     }
 
@@ -102,13 +102,13 @@ class AttachControllerTest extends TestCase
         $post = $this->createPostWithMedia(1, 'testing');
 
         $this
-            ->putJson("/nova-api/test-posts/{$post->id}", ['media_testing' => $uuid])
-            ->assertJsonValidationErrorMessage('media_testing', 'The media testing must have at least 2 items.');
+            ->putJson("/nova-api/test-posts/{$post->id}", ['media_testing_custom_attribute' => $uuid])
+            ->assertJsonValidationErrorMessage('media_testing_custom_attribute', 'The media testing custom attribute must have at least 2 items.');
 
         $post = $this->createPostWithMedia(2, 'testing');
 
         $this
-            ->putJson("/nova-api/test-posts/{$post->id}", ['media_testing' => $uuid])
+            ->putJson("/nova-api/test-posts/{$post->id}", ['media_testing_custom_attribute' => $uuid])
             ->assertOk();
     }
 
@@ -120,7 +120,7 @@ class AttachControllerTest extends TestCase
         $file = $this->makeUploadedFile($this->getJpgFile());
 
         $this
-            ->postJson("nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/{$post->id}/media/media_testing", ['file' => $file])
+            ->postJson("nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/{$post->id}/media/media_testing_custom_attribute", ['file' => $file])
             ->assertCreated();
 
         $this->assertCount(1, $post->media);
@@ -136,7 +136,7 @@ class AttachControllerTest extends TestCase
         TestPost::$withConversions = true;
 
         $this
-            ->postJson('nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/undefined/media/media_testing', [
+            ->postJson('nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/undefined/media/media_testing_custom_attribute', [
                 'file' => $file,
                 'fieldUuid' => $uuid,
             ])
@@ -159,7 +159,7 @@ class AttachControllerTest extends TestCase
 
 
         $this
-            ->postJson('/nova-api/test-posts', ['media_testing' => $uuid])
+            ->postJson('/nova-api/test-posts', ['media_testing_custom_attribute' => $uuid])
             ->assertCreated();
 
         $post = TestPost::first();
@@ -180,7 +180,7 @@ class AttachControllerTest extends TestCase
         $post = $this->createPost();
 
         $this
-            ->postJson("nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/{$post->id}/media/media_testing", ['media' => 1])
+            ->postJson("nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/{$post->id}/media/media_testing_custom_attribute", ['media' => 1])
             ->assertCreated();
 
         $this->assertCount(1, $post->media);
@@ -194,7 +194,7 @@ class AttachControllerTest extends TestCase
         $this->createPostWithMedia();
 
         $this
-            ->postJson('nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/undefined/media/media_testing', [
+            ->postJson('nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/undefined/media/media_testing_custom_attribute', [
                 'media' => 1,
                 'fieldUuid' => $uuid,
             ])
