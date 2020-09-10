@@ -7,8 +7,7 @@ use DmitryBubyakin\NovaMedialibraryField\Http\Requests\MedialibraryRequest;
 use DmitryBubyakin\NovaMedialibraryField\MedialibraryFieldResolver;
 use DmitryBubyakin\NovaMedialibraryField\Tests\Fixtures\Nova\ContainerField;
 use DmitryBubyakin\NovaMedialibraryField\Tests\TestCase;
-use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Resource;
+use Laravel\Nova\Fields\FieldCollection;
 use TypeError;
 
 class MedialibraryRequestTest extends TestCase
@@ -17,20 +16,9 @@ class MedialibraryRequestTest extends TestCase
     {
         parent::setUp();
 
-        MedialibraryFieldResolver::using(function (NovaRequest $request, Resource $resource, string $attribute) {
-            return $resource
-                    ->availableFields($request)
-                    ->map(function ($field) {
-                        if ($field instanceof ContainerField) {
-                            return $field->meta['fields'];
-                        }
-
-                        return $field;
-                    })
-                    ->flatten(1)
-                    ->whereInstanceOf(Medialibrary::class)
-                    ->findFieldByAttribute($attribute);
-        });
+        MedialibraryFieldResolver::$resolvers = array_merge(MedialibraryFieldResolver::$resolvers, [
+            ResolveFromContainerFields::class,
+        ]);
     }
 
     /** @test */
@@ -52,7 +40,7 @@ class MedialibraryRequestTest extends TestCase
     /** @test */
     public function test_medialibrary_field_error(): void
     {
-        $this->expectException(TypeError::class);
+        $this->expectExceptionMessage('Field with attribute `invalid-field` is not found.');
 
         $request = $this->createRequest('nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/1/media/invalid-field');
 
@@ -96,5 +84,22 @@ class MedialibraryRequestTest extends TestCase
         });
 
         return $request;
+    }
+}
+
+class ResolveFromContainerFields
+{
+    public function __invoke(FieldCollection $fields, string $attribute): ?Medialibrary
+    {
+        return $fields->map(function ($field) {
+            if ($field instanceof ContainerField) {
+                return $field->meta['fields'];
+            }
+
+            return $field;
+        })
+            ->flatten(1)
+            ->whereInstanceOf(Medialibrary::class)
+            ->findFieldByAttribute($attribute);
     }
 }

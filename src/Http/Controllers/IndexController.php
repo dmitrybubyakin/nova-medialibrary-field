@@ -14,12 +14,14 @@ class IndexController
     {
         $field = $request->medialibraryField();
 
-        $media = $request->resourceExists()
-                ? $request->findResourceOrFail()->getMedia($field->collectionName)
-                : TransientModel::make()->getMedia($request->fieldUuid());
+        [$model, $collectionName] = $request->resourceExists()
+            ? [$request->findModelOrFail(), $field->collectionName]
+            : [TransientModel::make(), $request->fieldUuid()];
+
+        $media = call_user_func($field->resolveMediaUsingCallback, $model, $collectionName);
 
         return response()->json(
-            $media->map(function (Media $media) use ($field): MediaPresenter {
+            collect($media)->map(function (Media $media) use ($field): MediaPresenter {
                 return new MediaPresenter($media, $field);
             })
         );

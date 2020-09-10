@@ -7,6 +7,7 @@ use DmitryBubyakin\NovaMedialibraryField\Fields\Support\AttachCallback;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaCollectionRules;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaFields;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaPresenter;
+use DmitryBubyakin\NovaMedialibraryField\Fields\Support\ResolveMediaCallback;
 use DmitryBubyakin\NovaMedialibraryField\TransientModel;
 use function DmitryBubyakin\NovaMedialibraryField\validate_args;
 use Illuminate\Contracts\Validation\Rule;
@@ -32,6 +33,8 @@ class Medialibrary extends Field
     public $attachCallback;
 
     public $attachExistingCallback;
+
+    public $resolveMediaUsingCallback;
 
     public $mediaOnIndexCallback;
 
@@ -59,8 +62,9 @@ class Medialibrary extends Field
 
         $this->collectionName = $collectionName;
         $this->diskName = $diskName;
-        $this->fieldsCallback = MediaFields::make();
-        $this->attachCallback = new AttachCallback;
+        $this->fields(MediaFields::make());
+        $this->attachUsing(new AttachCallback);
+        $this->resolveMediaUsing(new ResolveMediaCallback);
         $this->single(false);
         $this->mediaOnIndex(1);
         $this->attachRules([]);
@@ -105,6 +109,13 @@ class Medialibrary extends Field
         );
 
         return $this->withMeta(['attachExisting' => true]);
+    }
+
+    public function resolveMediaUsing(callable $mediaCallback): self
+    {
+        $this->resolveMediaUsingCallback = $mediaCallback;
+
+        return $this;
     }
 
     /**
@@ -286,7 +297,7 @@ class Medialibrary extends Field
             $this->attribute => MediaCollectionRules::make(
                 $rules[$this->attribute],
                 $request,
-                $this->collectionName,
+                $this,
             ),
         ];
     }
@@ -317,7 +328,27 @@ class Medialibrary extends Field
 
     protected function fillAttribute(NovaRequest $request, $requestAttribute, $model, $attribute): callable
     {
-        return function () use ($request, $attribute, $model): void {
+        $callback = null;
+
+        if (is_callable($this->fillCallback)) {
+            $callback = call_user_func(
+                $this->fillCallback,
+                $request,
+                $model,
+                $attribute,
+                $requestAttribute
+            );
+        }
+
+        if (is_a($model, \Whitecube\NovaFlexibleContent\Layouts\Layout::class)) {
+            $model = \Whitecube\NovaFlexibleContent\Flexible::getOriginModel();
+        }
+
+        return function () use ($request, $attribute, $model, $callback): void {
+            if (is_callable($callback)) {
+                $callback();
+            }
+
             if (empty($uuid = $request->input($attribute))) {
                 return;
             }

@@ -85,7 +85,7 @@ class AttachControllerTest extends TestCase
 
         $this
             ->postJson('/nova-api/test-posts', ['media_testing_custom_attribute' => $uuid])
-            ->assertJsonValidationErrorMessage('media_testing_custom_attribute', 'The media testing custom attribute field is required.');
+            ->assertJsonValidationErrorMessage('media_testing_custom_attribute', 'The media_testing_custom_attribute field is required.');
 
         $this->addMediaTo(TransientModel::make(), $this->getJpgFile(), $uuid);
 
@@ -103,7 +103,7 @@ class AttachControllerTest extends TestCase
 
         $this
             ->putJson("/nova-api/test-posts/{$post->id}", ['media_testing_custom_attribute' => $uuid])
-            ->assertJsonValidationErrorMessage('media_testing_custom_attribute', 'The media testing custom attribute must have at least 2 items.');
+            ->assertJsonValidationErrorMessage('media_testing_custom_attribute', 'The media_testing_custom_attribute must have at least 2 items.');
 
         $post = $this->createPostWithMedia(2, 'testing');
 

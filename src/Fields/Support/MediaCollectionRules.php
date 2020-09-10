@@ -2,30 +2,43 @@
 
 namespace DmitryBubyakin\NovaMedialibraryField\Fields\Support;
 
+use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
 use DmitryBubyakin\NovaMedialibraryField\TransientModel;
 use Illuminate\Contracts\Validation\ImplicitRule;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ClosureValidationRule;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class MediaCollectionRules
 {
-    public static function make(array $rules, NovaRequest $request, string $collectionName): array
+    public static function make(array $rules, NovaRequest $request, Medialibrary $field): array
     {
         if (empty($rules)) {
             return [];
         }
 
-        $callback = function ($attribute, $uuid, $fail) use ($rules, $request, $collectionName): void {
-            $media = static::getMedia($request, $uuid, $collectionName);
+        $callback = function ($attribute, $uuid, $fail) use ($rules, $request, $field): void {
+            $media = static::getMedia(
+                $request,
+                $uuid,
+                $field->collectionName,
+                $field->resolveMediaUsingCallback,
+            );
+
+            $temporaryAttribute = ':value';
 
             $validator = Validator::make(
-                [$attribute => $media],
-                [$attribute => $rules],
+                [$temporaryAttribute => $media],
+                [$temporaryAttribute => $rules],
             );
 
             if ($validator->fails()) {
-                $fail($validator->errors()->first($attribute));
+                $fail(Str::replaceFirst(
+                    $temporaryAttribute,
+                    $attribute,
+                    $validator->errors()->first($temporaryAttribute),
+                ));
             }
         };
 
@@ -36,12 +49,12 @@ class MediaCollectionRules
         ];
     }
 
-    private static function getMedia(NovaRequest $request, string $uuid, string $collectionName): array
+    private static function getMedia(NovaRequest $request, string $uuid, string $collectionName, callable $resolver): array
     {
-        return (
-            is_null($request->route('resourceId'))
-                ? TransientModel::make()->getMedia($uuid)
-                : $request->findModelOrFail()->getMedia($collectionName)
-        )->toArray();
+        [$model, $collectionName] = is_null($request->route('resourceId'))
+            ? [TransientModel::make(), $uuid]
+            : [$request->findModelOrFail(), $collectionName];
+
+        return collect(call_user_func($resolver, $model, $collectionName))->toArray();
     }
 }
