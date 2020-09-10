@@ -304,7 +304,7 @@ class Medialibrary extends Field
 
     public function resolve($resource, $attribute = null): void
     {
-        $this->value = Str::uuid();
+        $this->value = (string) Str::uuid();
     }
 
     public function resolveForDisplay($resource, $attribute = null): void
