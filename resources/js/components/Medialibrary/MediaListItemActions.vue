@@ -12,6 +12,10 @@
       <icon type="delete" view-box="0 0 20 20" width="14" height="14" />
     </button>
 
+    <button v-if="media.extraCopyCode" type="button" class="flex text-70 hover:text-primary focus:outline-none ml-2" @click="media.copyExtraCopyCode()">
+      <icon type="link" view-box="0 0 20 20" width="14" height="14" />
+    </button>
+
     <v-popover class="flex ml-auto" popover-base-class="" popover-class="bg-white rounded shadow border border-30">
       <button type="button" class="flex text-70 hover:text-primary focus:outline-none">
         <icon type="more" view-box="0 0 24 24" width="14" height="14" />
