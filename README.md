@@ -30,6 +30,7 @@ Features:
         - [PreviewUsing](#previewusing)
         - [Tooltip](#tooltip)
         - [Title](#title)
+        - [CopyAs](#copyAs)
         - [Croppable](#croppable)
         - [Single](#single)
         - [Accept](#accept)
@@ -112,7 +113,7 @@ Medialibrary::make('Media')->resolveMediaUsing(function (HasMedia $model, string
 #### AttachUsing
 
 Called inside [AttachController](src/Http/Controllers/AttachController.php#L32). [AttachCallback](src/Fields/Support/AttachCallback.php) is used by default.
-It accepts `$fieldUuid` which is used when a resource is not created. 
+It accepts `$fieldUuid` which is used when a resource is not created.
 If you want to attach media on the create view, you should keep [these lines](src/Fields/Support/AttachCallback.php#L20-L22) in your callback.
 
 ```php
@@ -187,6 +188,21 @@ Medialibrary::make('Media')->title('name');
 Medialibrary::make('Media')->title(function (Media $media) {
     return $media->name;
 });
+```
+
+#### CopyAs
+
+```php
+Medialibrary::make('Media')->copyAs('Url', function (Media $media) {
+    return $media->getFullUrl();
+});
+
+Medialibrary::make('Media')->copyAs('Html', function (Media $media) {
+    return $media->img();
+}, 'custom-icon');
+
+// You can hide default "Copy Url"
+Medialibrary::make('Media')->hideCopyUrlAction();
 ```
 
 #### Croppable
