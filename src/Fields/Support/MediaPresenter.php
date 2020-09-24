@@ -53,9 +53,15 @@ class MediaPresenter implements Arrayable
         return call_or_default($this->field->titleCallback, [$this->media]);
     }
 
-    public function extraCopyCode(): ?string
+    public function copyAs(): array
     {
-        return call_or_default($this->field->extraCopyCodeCallback, [$this->media]);
+        return collect(
+            $this->field->copyAs
+        )->mapSpread(function (string $as, string $icon, callable $value) {
+            $value = (string) $value($this->media);
+
+            return compact('as', 'icon', 'value');
+        })->toArray();
     }
 
     public function attached(): bool
@@ -79,7 +85,7 @@ class MediaPresenter implements Arrayable
             'previewUrl' => $this->previewUrl(),
             'tooltip' => $this->tooltip(),
             'title' => $this->title(),
-            'extraCopyCode' => $this->extraCopyCode(),
+            'copyAs' => $this->copyAs(),
             'attached' => $this->attached(),
             'authorizedToView' => $this->authorizedTo('view'),
             'authorizedToUpdate' => $this->authorizedTo('update'),

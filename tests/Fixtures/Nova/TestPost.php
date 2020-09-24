@@ -2,13 +2,14 @@
 
 namespace DmitryBubyakin\NovaMedialibraryField\Tests\Fixtures\Nova;
 
-use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Panel;
 use Laravel\Nova\Resource;
+use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Text;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Database\Eloquent\Builder;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
 
 class TestPost extends Resource
 {
@@ -34,7 +35,13 @@ class TestPost extends Resource
                 })
                 ->resolveMediaUsing(function (HasMedia $media, string $collectionName) {
                     return $media->getMedia($collectionName)->where('file_name', '!=', 'ignored.txt');
-                }),
+                })
+                ->copyAs('Url', function (Media $media) {
+                    return $media->getFullUrl();
+                })
+                ->copyAs('Html', function (Media $media) {
+                    return $media->img();
+                }, 'custom-icon'),
 
             Medialibrary::make('Media testing', 'testing')
                 ->rules('required', 'array')

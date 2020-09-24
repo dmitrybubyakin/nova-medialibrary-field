@@ -199,14 +199,20 @@ export default class Media {
     this.refresh()
   }
 
-  async copyUrl() {
-    await copy(this.downloadUrl)
+  async copy(as) {
+    let value = null
 
-    Nova.success(Nova.app.__('Copied!'))
-  }
+    for (const copyAs of this.copyAs) {
+      if (copyAs.as === as) {
+        value = copyAs.value
+      }
+    }
 
-  async copyExtraCopyCode() {
-    await copy(this.extraCopyCode)
+    if (value === null) {
+      value = this[as]
+    }
+
+    await copy(value)
 
     Nova.success(Nova.app.__('Copied!'))
   }
