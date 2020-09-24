@@ -53,6 +53,11 @@ class MediaPresenter implements Arrayable
         return call_or_default($this->field->titleCallback, [$this->media]);
     }
 
+    public function extraCopyCode(): ?string
+    {
+        return call_or_default($this->field->extraCopyCodeCallback, [$this->media]);
+    }
+
     public function attached(): bool
     {
         return $this->media->model_type !== TransientModel::class;
@@ -74,6 +79,7 @@ class MediaPresenter implements Arrayable
             'previewUrl' => $this->previewUrl(),
             'tooltip' => $this->tooltip(),
             'title' => $this->title(),
+            'extraCopyCode' => $this->extraCopyCode(),
             'attached' => $this->attached(),
             'authorizedToView' => $this->authorizedTo('view'),
             'authorizedToUpdate' => $this->authorizedTo('update'),

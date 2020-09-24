@@ -32,6 +32,8 @@ class Medialibrary extends Field
 
     public $attachCallback;
 
+    public $extraCopyCodeCallback;
+
     public $attachExistingCallback;
 
     public $resolveMediaUsingCallback;
@@ -207,6 +209,23 @@ class Medialibrary extends Field
             $title,
             function (Media $media) use ($title): ?string {
                 return $media->{$title};
+            }
+        );
+
+        return $this;
+    }
+
+    /**
+     * @param string|callable $extraCode
+     */
+    public function extraCopyCode($extraCode): self
+    {
+        validate_args();
+
+        $this->extraCopyCodeCallback = callable_or_default(
+            $extraCode,
+            function() use ($extraCode) {
+                return $extraCode;
             }
         );
 

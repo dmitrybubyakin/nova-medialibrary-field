@@ -205,6 +205,12 @@ export default class Media {
     Nova.success(Nova.app.__('Copied!'))
   }
 
+  async copyExtraCopyCode() {
+    await copy(this.extraCopyCode)
+
+    Nova.success(Nova.app.__('Copied!'))
+  }
+
   async crop(data) {
     data = { ...data, conversion: this.cropperConversion }
 
