@@ -12,21 +12,32 @@
       <icon type="delete" view-box="0 0 20 20" width="14" height="14" />
     </button>
 
-    <button v-if="media.extraCopyCode" type="button" class="flex text-70 hover:text-primary focus:outline-none ml-2" @click="media.copyExtraCopyCode()">
-      <icon type="link" view-box="0 0 20 20" width="14" height="14" />
-    </button>
-
     <v-popover class="flex ml-auto" popover-base-class="" popover-class="bg-white rounded shadow border border-30">
       <button type="button" class="flex text-70 hover:text-primary focus:outline-none">
         <icon type="more" view-box="0 0 24 24" width="14" height="14" />
       </button>
       <div slot="popover">
-        <button v-close-popover type="button" class="w-full flex px-4 py-2 hover:bg-30 focus:outline-none" @click="media.copyUrl()">
+        <button v-if="!hideCopyUrlAction" v-close-popover type="button" class="w-full flex px-4 py-2 hover:bg-30 focus:outline-none" @click="media.copy('downloadUrl')">
           <span class="text-80">
             <icon type="link" view-box="0 0 20 20" width="14" height="14" />
           </span>
           <span class="text-left text-sm text-90 ml-2">
             {{ __('Copy Url') }}
+          </span>
+        </button>
+
+        <button v-for="copyAs in media.copyAs"
+                :key="copyAs.as"
+                v-close-popover
+                type="button"
+                class="w-full flex px-4 py-2 hover:bg-30 focus:outline-none"
+                @click="media.copy(copyAs.as)"
+        >
+          <span class="text-80">
+            <icon :type="copyAs.icon" view-box="0 0 20 20" width="14" height="14" />
+          </span>
+          <span class="text-left text-sm text-90 ml-2">
+            {{ __(`Copy as ${copyAs.as}`) }}
           </span>
         </button>
 
@@ -85,6 +96,9 @@ export default {
     },
     canRegenerate() {
       return !this.readonly
+    },
+    hideCopyUrlAction() {
+      return this.context.field.hideCopyUrlAction
     },
   },
 }

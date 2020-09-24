@@ -32,7 +32,7 @@ class Medialibrary extends Field
 
     public $attachCallback;
 
-    public $extraCopyCodeCallback;
+    public $copyAs = [];
 
     public $attachExistingCallback;
 
@@ -216,20 +216,31 @@ class Medialibrary extends Field
     }
 
     /**
-     * @param string|callable $extraCode
+     * @param string|callable $value
      */
-    public function extraCopyCode($extraCode): self
+    public function copyAs(string $as, $value, string $icon = 'link'): self
     {
         validate_args();
 
-        $this->extraCopyCodeCallback = callable_or_default(
-            $extraCode,
-            function() use ($extraCode) {
-                return $extraCode;
-            }
-        );
+        $this->copyAs[] = [
+            $as,
+            $icon,
+            callable_or_default(
+                $value,
+                function (Media $media) use ($value): ?string {
+                    return $media->{$value};
+                }
+            ),
+        ];
 
         return $this;
+    }
+
+    public function hideCopyUrlAction(): self
+    {
+        return $this->withMeta([
+            'hideCopyUrlAction' => true,
+        ]);
     }
 
     /**
