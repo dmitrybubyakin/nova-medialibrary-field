@@ -84,6 +84,10 @@ export default {
       return this.context.field.attachExisting
     },
 
+    synchronousUploading() {
+      return this.context.field.synchronousUploading
+    },
+
     validationFailed() {
       return this.media.some(media => media.validationErrors.has('file'))
     },
@@ -163,11 +167,12 @@ export default {
       })
     },
 
-    upload() {
+    async upload() {
       const { attribute, value } = this.context.field
       const { resourceName, resourceId } = this.context
 
-      this.mediaToUpload.forEach(media => {
+
+      for (const media of this.mediaToUpload) {
         const formData = new FormData()
 
         media.fillFormData(formData)
@@ -180,12 +185,16 @@ export default {
 
         media.uploading = true
 
-        Nova
+        const uploadingPromise = Nova
           .request()
           .post(`/nova-vendor/dmitrybubyakin/nova-medialibrary-field/${resourceName}/${resourceId}/media/${attribute}`, formData, options)
           .then(() => this.handleUploadSucceeded(media))
           .catch(error => this.handleUploadFailed(media, error))
-      })
+
+        if (this.synchronousUploading) {
+          await uploadingPromise
+        }
+      }
     },
 
     handleUploadSucceeded(media) {
