@@ -89,6 +89,14 @@ export default {
     },
   },
 
+  created() {
+    Nova.$on(`nova-medialibrary-field:attach:${this.context.field.attribute}`, this.addMediaItems)
+  },
+
+  beforeDestroy() {
+    Nova.$on(`nova-medialibrary-field:attach:${this.context.field.attribute}`, this.addMediaItems)
+  },
+
   methods: {
     processFiles(event) {
       [...event.target.files].forEach(file => {
@@ -146,6 +154,10 @@ export default {
     addChosenMedia(mediaItems) {
       this.closeChooseExistingMediaModal()
 
+      this.addMediaItems(mediaItems)
+    },
+
+    addMediaItems(mediaItems) {
       mediaItems.forEach(media => {
         this.addMedia(UploadingExistingMedia.create(media))
       })
