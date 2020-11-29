@@ -41,7 +41,11 @@ class AttachableController
         })->when($request->input('maxSize'), function (Builder $query, int $maxSize): void {
             $query->where('size', '<=', $maxSize);
         })->when($request->input('mimeType'), function (Builder $query, string $mimeType): void {
-            $query->where('mime_type', 'like', str_replace('*', '%', $mimeType));
+            if (strpos($mimeType, ',') !== false) {
+                $query->whereIn('mime_type', explode(',', $mimeType));
+            } else {
+                $query->where('mime_type', 'like', str_replace('*', '%', $mimeType));
+            }
         });
     }
 }

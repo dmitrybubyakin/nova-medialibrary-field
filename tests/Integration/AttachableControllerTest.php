@@ -60,5 +60,10 @@ class AttachableControllerTest extends TestCase
             ->getJson("nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/{$post->id}/media/media/attachable?mimeType=image/*")
             ->assertSuccessful()
             ->assertJsonCount(1, 'data');
+
+        $this
+            ->getJson("nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/{$post->id}/media/media/attachable?mimeType=image/jpg,image/jpeg,image/png,image/gif")
+            ->assertSuccessful()
+            ->assertJsonCount(1, 'data');
     }
 }

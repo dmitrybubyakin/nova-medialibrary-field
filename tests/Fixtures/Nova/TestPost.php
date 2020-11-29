@@ -2,14 +2,14 @@
 
 namespace DmitryBubyakin\NovaMedialibraryField\Tests\Fixtures\Nova;
 
-use Laravel\Nova\Panel;
-use Laravel\Nova\Resource;
+use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Panel;
+use Laravel\Nova\Resource;
 use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Database\Eloquent\Builder;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
 
 class TestPost extends Resource
 {
