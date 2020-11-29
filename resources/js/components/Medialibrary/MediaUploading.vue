@@ -110,9 +110,7 @@ export default {
       this.showFileInput = false
       this.$nextTick(() => this.showFileInput = true)
 
-      if (this.context.field.autouploading) {
-        this.upload()
-      }
+      this.autoupload()
     },
 
     addMedia(media) {
@@ -165,6 +163,14 @@ export default {
       mediaItems.forEach(media => {
         this.addMedia(UploadingExistingMedia.create(media))
       })
+
+      this.autoupload()
+    },
+
+    autoupload() {
+      if (this.context.field.autouploading) {
+        this.upload()
+      }
     },
 
     async upload() {
