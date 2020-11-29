@@ -34,7 +34,7 @@ export default {
       return this.field.value || []
     },
     previewClassList() {
-      return this.field.indexPreviewClassList || 'rounded-full w-8 h-8 ml-2'
+      return this.field.indexPreviewClassList || 'rounded-full w-8 h-8 min-w-8 min-h-8 ml-2'
     },
   },
 
