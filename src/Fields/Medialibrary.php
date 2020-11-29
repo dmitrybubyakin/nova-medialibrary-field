@@ -56,6 +56,8 @@ class Medialibrary extends Field
 
     public $cropperOptionsCallback;
 
+    public $moveMediaToTargetModelCallback;
+
     public $attachRules;
 
     public function __construct(string $name, string $collectionName = '', string $diskName = '', string $attribute = null)
@@ -267,6 +269,13 @@ class Medialibrary extends Field
         return $this;
     }
 
+    public function moveMediaToTargetModelUsing(callable $moveMediaToTargetModelCallback): self
+    {
+        $this->moveMediaToTargetModelCallback = $moveMediaToTargetModelCallback;
+
+        return $this;
+    }
+
     public function single(bool $single = true): self
     {
         $this->single = $single;
@@ -383,15 +392,27 @@ class Medialibrary extends Field
                 return;
             }
 
-            $propertyName = TransientModel::getCustomPropertyName();
-
             foreach (TransientModel::make()->getMedia($uuid) as $media) {
-                $media
-                    ->forgetCustomProperty($propertyName)
-                    ->move($model, $this->collectionName, $this->diskName)
-                    ->update(['manipulations' => $media->manipulations]);
+                $this->moveMediaToTargetModel($media, $model);
             }
         };
+    }
+
+    public function moveMediaToTargetModel(Media $media, HasMedia $target): void
+    {
+        $propertyName = TransientModel::getCustomPropertyName();
+
+        $moveMediaToTargetModelCallback = callable_or_default(
+            $this->moveMediaToTargetModelCallback,
+            function (Media $media, HasMedia $target, string $propertyName): void {
+                $media
+                    ->forgetCustomProperty($propertyName)
+                    ->move($target, $this->collectionName, $this->diskName)
+                    ->update(['manipulations' => $media->manipulations]);
+            }
+        );
+
+        $moveMediaToTargetModelCallback($media, $target, $propertyName);
     }
 
     public function meta(): array
