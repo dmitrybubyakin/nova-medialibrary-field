@@ -68,6 +68,8 @@ class AttachController
                     $request->resource()::$model,
                     $collectionName
                 );
+
+                $model->registerAllMediaConversions($media);
             }
         });
     }

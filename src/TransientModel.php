@@ -89,6 +89,12 @@ class TransientModel extends Model implements HasMedia
         $this->mediaConversions = $model->mediaConversions;
         $this->mediaCollections = $model->mediaCollections;
 
+        foreach ($this->mediaCollections as $collection) {
+            if ($collection->name === $collectionName) {
+                $collection->name = $media->collection_name;
+            }
+        }
+
         foreach ($this->mediaConversions as $conversion) {
             if (in_array($collectionName, $conversion->getPerformOnCollections())) {
                 $conversion->performOnCollections($media->collection_name);

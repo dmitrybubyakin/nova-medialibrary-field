@@ -187,14 +187,21 @@ class AttachControllerTest extends TestCase
     }
 
     /** @test */
-    public function existing_media_can_be_attached_to_a_non_existing_resource(): void
+    public function existing_media_can_be_attached_to_a_non_existing_resource_with_single_file_collection(): void
     {
         $uuid = (string) Str::uuid();
 
         $this->createPostWithMedia();
 
         $this
-            ->postJson('nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/undefined/media/media_testing_custom_attribute', [
+            ->postJson('nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/undefined/media/media_testing_single', [
+                'media' => 1,
+                'fieldUuid' => $uuid,
+            ])
+            ->assertCreated();
+
+        $this
+            ->postJson('nova-vendor/dmitrybubyakin/nova-medialibrary-field/test-posts/undefined/media/media_testing_single', [
                 'media' => 1,
                 'fieldUuid' => $uuid,
             ])
