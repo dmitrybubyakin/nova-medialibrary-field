@@ -1,5 +1,5 @@
 <template>
-  <default-field :field="field" :errors="errors" :full-width-content="true">
+  <default-field :field="field" :errors="errors" :full-width-content="true" :show-help-text="showHelpText">
     <template slot="field">
       <MedialibraryField :add-files="true" :field="field" :resource-name="resourceName" :resource-id="resourceId" />
     </template>

@@ -15,6 +15,7 @@
             :resource-id="resourceId"
             :resource-name="resourceName"
             :field="field"
+            :show-help-text="field.helpText != null"
           />
         </div>
 
