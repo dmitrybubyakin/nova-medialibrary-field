@@ -23,7 +23,7 @@
 
     <div v-else class="group-hover:block hidden absolute pin bg-overlay">
       <div class="flex items-center justify-center h-full">
-        <button type="button" class="flex text-white hover:text-danger focus:outline-none" @click="media.remove()">
+        <button type="button" class="flex text-white hover:text-danger focus:outline-none" @click="media.remove()" dusk="nova-media-uploading-list-item-media-remove-button">
           <icon type="delete" view-box="0 0 20 20" width="20" height="20" />
         </button>
       </div>
