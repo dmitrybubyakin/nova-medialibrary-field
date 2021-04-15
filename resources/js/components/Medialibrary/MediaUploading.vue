@@ -17,15 +17,15 @@
       </p>
     </div>
 
-    <label :for="'input' + _uid" class="form-file form-file-btn btn btn-default btn-primary">
+    <label :for="'input' + _uid" class="form-file form-file-btn btn btn-default btn-primary" dusk="media-choose-action-button">
       {{ chooseButtonText }}
     </label>
 
-    <button v-if="attachExistingButtonVisible" type="button" class="btn btn-default btn-primary ml-3" @click="attachExisting">
+    <button v-if="attachExistingButtonVisible" type="button" class="btn btn-default btn-primary ml-3" @click="attachExisting" dusk="media-attach-existing-button">
       {{ __('Use existing') }}
     </button>
 
-    <progress-button v-if="mediaToUpload.length" class="ml-3" @click.native="upload">
+    <progress-button v-if="mediaToUpload.length" class="ml-3" @click.native="upload" dusk="media-upload-action-button">
       {{ __('Upload') }}
     </progress-button>
 

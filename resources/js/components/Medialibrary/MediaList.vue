@@ -11,7 +11,7 @@
       @start="handleDragStart"
       @end="handleDragEnd"
     >
-      <MediaListItem v-for="media in mediaList" :key="media.id" :media="media" class="m-2" />
+      <MediaListItem v-for="media in mediaList" :key="media.id" :media="media" class="m-2" dusk="nova-media-list-item" />
     </Draggable>
   </div>
 </template>

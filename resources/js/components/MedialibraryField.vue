@@ -1,8 +1,8 @@
 <template>
   <Provider :field="field" :resource-name="resourceName" :resource-id="resourceId">
     <div>
-      <MediaList />
-      <MediaUploading v-if="addFiles && !field.readonly" class="mt-2" />
+      <MediaList dusk="nova-media-list" />
+      <MediaUploading v-if="addFiles && !field.readonly" class="mt-2" dusk="nova-media-uploading" />
     </div>
   </Provider>
 </template>
