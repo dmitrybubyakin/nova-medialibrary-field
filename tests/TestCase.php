@@ -6,8 +6,10 @@ use DmitryBubyakin\NovaMedialibraryField\FieldServiceProvider;
 use DmitryBubyakin\NovaMedialibraryField\Tests\Fixtures\TestPost;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Nova\Actions\ActionResource;
+use Laravel\Nova\Events\ServingNova;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaServiceProvider;
 use Mockery;
@@ -73,6 +75,8 @@ abstract class TestCase extends Orchestra
         ]);
 
         Nova::$resources = array_filter(Nova::$resources);
+
+        event(new ServingNova(Request::create('/')));
     }
 
     protected function setUpTestFiles($app): void
