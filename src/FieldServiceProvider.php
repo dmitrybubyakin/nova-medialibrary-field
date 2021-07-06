@@ -21,14 +21,15 @@ class FieldServiceProvider extends ServiceProvider
         Nova::serving(function (ServingNova $event): void {
             Nova::script('nova-medialibrary-field', __DIR__.'/../dist/js/field.js');
             Nova::style('nova-medialibrary-field', __DIR__.'/../dist/css/field.css');
+            
+
+            Media::$model = config('media-library.media_model');
+
+            Nova::resources([
+                Media::class,
+            ]);
         });
-
-        Media::$model = config('media-library.media_model');
-
-        Nova::resources([
-            Media::class,
-        ]);
-
+        
         $this->app->booted(function (): void {
             $this->routes();
             $this->translations();
