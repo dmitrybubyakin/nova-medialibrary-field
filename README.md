@@ -102,6 +102,24 @@ Medialibrary::make('Media')->fields(function () {
     ];
 });
 ```
+
+#### Generated Conversion - CopyAs
+By default, both URL and preview image will use based on the conversion type. Just like the main media, you can define your own call back or pass a type as an string. 
+```php
+GeneratedConversions::make('Media')->copyAs('conversionName');
+GeneratedConversions::make('Media')->copyAs(function (Media $media, string $conversionName) {
+    return $media->getFullUrl($conversionName);
+});
+```
+
+#### Generated Conversion - PreviewUsing
+By default, both URL and preview image will use based on the conversion type. Just like the main media, you can define your own call back or pass a type as an string. 
+```php
+GeneratedConversions::make('Media')->previewUsing('conversionName');
+GeneratedConversions::make('Media')->previewUsing(function (Media $media, string $conversionName) {
+    return $media->getFullUrl($conversionName);
+});
+```
 #### ResolveMediaUsing
 
 ```php
