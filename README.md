@@ -55,8 +55,8 @@ Features:
 ![update view](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/update.png)
 ![media actions](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/actions.png)
 ![media crop dialog](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/crop-dialog.png)
-![media details dialog](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/media-details.png)
-![existing media dialog](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/existing-media.png)
+![media details dialog](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/media-details-dialog.png)
+![existing media dialog](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/existing-media-dialog.png)
 
 ## Installation
 
