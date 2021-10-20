@@ -349,6 +349,9 @@ class AuthServiceProvider extends ServiceProvider
  - [en](resources/lang/en.json)
  - [fr](resources/lang/fr.json)
  - [pt-BR](resources/lang/pt-BR.json)
+ - [ru](resources/lang/ru.json)
+ - [tr](resources/lang/tr.json)
+ - [uk](resources/lang/uk.json)
  - [zh-CN](resources/lang/zh-CN.json)
 
 ## Changelog
