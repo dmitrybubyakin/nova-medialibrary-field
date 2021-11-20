@@ -348,9 +348,12 @@ class Medialibrary extends Field
 
     public function resolveForDisplay($resource, $attribute = null): void
     {
-        $indexControllerAction = 'Laravel\Nova\Http\Controllers\ResourceIndexController@handle';
+        $controllerActions = [
+            'Laravel\Nova\Http\Controllers\ResourceIndexController@handle', // Index controller action
+            'Laravel\Nova\Http\Controllers\LensController@show', // Lens controller action
+        ];
 
-        if (Route::current()->getActionName() === $indexControllerAction) {
+        if (in_array(Route::current()->getActionName(), $controllerActions)) {
             $this->resolveForIndex($resource, $attribute);
         }
     }
