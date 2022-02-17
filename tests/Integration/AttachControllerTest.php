@@ -146,7 +146,7 @@ class AttachControllerTest extends TestCase
 
         $media = Media::first();
         $media->setCustomProperty('a', 'b')->save();
-        $media->update(['manipulations' => ['*' => ['with' => 100]]]);
+        $media->update(['manipulations' => ['*' => ['width' => 100]]]);
 
         $this->assertSame($uuid, $media->collection_name);
         $this->assertTrue($media->model->is(TransientModel::make()));
@@ -157,10 +157,13 @@ class AttachControllerTest extends TestCase
             'collectionName' => 'testing',
         ], $media->getCustomProperty(TransientModel::getCustomPropertyName()));
 
+        TestPost::$withConversions = true;
 
         $this
             ->postJson('/nova-api/test-posts', ['media_testing_custom_attribute' => $uuid])
             ->assertCreated();
+
+        TestPost::$withConversions = false;
 
         $post = TestPost::first();
 
@@ -169,7 +172,7 @@ class AttachControllerTest extends TestCase
         $this->assertCount(1, $post->media);
         $this->assertSame('b', $post->media->first()->getCustomProperty('a'));
         $this->assertSame(null, $post->media->first()->getCustomProperty(TransientModel::getCustomPropertyName()));
-        $this->assertSame(['*' => ['with' => 100]], $post->media->first()->manipulations);
+        $this->assertSame(['*' => ['width' => 100]], $post->media->first()->manipulations);
     }
 
     /** @test */

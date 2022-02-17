@@ -12,12 +12,12 @@ class SortControllerTest extends TestCase
     {
         $this->createPostWithMedia(3);
 
-        $this->assertSame([1 => 1, 2 => 2, 3 => 3], Media::pluck('id', 'order_column')->all());
+        $this->assertEquals([1 => '1', 2 => '2', 3 => '3'], Media::pluck('order_column', 'id')->all());
 
         $this->postJson('nova-vendor/dmitrybubyakin/nova-medialibrary-field/sort', [
             'media' => [3, 2, 1],
         ]);
-        
-        $this->assertSame([1 => 3, 2 => 2, 3 => 1], Media::pluck('id', 'order_column')->all());
+
+        $this->assertEquals([1 => '3', 2 => '2', 3 => '1'], Media::pluck('order_column', 'id')->all());
     }
 }
