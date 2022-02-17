@@ -135,10 +135,12 @@ export default {
       const { field } = this.context
 
       if (!media.hasValidSize(field)) {
-        Nova.error(this.__('File :filename must be less than :size kilobytes', {
-          filename: media.fileName,
-          size: field.maxSize / 1024,
-        }))
+        Nova.error(
+          this.__('File :filename must be less than :size MB', {
+            filename: media.fileName,
+            size: field.maxSize / 1024 / 1024,
+          })
+        )
         return true
       }
 
