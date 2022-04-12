@@ -34,10 +34,10 @@
 </template>
 
 <script>
-import { InteractsWithResourceInformation } from 'laravel-nova'
+import { HandlesValidationErrors, } from 'laravel-nova'
 
 export default {
-  mixins: [InteractsWithResourceInformation],
+  mixins: [HandlesValidationErrors,],
 
   props: {
     resourceName: {

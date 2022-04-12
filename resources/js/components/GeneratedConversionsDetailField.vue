@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import copy from 'clipboard-copy'
+import copy from 'vue3-clipboard'
 
 export default {
   // eslint-disable-next-line

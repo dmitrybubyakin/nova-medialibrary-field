@@ -46,8 +46,7 @@
 </template>
 
 <script>
-import VueCropper from 'vue-cropperjs'
-import 'cropperjs/dist/cropper.css'
+import VueCropper from 'vue3-cropperjs'
 
 export default {
   components: {
@@ -116,3 +115,7 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+@import "vue3-cropperjs/dist/v3cropper.css";
+</style>

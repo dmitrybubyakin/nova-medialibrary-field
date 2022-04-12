@@ -1,5 +1,5 @@
 import { Errors } from 'laravel-nova'
-import copy from 'clipboard-copy'
+import copy from 'vue3-clipboard'
 
 export default class Media {
   constructor(media, attribute, requestParams) {
