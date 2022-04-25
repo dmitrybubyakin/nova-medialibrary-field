@@ -1,12 +1,11 @@
-import { Errors } from 'laravel-nova'
-import copy from 'vue3-clipboard'
+import { Errors, Localization } from 'laravel-nova'
+import Clipboard from 'clipboard'
 
 export default class Media {
   constructor(media, attribute, requestParams) {
     for (let key in media) {
       this[key] = media[key]
     }
-
 
     this.__loading = false
     this.__updating = false
@@ -44,7 +43,7 @@ export default class Media {
   }
 
   get singularLabel() {
-    return _.find(Nova.config.resources, resource => {
+    return _.find(Nova.config('resources'), (resource) => {
       return resource.uriKey == this.resourceName
     }).singularLabel
   }
@@ -86,15 +85,14 @@ export default class Media {
   withUpdating(promise) {
     this.__updating = true
 
-    return promise.finally(() => this.__updating = false)
+    return promise.finally(() => (this.__updating = false))
   }
 
   fetch(uri) {
     return this.withLoading(
-      Nova
-        .request()
+      Nova.request()
         .get(`/nova-api/dmitrybubyakin-nova-medialibrary-media/${uri}`, { params: this.__requestParams })
-        .then(response => response.data),
+        .then((response) => response.data)
     )
   }
 
@@ -138,14 +136,14 @@ export default class Media {
   }
 
   async view() {
-    this.__resource = await this.fetch(this.id).then(response => response.resource)
+    this.__resource = await this.fetch(this.id).then((response) => response.resource)
 
     this.openDetailModal()
   }
 
   async edit() {
     this.__errors = new Errors()
-    this.__fields = await this.fetch(`${this.id}/update-fields`).then(response => Object.values(response.fields))
+    this.__fields = await this.fetch(`${this.id}/update-fields`).then((response) => Object.values(response.fields))
 
     this.openUpdateModal()
   }
@@ -158,16 +156,12 @@ export default class Media {
     }
 
     try {
-      await this.withUpdating(
-        Nova
-          .request()
-          .post(`/nova-api/${this.resourceName}/${this.resourceId}`, formData),
-      )
+      await this.withUpdating(Nova.request().post(`/nova-api/${this.resourceName}/${this.resourceId}`, formData))
 
       this.closeAllModals()
       this.refresh()
 
-      Nova.success(Nova.app.__('Media was updated!', { resource: this.singularLabel.toLowerCase() }))
+      Nova.success(Localization.methods.__('Media was updated!', { resource: this.singularLabel.toLowerCase() }))
     } catch (error) {
       if (!error.response) {
         throw error
@@ -175,31 +169,33 @@ export default class Media {
         this.__errors = new Errors(error.response.data.errors)
       }
 
-      Nova.error(Nova.app.__('There was a problem submitting the form.'))
+      Nova.error(Localization.methods.__('There was a problem submitting the form.'))
     }
   }
 
   async confirmDelete() {
-    await Nova.request().delete(`/nova-api/${this.resourceName}`, { params: {
-      ...this.__requestParams,
-      resources: [this.id],
-    } })
+    await Nova.request().delete(`/nova-api/${this.resourceName}`, {
+      params: {
+        ...this.__requestParams,
+        resources: [this.id],
+      },
+    })
 
     this.closeAllModals()
     this.refresh()
 
-    Nova.success(Nova.app.__('Media was deleted!', { resource: this.singularLabel.toLowerCase() }))
+    Nova.success(Localization.methods.__('Media was deleted!', { resource: this.singularLabel.toLowerCase() }))
   }
 
   async regenerate() {
     await Nova.request().post(`/nova-vendor/dmitrybubyakin/nova-medialibrary-field/${this.id}/regenerate`)
 
-    Nova.success(Nova.app.__('Media was regenerated!', { resource: this.singularLabel.toLowerCase() }))
+    Nova.success(Localization.methods.__('Media was regenerated!', { resource: this.singularLabel.toLowerCase() }))
 
     this.refresh()
   }
 
-  async copy(as) {
+  async copy(as, container) {
     let value = null
 
     for (const copyAs of this.copyAs) {
@@ -212,24 +208,24 @@ export default class Media {
       value = this[as]
     }
 
-    await copy(value)
+    Clipboard.copy(value, {
+      container: typeof container === 'object' ? container : document.body,
+    })
 
-    Nova.success(Nova.app.__('Copied!'))
+    Nova.success(Localization.methods.__('Copied!'))
   }
 
   async crop(data) {
     data = { ...data, conversion: this.cropperConversion }
 
     await this.withUpdating(
-      Nova
-        .request()
-        .post(`/nova-vendor/dmitrybubyakin/nova-medialibrary-field/${this.id}/crop`, data),
+      Nova.request().post(`/nova-vendor/dmitrybubyakin/nova-medialibrary-field/${this.id}/crop`, data)
     )
 
     this.closeAllModals()
     this.refresh()
 
-    Nova.success(Nova.app.__('Media was cropped!', { resource: this.singularLabel.toLowerCase() }))
+    Nova.success(Localization.methods.__('Media was cropped!', { resource: this.singularLabel.toLowerCase() }))
   }
 
   refresh() {
