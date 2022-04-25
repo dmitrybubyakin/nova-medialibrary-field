@@ -8,7 +8,7 @@
   />
   <div v-else class="bg-40 flex items-center justify-center">
     <slot name="fallback">
-      <span class="truncate select-none">
+      <span class="select-none truncate">
         {{ media.extension.toUpperCase() }}
       </span>
     </slot>

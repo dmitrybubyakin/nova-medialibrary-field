@@ -1,6 +1,6 @@
 <template>
   <Modal :show="show" @close-via-escape="$emit('close')" role="dialog" maxWidth="2xl">
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+    <div class="overflow-hidden rounded-lg bg-white shadow-lg dark:bg-gray-800">
       <ModalHeader v-text="__('Media Details')" />
 
       <ModalContent class="px-8">
@@ -23,7 +23,7 @@
       </ModalContent>
 
       <ModalFooter>
-        <div class="flex items-center ml-auto">
+        <div class="ml-auto flex items-center">
           <CancelButton component="button" type="button" class="ml-auto mr-3" @click="$emit('close')" />
 
           <OutlineButton v-if="canDelete" omponent="button" type="button" class="mr-3" @click="$emit('delete')">

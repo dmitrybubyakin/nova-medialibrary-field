@@ -1,22 +1,22 @@
 <template>
-  <div v-tooltip="tooltip" class="relative overflow-hidden rounded shadow dragging:border-none">
+  <div v-tooltip="tooltip" class="dragging:border-none relative overflow-hidden rounded shadow">
     <MediaListItemPreview :media="media">
-      <div class="dragging:hidden group-hover:block hidden absolute inset-0 bg-overlay rounded-b">
-        <div class="flex items-center justify-center h-full">
-          <a :href="media.downloadUrl" target="_blank" class="text-white media-item-download">
+      <div class="dragging:hidden bg-overlay absolute inset-0 hidden rounded-b group-hover:block">
+        <div class="flex h-full items-center justify-center">
+          <a :href="media.downloadUrl" target="_blank" class="media-item-download text-white">
             <Icon type="download" view-box="0 0 24 24" width="32" height="32" />
           </a>
         </div>
       </div>
     </MediaListItemPreview>
 
-    <div v-if="media.title" class="w-32 px-2 mt-1 dragging:hidden">
-      <p class="text-sm truncate text-80">
+    <div v-if="media.title" class="dragging:hidden mt-1 w-32 px-2">
+      <p class="text-80 truncate text-sm">
         {{ media.title }}
       </p>
     </div>
 
-    <div v-if="media.loading" class="absolute flex items-center justify-center inset-0 bg-overlay">
+    <div v-if="media.loading" class="bg-overlay absolute inset-0 flex items-center justify-center">
       <loader class="text-white" />
     </div>
 

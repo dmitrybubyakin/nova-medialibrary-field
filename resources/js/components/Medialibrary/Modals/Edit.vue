@@ -10,7 +10,7 @@
       autocomplete="off"
       @change="onUpdateFormStatus"
       @submit.prevent="handleSubmit()"
-      class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
+      class="overflow-hidden rounded-lg bg-white shadow-lg dark:bg-gray-800"
     >
       <div>
         <ModalHeader v-text="__('Edit Media')" />
@@ -31,7 +31,7 @@
         </div>
 
         <ModalFooter>
-          <div class="flex items-center ml-auto">
+          <div class="ml-auto flex items-center">
             <CancelButton component="button" type="button" class="ml-auto mr-3" @click="$emit('close')" />
 
             <LoadingButton

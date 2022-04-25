@@ -1,6 +1,6 @@
 <template>
   <Modal :show="show" @close-via-escape="$emit('close')" role="dialog">
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+    <div class="overflow-hidden rounded-lg bg-white shadow-lg dark:bg-gray-800">
       <ModalHeader v-text="__('Crop Media')" />
 
       <div>
@@ -21,7 +21,7 @@
           <button
             v-if="resizable"
             type="button"
-            class="flex items-center justify-center hover:opacity-50 focus:outline-none focus:ring rounded h-8 w-8"
+            class="flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
             @click="toggleAspectRatio"
           >
             <icon-cropper-lock v-if="locked" width="24" height="24" />
@@ -31,7 +31,7 @@
           <button
             v-if="rotatable"
             type="button"
-            class="flex items-center justify-center hover:opacity-50 focus:outline-none focus:ring rounded h-8 w-8 ml-2"
+            class="ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
             @click="rotate(-90)"
           >
             <icon-cropper-rotate width="24" height="24" />
@@ -40,7 +40,7 @@
           <button
             v-if="rotatable"
             type="button"
-            class="flex items-center justify-center hover:opacity-50 focus:outline-none focus:ring rounded h-8 w-8 ml-2"
+            class="ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
             @click="rotate(90)"
           >
             <icon-cropper-rotate width="24" height="24" style="transform: rotateY(180deg)" />
@@ -49,7 +49,7 @@
           <button
             v-if="zoomable"
             type="button"
-            class="flex items-center justify-center hover:opacity-50 focus:outline-none focus:ring rounded h-8 w-8 ml-2"
+            class="ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
             @click="zoom(0.2)"
           >
             <icon-cropper-zoom-in width="24" height="24" />
@@ -58,14 +58,14 @@
           <button
             v-if="zoomable"
             type="button"
-            class="flex items-center justify-center hover:opacity-50 focus:outline-none focus:ring rounded h-8 w-8 ml-2"
+            class="ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
             @click="zoom(-0.2)"
           >
             <icon-cropper-zoom-out width="24" height="24" />
           </button>
         </div>
 
-        <div class="flex items-center ml-auto">
+        <div class="ml-auto flex items-center">
           <CancelButton component="button" type="button" class="ml-auto mr-3" @click="$emit('close')" />
 
           <LoadingButton

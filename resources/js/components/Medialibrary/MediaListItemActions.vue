@@ -4,20 +4,20 @@
       <Icon type="eye" width="17" height="14" />
     </button>
 
-    <button v-if="canEdit" type="button" class="flex ml-2 hover:opacity-50 focus:outline-none" @click="media.edit()">
+    <button v-if="canEdit" type="button" class="ml-2 flex hover:opacity-50 focus:outline-none" @click="media.edit()">
       <Icon type="pencil-alt" width="14" height="14" />
     </button>
 
     <button
       v-if="canDelete"
       type="button"
-      class="flex ml-2 hover:opacity-50 focus:outline-none"
+      class="ml-2 flex hover:opacity-50 focus:outline-none"
       @click="media.openDeleteModal()"
     >
       <Icon type="trash" width="14" height="14" />
     </button>
 
-    <VDropdown :distance="6" class="flex ml-auto" :triggers="['click']" :popperTriggers="['click']">
+    <VDropdown :distance="6" class="ml-auto flex" :triggers="['click']" :popperTriggers="['click']">
       <button type="button" class="flex hover:opacity-50 focus:outline-none">
         <Icon :solid="true" type="dots-horizontal" view-box="0 0 24 24" width="14" height="14" />
       </button>
@@ -26,13 +26,13 @@
         <button
           v-if="!hideCopyUrlAction"
           type="button"
-          class="flex p-2 hover:bg-gray-50 w-full focus:outline-none"
+          class="flex w-full p-2 hover:bg-gray-50 focus:outline-none"
           @click="doCopy($event, 'downloadUrl')"
         >
           <span class="flex-none">
             <Icon type="clipboard-copy" width="14" height="14" />
           </span>
-          <span class="grow ml-2 text-sm text-left">
+          <span class="ml-2 grow text-left text-sm">
             {{ __('Copy Url') }}
           </span>
         </button>
@@ -41,13 +41,13 @@
           v-for="copyAs in media.copyAs"
           :key="copyAs.as"
           type="button"
-          class="flex p-2 hover:bg-gray-50 w-full focus:outline-none"
+          class="flex w-full p-2 hover:bg-gray-50 focus:outline-none"
           @click="media.copy(copyAs.as)"
         >
           <span class="flex-none">
             <Icon :type="copyAs.icon" width="14" height="14" />
           </span>
-          <span class="grow ml-2 text-sm text-left">
+          <span class="ml-2 grow text-left text-sm">
             {{ __(`Copy as ${copyAs.as}`) }}
           </span>
         </button>
@@ -55,13 +55,13 @@
         <button
           v-if="canCrop"
           type="button"
-          class="flex p-2 hover:bg-gray-50 w-full focus:outline-none"
+          class="flex w-full p-2 hover:bg-gray-50 focus:outline-none"
           @click="media.openCropperModal()"
         >
           <span class="flex-none">
             <icon-crop width="14" height="14" />
           </span>
-          <span class="grow ml-2 text-sm text-left">
+          <span class="ml-2 grow text-left text-sm">
             {{ __('Crop') }}
           </span>
         </button>
@@ -69,13 +69,13 @@
         <button
           v-if="canRegenerate"
           type="button"
-          class="flex p-2 hover:bg-gray-50 w-full focus:outline-none"
+          class="flex w-full p-2 hover:bg-gray-50 focus:outline-none"
           @click="media.regenerate()"
         >
           <span class="flex-none">
             <Icon type="refresh" width="14" height="14" />
           </span>
-          <span class="grow ml-2 text-sm text-left">
+          <span class="ml-2 grow text-left text-sm">
             {{ __('Regenerate') }}
           </span>
         </button>
