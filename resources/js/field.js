@@ -1,16 +1,32 @@
-Nova.booting((Vue, router, store) => {
-  Nova.inertia('icon-crop', require('./components/Icons/Crop').default);
-  Nova.inertia('icon-link', require('./components/Icons/Link').default);
+import IndexField from './components/MedialibraryIndexField'
+import DetailField from './components/MedialibraryDetailField'
+import FormField from './components/MedialibraryFormField'
+import GeneratedConversionsDetailField from './components/GeneratedConversionsDetailField'
 
-  Nova.inertia('icon-cropper-rotate', require('./components/Icons/Cropper/Rotate').default);
-  Nova.inertia('icon-cropper-lock', require('./components/Icons/Cropper/Lock').default);
-  Nova.inertia('icon-cropper-unlock', require('./components/Icons/Cropper/Unlock').default);
-  Nova.inertia('icon-cropper-zoom-in', require('./components/Icons/Cropper/ZoomIn').default);
-  Nova.inertia('icon-cropper-zoom-out', require('./components/Icons/Cropper/ZoomOut').default);
+import IconCrop from './components/Icons/Crop'
+import IconLink from './components/Icons/Link'
 
-  Nova.inertia('index-nova-medialibrary-field', require('./components/MedialibraryIndexField').default);
-  Nova.inertia('detail-nova-medialibrary-field', require('./components/MedialibraryDetailField').default);
-  Nova.inertia('form-nova-medialibrary-field', require('./components/MedialibraryFormField').default);
+import IconCropperRotate from './components/Icons/Cropper/Rotate'
+import IconCropperLock from './components/Icons/Cropper/Lock'
+import IconCropperUnlock from './components/Icons/Cropper/Unlock'
+import IconCropperZoomIn from './components/Icons/Cropper/ZoomIn'
+import IconCropperZoomOut from './components/Icons/Cropper/ZoomOut'
 
-  Nova.inertia('detail-nova-generated-conversions-field', require('./components/GeneratedConversionsDetailField'))
-});
+Nova.booting((app, store) => {
+  // Icons
+  app.component('icon-crop', IconCrop)
+  app.component('icon-link', IconLink)
+
+  // Cropper icons
+  app.component('icon-cropper-rotate', IconCropperRotate)
+  app.component('icon-cropper-lock', IconCropperLock)
+  app.component('icon-cropper-unlock', IconCropperUnlock)
+  app.component('icon-cropper-zoom-in', IconCropperZoomIn)
+  app.component('icon-cropper-zoom-out', IconCropperZoomOut)
+
+  app.component('index-nova-medialibrary-field', IndexField)
+  app.component('detail-nova-medialibrary-field', DetailField)
+  app.component('form-nova-medialibrary-field', FormField)
+
+  app.component('detail-nova-generated-conversions-field', GeneratedConversionsDetailField)
+})
