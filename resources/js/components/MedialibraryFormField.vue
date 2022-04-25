@@ -1,9 +1,9 @@
 <template>
-  <default-field :field="field" :errors="errors" :full-width-content="true" :show-help-text="showHelpText">
-    <template slot="field">
+  <DefaultField :field="field" :errors="errors" :full-width-content="true" :show-help-text="showHelpText">
+    <template #field>
       <MedialibraryField :add-files="true" :field="field" :resource-name="resourceName" :resource-id="resourceId" />
     </template>
-  </default-field>
+  </DefaultField>
 </template>
 
 <script>
@@ -17,7 +17,6 @@ export default {
 
   mixins: [FormField, HandlesValidationErrors],
 
-  // eslint-disable-next-line
   props: ['resourceName', 'resourceId', 'field'],
 
   methods: {
