@@ -1,41 +1,53 @@
 <template>
-  <modal class="select-text" @modal-close="handleClose">
-    <card class="w-action-fields overflow-hidden">
-      <div class="px-8 py-6">
-        <div class="flex items-center">
-          <h4 class="text-90 font-normal text-2xl flex-no-shrink">
-            {{ __('Media Details') }}
-          </h4>
+  <Modal :show="show" @close-via-escape="$emit('close')" role="dialog" maxWidth="2xl">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+      <ModalHeader v-text="__('Media Details')" />
 
-          <div class="ml-3 w-full flex items-center justify-end">
-            <button v-if="canDelete" class="btn btn-default btn-icon btn-white" :title="__('Delete')" @click="handleDelete">
-              <icon type="delete" class="text-80" />
-            </button>
+      <ModalContent class="px-8">
+        <template v-if="resource">
+          <component
+            :key="index"
+            v-for="(field, index) in resource.fields"
+            :index="index"
+            :is="resolveComponentName(field)"
+            :resource-name="resourceName"
+            :resource-id="resourceId"
+            :resource="resource"
+            :field="field"
+          />
 
-            <button v-if="canEdit" class="btn btn-default btn-icon bg-primary ml-3" :title="__('Edit')" @click="handleEdit">
-              <icon type="edit" class="text-white" style="margin-top: -2px; margin-left: 3px" />
-            </button>
+          <div v-if="resource.fields.length == 0">
+            {{ __('There are no fields to display.') }}
           </div>
-        </div>
+        </template>
+      </ModalContent>
 
-        <component
-          :is="resolveComponentName(field)"
-          v-for="(field, index) in resource.fields"
-          :key="index"
-          :class="{ 'remove-bottom-border': index === resource.fields.length - 1 }"
-          :resource-name="resourceName"
-          :resource-id="resourceId"
-          :resource="resource"
-          :field="field"
-        />
-      </div>
-    </card>
-  </modal>
+      <ModalFooter>
+        <div class="flex items-center ml-auto">
+          <CancelButton component="button" type="button" class="ml-auto mr-3" @click="$emit('close')" />
+
+          <OutlineButton v-if="canDelete" omponent="button" type="button" class="mr-3" @click="$emit('delete')">
+            <Icon type="trash" width="24" height="24" />
+          </OutlineButton>
+
+          <DefaultButton v-if="canEdit" omponent="button" type="button" class="mr-3" @click="$emit('edit')">
+            <Icon type="pencil-alt" width="24" height="24" />
+          </DefaultButton>
+        </div>
+      </ModalFooter>
+    </div>
+  </Modal>
 </template>
 
 <script>
 export default {
+  emits: ['edit', 'delete', 'close'],
+
   props: {
+    show: {
+      type: Boolean,
+      default: false,
+    },
     resourceName: {
       type: String,
       required: true,
@@ -52,8 +64,17 @@ export default {
       type: Boolean,
       default: false,
     },
+    updating: {
+      type: Boolean,
+      required: true,
+    },
   },
-
+  created() {
+    document.addEventListener('keydown', this.handleKeydown)
+  },
+  beforeUnmount() {
+    document.removeEventListener('keydown', this.handleKeydown)
+  },
   computed: {
     canDelete() {
       return this.resource.authorizedToDelete && !this.readonly
@@ -62,22 +83,9 @@ export default {
       return this.resource.authorizedToUpdate && !this.readonly
     },
   },
-
   methods: {
     resolveComponentName(field) {
       return field.prefixComponent ? 'detail-' + field.component : field.component
-    },
-
-    handleClose() {
-      this.$emit('close')
-    },
-
-    handleDelete() {
-      this.$emit('delete')
-    },
-
-    handleEdit() {
-      this.$emit('edit')
     },
   },
 }
