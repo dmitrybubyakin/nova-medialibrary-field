@@ -1,26 +1,27 @@
 <template>
-  <panel-item :field="field">
-    <div slot="value">
-      <MedialibraryField :add-files="canAddFiles" :field="field" :resource-name="resourceName" :resource-id="resourceId" />
-    </div>
-  </panel-item>
+    <PanelItem :field="field">
+        <template #value>
+            <MedialibraryField :add-files="canAddFiles" :field="field" :resource-name="resourceName"
+                :resource-id="resourceId" />
+        </template>
+    </PanelItem>
 </template>
 
 <script>
 import MedialibraryField from './MedialibraryField'
 
 export default {
-  components: {
-    MedialibraryField,
-  },
-
-  // eslint-disable-next-line
-  props: ['resource', 'resourceName', 'resourceId', 'field'],
-
-  computed: {
-    canAddFiles() {
-      return !!this.field.attachOnDetails
+    components: {
+        MedialibraryField,
     },
-  },
+
+    // eslint-disable-next-line
+    props: ['resource', 'resourceName', 'resourceId', 'field'],
+
+    computed: {
+        canAddFiles() {
+            return !!this.field.attachOnDetails
+        },
+    },
 }
 </script>
