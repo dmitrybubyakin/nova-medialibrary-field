@@ -7,6 +7,8 @@ composer.lock
 phpunit.xml
 .phpunit.result.cache
 .php_cs.cache
+.php-cs-fixer.cache
+.vim
 .DS_Store
 Thumbs.db
 tests/Support/tmp
