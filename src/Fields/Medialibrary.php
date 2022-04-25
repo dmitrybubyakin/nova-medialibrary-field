@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DmitryBubyakin\NovaMedialibraryField\Fields;
 
@@ -349,7 +351,7 @@ class Medialibrary extends Field
     public function resolveForDisplay($resource, $attribute = null): void
     {
         $controllerActions = [
-            'Laravel\Nova\Http\Controllers\ResourceIndexController@handle', // Index controller action
+            'Laravel\Nova\Http\Controllers\ResourceIndexController', // Index controller action
             'Laravel\Nova\Http\Controllers\LensController@show', // Lens controller action
         ];
 
