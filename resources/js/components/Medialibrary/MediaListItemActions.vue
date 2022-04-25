@@ -1,65 +1,86 @@
 <template>
-  <div class="my-2 px-2 flex">
-    <button v-if="canView" type="button" class="flex text-70 hover:text-primary focus:outline-none" @click="media.view()">
-      <icon type="view" view-box="0 0 22 14" width="17" height="14" />
+  <div class="flex px-2 py-1">
+    <button v-if="canView" type="button" class="flex hover:opacity-50 focus:outline-none" @click="media.view()">
+      <Icon type="eye" width="17" height="14" />
     </button>
 
-    <button v-if="canEdit" type="button" class="flex text-70 hover:text-primary focus:outline-none ml-2" @click="media.edit()">
-      <icon type="edit" view-box="0 0 20 20" width="14" height="14" />
+    <button v-if="canEdit" type="button" class="flex ml-2 hover:opacity-50 focus:outline-none" @click="media.edit()">
+      <Icon type="pencil-alt" width="14" height="14" />
     </button>
 
-    <button v-if="canDelete" type="button" class="flex text-70 hover:text-primary focus:outline-none ml-2" @click="media.openDeleteModal()">
-      <icon type="delete" view-box="0 0 20 20" width="14" height="14" />
+    <button
+      v-if="canDelete"
+      type="button"
+      class="flex ml-2 hover:opacity-50 focus:outline-none"
+      @click="media.openDeleteModal()"
+    >
+      <Icon type="trash" width="14" height="14" />
     </button>
 
-    <v-popover class="flex ml-auto" popover-base-class="" popover-class="bg-white rounded shadow border border-30">
-      <button type="button" class="flex text-70 hover:text-primary focus:outline-none">
-        <icon type="more" view-box="0 0 24 24" width="14" height="14" />
+    <VDropdown :distance="6" class="flex ml-auto" :triggers="['click']" :popperTriggers="['click']">
+      <button type="button" class="flex hover:opacity-50 focus:outline-none">
+        <Icon :solid="true" type="dots-horizontal" view-box="0 0 24 24" width="14" height="14" />
       </button>
-      <div slot="popover">
-        <button v-if="!hideCopyUrlAction" v-close-popover type="button" class="w-full flex px-4 py-2 hover:bg-30 focus:outline-none" @click="media.copy('downloadUrl')">
-          <span class="text-80">
-            <icon type="link" view-box="0 0 20 20" width="14" height="14" />
+
+      <template #popper>
+        <button
+          v-if="!hideCopyUrlAction"
+          type="button"
+          class="flex p-2 hover:bg-gray-50 w-full focus:outline-none"
+          @click="doCopy($event, 'downloadUrl')"
+        >
+          <span class="flex-none">
+            <Icon type="clipboard-copy" width="14" height="14" />
           </span>
-          <span class="text-left text-sm text-90 ml-2">
+          <span class="grow ml-2 text-sm text-left">
             {{ __('Copy Url') }}
           </span>
         </button>
 
-        <button v-for="copyAs in media.copyAs"
-                :key="copyAs.as"
-                v-close-popover
-                type="button"
-                class="w-full flex px-4 py-2 hover:bg-30 focus:outline-none"
-                @click="media.copy(copyAs.as)"
+        <button
+          v-for="copyAs in media.copyAs"
+          :key="copyAs.as"
+          type="button"
+          class="flex p-2 hover:bg-gray-50 w-full focus:outline-none"
+          @click="media.copy(copyAs.as)"
         >
-          <span class="text-80">
-            <icon :type="copyAs.icon" view-box="0 0 20 20" width="14" height="14" />
+          <span class="flex-none">
+            <Icon :type="copyAs.icon" width="14" height="14" />
           </span>
-          <span class="text-left text-sm text-90 ml-2">
+          <span class="grow ml-2 text-sm text-left">
             {{ __(`Copy as ${copyAs.as}`) }}
           </span>
         </button>
 
-        <button v-if="canCrop" v-close-popover type="button" class="w-full flex px-4 py-2 hover:bg-30 focus:outline-none" @click="media.openCropperModal()">
-          <span class="text-80">
-            <icon type="crop" view-box="0 0 561 561" width="14" height="14" />
+        <button
+          v-if="canCrop"
+          type="button"
+          class="flex p-2 hover:bg-gray-50 w-full focus:outline-none"
+          @click="media.openCropperModal()"
+        >
+          <span class="flex-none">
+            <icon-crop width="14" height="14" />
           </span>
-          <span class="text-left text-sm text-90 ml-2">
+          <span class="grow ml-2 text-sm text-left">
             {{ __('Crop') }}
           </span>
         </button>
 
-        <button v-if="canRegenerate" v-close-popover type="button" class="w-full flex px-4 py-2 hover:bg-30 focus:outline-none" @click="media.regenerate()">
-          <span class="text-80">
-            <icon type="refresh" view-box="0 0 24 24" width="14" height="14" />
+        <button
+          v-if="canRegenerate"
+          type="button"
+          class="flex p-2 hover:bg-gray-50 w-full focus:outline-none"
+          @click="media.regenerate()"
+        >
+          <span class="flex-none">
+            <Icon type="refresh" width="14" height="14" />
           </span>
-          <span class="text-left text-sm text-90 ml-2">
+          <span class="grow ml-2 text-sm text-left">
             {{ __('Regenerate') }}
           </span>
         </button>
-      </div>
-    </v-popover>
+      </template>
+    </VDropdown>
   </div>
 </template>
 
@@ -76,6 +97,12 @@ export default {
 
   inject: {
     context,
+  },
+
+  methods: {
+    async doCopy(event, as) {
+      await this.media.copy(as, event.target)
+    },
   },
 
   computed: {
