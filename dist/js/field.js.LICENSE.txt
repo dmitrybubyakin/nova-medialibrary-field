@@ -1,9 +1,19 @@
 /*!
-   * clipboard.js v2.0.6
-   * https://clipboardjs.com/
-   * 
-   * Licensed MIT © Zeno Rocha
-   */
+ * Cropper.js v1.5.12
+ * https://fengyuanchen.github.io/cropperjs
+ *
+ * Copyright 2015-present Chen Fengyuan
+ * Released under the MIT license
+ *
+ * Date: 2021-06-12T08:00:17.411Z
+ */
+
+/*!
+ * clipboard.js v2.0.10
+ * https://clipboardjs.com/
+ *
+ * Licensed MIT © Zeno Rocha
+ */
 
 /*!
  * vuex v4.0.2
