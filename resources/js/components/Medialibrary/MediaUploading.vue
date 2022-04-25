@@ -1,6 +1,9 @@
 <template>
   <div>
     <input
+      size="lg"
+      align="center"
+      component="button"
       v-if="showFileInput"
       :id="'input' + _uid"
       :accept="context.field.accept"
@@ -8,7 +11,7 @@
       type="file"
       class="form-file-input"
       @change="processFiles"
-    >
+    />
 
     <div class="mt-2 mb-3">
       <MediaUploadingList :media="media" />
@@ -17,11 +20,21 @@
       </p>
     </div>
 
-    <label :for="'input' + _uid" class="form-file form-file-btn btn btn-default btn-primary" dusk="media-choose-action-button">
+    <label
+      :for="'input' + _uid"
+      class="shadow relative bg-primary-500 hover:bg-primary-400 active:bg-primary-600 text-white dark:text-gray-900 cursor-pointer rounded text-sm font-bold focus:outline-none focus:ring inline-flex items-center justify-center h-9 px-3 shadow relative bg-primary-500 hover:bg-primary-400 active:bg-primary-600 text-white dark:text-gray-900"
+      dusk="media-choose-action-button"
+    >
       {{ chooseButtonText }}
     </label>
 
-    <button v-if="attachExistingButtonVisible" type="button" class="btn btn-default btn-primary ml-3" @click="attachExisting" dusk="media-attach-existing-button">
+    <button
+      v-if="attachExistingButtonVisible"
+      type="button"
+      class="btn btn-default btn-primary ml-3"
+      @click="attachExisting"
+      dusk="media-attach-existing-button"
+    >
       {{ __('Use existing') }}
     </button>
 
@@ -67,7 +80,7 @@ export default {
 
   computed: {
     mediaToUpload() {
-      return this.media.filter(media => !media.uploading)
+      return this.media.filter((media) => !media.uploading)
     },
 
     chooseButtonText() {
@@ -89,7 +102,7 @@ export default {
     },
 
     validationFailed() {
-      return this.media.some(media => media.validationErrors.has('file'))
+      return this.media.some((media) => media.validationErrors.has('file'))
     },
   },
 
@@ -103,12 +116,12 @@ export default {
 
   methods: {
     processFiles(event) {
-      [...event.target.files].forEach(file => {
+      ;[...event.target.files].forEach((file) => {
         this.addMedia(UploadingFile.create(file))
       })
 
       this.showFileInput = false
-      this.$nextTick(() => this.showFileInput = true)
+      this.$nextTick(() => (this.showFileInput = true))
 
       this.autoupload()
     },
@@ -128,17 +141,19 @@ export default {
     },
 
     removeMedia({ id }) {
-      this.media = this.media.filter(media => media.id !== id)
+      this.media = this.media.filter((media) => media.id !== id)
     },
 
     validationFails(media) {
       const { field } = this.context
 
       if (!media.hasValidSize(field)) {
-        Nova.error(this.__('File :filename must be less than :size kilobytes', {
-          filename: media.fileName,
-          size: field.maxSize / 1024,
-        }))
+        Nova.error(
+          this.__('File :filename must be less than :size kilobytes', {
+            filename: media.fileName,
+            size: field.maxSize / 1024,
+          })
+        )
         return true
       }
 
@@ -160,7 +175,7 @@ export default {
     },
 
     addMediaItems(mediaItems) {
-      mediaItems.forEach(media => {
+      mediaItems.forEach((media) => {
         this.addMedia(UploadingExistingMedia.create(media))
       })
 
@@ -177,7 +192,6 @@ export default {
       const { attribute, value } = this.context.field
       const { resourceName, resourceId } = this.context
 
-
       for (const media of this.mediaToUpload) {
         const formData = new FormData()
 
@@ -186,16 +200,19 @@ export default {
         formData.append('fieldUuid', value)
 
         const options = {
-          onUploadProgress: event => media.handleUploadProgress(event),
+          onUploadProgress: (event) => media.handleUploadProgress(event),
         }
 
         media.uploading = true
 
-        const uploadingPromise = Nova
-          .request()
-          .post(`/nova-vendor/dmitrybubyakin/nova-medialibrary-field/${resourceName}/${resourceId}/media/${attribute}`, formData, options)
+        const uploadingPromise = Nova.request()
+          .post(
+            `/nova-vendor/dmitrybubyakin/nova-medialibrary-field/${resourceName}/${resourceId}/media/${attribute}`,
+            formData,
+            options
+          )
           .then(() => this.handleUploadSucceeded(media))
-          .catch(error => this.handleUploadFailed(media, error))
+          .catch((error) => this.handleUploadFailed(media, error))
 
         if (this.synchronousUploading) {
           await uploadingPromise
