@@ -1,11 +1,11 @@
 <template>
   <div class="flex px-2 py-1">
     <button v-if="canView" type="button" class="focus:outline-none flex hover:opacity-50" @click="media.view()">
-      <Icon type="eye" width="17" height="14" />
+      <Icon type="eye" width="18" height="18" />
     </button>
 
     <button v-if="canEdit" type="button" class="focus:outline-none ml-2 flex hover:opacity-50" @click="media.edit()">
-      <Icon type="pencil-alt" width="14" height="14" />
+      <Icon type="pencil-alt" width="18" height="18" />
     </button>
 
     <button
@@ -14,12 +14,12 @@
       class="focus:outline-none ml-2 flex hover:opacity-50"
       @click="media.openDeleteModal()"
     >
-      <Icon type="trash" width="14" height="14" />
+      <Icon type="trash" width="18" height="18" />
     </button>
 
     <Dropdown placement="bottom-start">
       <DropdownTrigger :show-arrow="false" class="h-6 w-6 hover:opacity-50">
-        <Icon :solid="true" type="dots-horizontal" view-box="0 0 24 24" width="14" height="14" />
+        <Icon :solid="true" type="dots-horizontal" view-box="0 0 24 24" width="18" height="18" />
       </DropdownTrigger>
 
       <template #menu>
