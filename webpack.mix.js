@@ -9,8 +9,8 @@ mix
   .webpackConfig(require('./webpack.config'))
   .sass('resources/sass/field.scss', 'css')
   .nova('dmitrybubyakin/nova-medialibrary-field')
-// .sourceMaps()
-// .version()
+  .sourceMaps()
+  .version()
 
 mix.alias({
   'laravel-nova': path.join(__dirname, 'vendor/laravel/nova/resources/js/mixins/packages.js'),
