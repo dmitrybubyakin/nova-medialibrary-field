@@ -15,14 +15,14 @@
 
     <div class="mt-2 mb-3">
       <MediaUploadingList :media="media" />
-      <p v-if="validationFailed" class="text-danger text-sm mt-3">
+      <p v-if="validationFailed" class="text-danger mt-3 text-sm">
         {{ __('Validation failed. Hover media to see details.') }}
       </p>
     </div>
 
     <label
       :for="'input' + _uid"
-      class="shadow relative bg-primary-500 hover:bg-primary-400 active:bg-primary-600 text-white dark:text-gray-900 cursor-pointer rounded text-sm font-bold focus:outline-none focus:ring inline-flex items-center justify-center h-9 px-3 shadow relative bg-primary-500 hover:bg-primary-400 active:bg-primary-600 text-white dark:text-gray-900"
+      class="focus:outline-none relative relative inline-flex h-9 cursor-pointer items-center justify-center rounded bg-primary-500 bg-primary-500 px-3 text-sm font-bold text-white text-white shadow shadow hover:bg-primary-400 hover:bg-primary-400 focus:ring active:bg-primary-600 active:bg-primary-600 dark:text-gray-900 dark:text-gray-900"
       dusk="media-choose-action-button"
     >
       {{ chooseButtonText }}
@@ -42,15 +42,15 @@
       {{ __('Upload') }}
     </progress-button>
 
-    <portal v-if="chooseExistingMediaModalOpen" to="modals">
-      <ChooseExistingMediaModal
-        :field="context.field"
-        :resource-id="context.resourceId"
-        :resource-name="context.resourceName"
-        @close="closeChooseExistingMediaModal"
-        @choose="addChosenMedia"
-      />
-    </portal>
+    <ChooseExistingMediaModal
+      v-if="chooseExistingMediaModalOpen"
+      :show="chooseExistingMediaModalOpen"
+      :field="context.field"
+      :resource-id="context.resourceId"
+      :resource-name="context.resourceName"
+      @close="closeChooseExistingMediaModal"
+      @choose="addChosenMedia"
+    />
   </div>
 </template>
 
@@ -111,7 +111,7 @@ export default {
   },
 
   beforeDestroy() {
-    Nova.$on(`nova-medialibrary-field:attach:${this.context.field.attribute}`, this.addMediaItems)
+    Nova.$off(`nova-medialibrary-field:attach:${this.context.field.attribute}`, this.addMediaItems)
   },
 
   methods: {
