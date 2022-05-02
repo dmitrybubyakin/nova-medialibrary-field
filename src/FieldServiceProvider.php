@@ -18,10 +18,10 @@ class FieldServiceProvider extends ServiceProvider
 
         $this->loadJSONTranslationsFrom(resource_path('lang/vendor/nova-medialibrary-field'));
 
-        Nova::serving(function (ServingNova $event): void {
-            Nova::script('nova-medialibrary-field', __DIR__.'/../dist/js/field.js');
-            Nova::style('nova-medialibrary-field', __DIR__.'/../dist/css/field.css');
-        });
+        // Nova::serving(function (ServingNova $event): void {
+        //     Nova::script('nova-medialibrary-field', __DIR__.'/../dist/js/field.js');
+        //     Nova::style('nova-medialibrary-field', __DIR__.'/../dist/css/field.css');
+        // });
 
         Media::$model = config('media-library.media_model');
 
