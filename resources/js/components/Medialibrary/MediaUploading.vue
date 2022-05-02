@@ -5,7 +5,7 @@
       align="center"
       component="button"
       v-if="showFileInput"
-      :id="'input' + _uid"
+      :id="inputId"
       :accept="context.field.accept"
       :multiple="!context.field.single"
       type="file"
@@ -21,8 +21,8 @@
     </div>
 
     <label
-      :for="'input' + _uid"
-      class="focus:outline-none relative relative inline-flex h-9 cursor-pointer items-center justify-center rounded bg-primary-500 bg-primary-500 px-3 text-sm font-bold text-white text-white shadow shadow hover:bg-primary-400 hover:bg-primary-400 focus:ring active:bg-primary-600 active:bg-primary-600 dark:text-gray-900 dark:text-gray-900"
+      :for="inputId"
+      class="focus:outline-none bg-primary-500 bg-primary-500 hover:bg-primary-400 hover:bg-primary-400 active:bg-primary-600 active:bg-primary-600 relative relative inline-flex h-9 cursor-pointer items-center justify-center rounded px-3 text-sm font-bold text-white text-white shadow shadow focus:ring dark:text-gray-900 dark:text-gray-900"
       dusk="media-choose-action-button"
     >
       {{ chooseButtonText }}
@@ -74,8 +74,13 @@ export default {
     return {
       chooseExistingMediaModalOpen: false,
       showFileInput: true,
+      inputId: '',
       media: [],
     }
+  },
+
+  mounted() {
+    this.inputId = `input${this.context.field.value}`
   },
 
   computed: {
