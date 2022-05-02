@@ -1,86 +1,74 @@
 <template>
   <div class="flex px-2 py-1">
-    <button v-if="canView" type="button" class="flex hover:opacity-50 focus:outline-none" @click="media.view()">
+    <button v-if="canView" type="button" class="focus:outline-none flex hover:opacity-50" @click="media.view()">
       <Icon type="eye" width="17" height="14" />
     </button>
 
-    <button v-if="canEdit" type="button" class="ml-2 flex hover:opacity-50 focus:outline-none" @click="media.edit()">
+    <button v-if="canEdit" type="button" class="focus:outline-none ml-2 flex hover:opacity-50" @click="media.edit()">
       <Icon type="pencil-alt" width="14" height="14" />
     </button>
 
     <button
       v-if="canDelete"
       type="button"
-      class="ml-2 flex hover:opacity-50 focus:outline-none"
+      class="focus:outline-none ml-2 flex hover:opacity-50"
       @click="media.openDeleteModal()"
     >
       <Icon type="trash" width="14" height="14" />
     </button>
 
-    <VDropdown :distance="6" class="ml-auto flex" :triggers="['click']" :popperTriggers="['click']">
-      <button type="button" class="flex hover:opacity-50 focus:outline-none">
+    <Dropdown placement="bottom-start">
+      <DropdownTrigger :show-arrow="false" class="h-6 w-6 hover:opacity-50">
         <Icon :solid="true" type="dots-horizontal" view-box="0 0 24 24" width="14" height="14" />
-      </button>
+      </DropdownTrigger>
 
-      <template #popper>
-        <button
-          v-if="!hideCopyUrlAction"
-          type="button"
-          class="flex w-full p-2 hover:bg-gray-50 focus:outline-none"
-          @click="doCopy($event, 'downloadUrl')"
-        >
-          <span class="flex-none">
-            <Icon type="clipboard-copy" width="14" height="14" />
-          </span>
-          <span class="ml-2 grow text-left text-sm">
-            {{ __('Copy Url') }}
-          </span>
-        </button>
+      <template #menu>
+        <DropdownMenu>
+          <div class="flex flex-col py-1">
+            <DropdownMenuItem
+              as="button"
+              v-if="!hideCopyUrlAction"
+              @click="doCopy($event, 'downloadUrl')"
+              class="flex py-1 hover:bg-gray-100"
+            >
+              <Icon type="clipboard-copy" width="20" height="20" />
+              <span class="ml-2">{{ __('Copy Url') }}</span>
+            </DropdownMenuItem>
 
-        <button
-          v-for="copyAs in media.copyAs"
-          :key="copyAs.as"
-          type="button"
-          class="flex w-full p-2 hover:bg-gray-50 focus:outline-none"
-          @click="media.copy(copyAs.as)"
-        >
-          <span class="flex-none">
-            <Icon :type="copyAs.icon" width="14" height="14" />
-          </span>
-          <span class="ml-2 grow text-left text-sm">
-            {{ __(`Copy as ${copyAs.as}`) }}
-          </span>
-        </button>
+            <DropdownMenuItem
+              as="button"
+              class="flex items-center hover:bg-gray-100"
+              v-for="copyAs in media.copyAs"
+              :key="copyAs.as"
+              @click="media.copy(copyAs.as)"
+            >
+              <Icon :type="copyAs.icon" width="20" height="20" />
+              <span class="ml-2">{{ __(`Copy as ${copyAs.as}`) }}</span>
+            </DropdownMenuItem>
 
-        <button
-          v-if="canCrop"
-          type="button"
-          class="flex w-full p-2 hover:bg-gray-50 focus:outline-none"
-          @click="media.openCropperModal()"
-        >
-          <span class="flex-none">
-            <icon-crop width="14" height="14" />
-          </span>
-          <span class="ml-2 grow text-left text-sm">
-            {{ __('Crop') }}
-          </span>
-        </button>
+            <DropdownMenuItem
+              as="button"
+              v-if="canCrop"
+              class="flex items-center hover:bg-gray-100"
+              @click="media.openCropperModal()"
+            >
+              <icon-crop width="20" height="20" />
+              <span class="ml-2">{{ __('Crop') }}</span>
+            </DropdownMenuItem>
 
-        <button
-          v-if="canRegenerate"
-          type="button"
-          class="flex w-full p-2 hover:bg-gray-50 focus:outline-none"
-          @click="media.regenerate()"
-        >
-          <span class="flex-none">
-            <Icon type="refresh" width="14" height="14" />
-          </span>
-          <span class="ml-2 grow text-left text-sm">
-            {{ __('Regenerate') }}
-          </span>
-        </button>
+            <DropdownMenuItem
+              as="button"
+              v-if="canRegenerate"
+              class="flex items-center hover:bg-gray-100"
+              @click="media.regenerate()"
+            >
+              <Icon type="refresh" />
+              <span class="ml-2">{{ __('Regenerate') }}</span>
+            </DropdownMenuItem>
+          </div>
+        </DropdownMenu>
       </template>
-    </VDropdown>
+    </Dropdown>
   </div>
 </template>
 
