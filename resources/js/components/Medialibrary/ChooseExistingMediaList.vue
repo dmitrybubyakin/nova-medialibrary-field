@@ -1,11 +1,10 @@
 <template>
-  <div class="flex flex-wrap -m-2">
+  <div class="grid grid-cols-5 gap-2">
     <ChooseExistingMediaListItem
       v-for="mediaItem in media"
       :key="mediaItem.id"
       :media="mediaItem"
       :chosen="isChosen(mediaItem)"
-      class="m-2"
       @choose="$emit('choose', mediaItem)"
       @unchoose="$emit('unchoose', mediaItem)"
     />
@@ -16,6 +15,8 @@
 import ChooseExistingMediaListItem from './ChooseExistingMediaListItem'
 
 export default {
+  emits: ['choose', 'unchoose'],
+
   components: {
     ChooseExistingMediaListItem,
   },
@@ -33,7 +34,7 @@ export default {
 
   methods: {
     isChosen(mediaItem) {
-      return this.chosenMedia.filter(m => m.id === mediaItem.id).length > 0
+      return this.chosenMedia.filter((m) => m.id === mediaItem.id).length > 0
     },
   },
 }
