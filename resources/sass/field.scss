@@ -18,6 +18,14 @@
   width: 1024px;
 }
 
+.grid-cols-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.gap-2 {
+    gap: 0.5rem;
+}
+
 .bg-overlay {
   background: hsla(0, 0%, 0%, 0.3);
 }
