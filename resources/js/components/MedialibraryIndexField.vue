@@ -9,7 +9,7 @@
       class="no-underline"
     >
       <MediaPreview :media="media" :class="previewClassList">
-        <span slot="fallback" class="text-90 text-xs truncate select-none">
+        <span slot="fallback" class="text-90 select-none truncate text-xs">
           {{ media.extension.toUpperCase() }}
         </span>
       </MediaPreview>
