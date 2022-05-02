@@ -142,20 +142,10 @@ export default {
     },
 
     setInitCropperData() {
-      let dataPresent = Object.entries(this.media.cropperData).reduce((carry, pair) => {
-        let [key, value] = pair
-        if (!carry || !value) {
-          carry = false
-        }
-      }, true)
-
-      if (dataPresent) {
-        this.cropper.setData(this.media.cropperData)
-      }
+      this.cropper.setData(this.media.cropperData)
     },
 
     rotate(value) {
-      console.log(this.cropper)
       this.cropper.rotate(value)
     },
 
