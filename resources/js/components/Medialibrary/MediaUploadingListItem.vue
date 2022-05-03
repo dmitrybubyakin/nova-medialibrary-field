@@ -1,12 +1,26 @@
 <template>
-  <div v-tooltip="tooltip" class="relative group flex w-16 h-16 bg-50 rounded-full overflow-hidden" :class="{ 'shadow-danger': media.uploadingFailed }">
+  <div
+    v-tooltip="tooltip"
+    class="bg-50 group relative flex h-16 w-16 overflow-hidden rounded"
+    :class="{ 'shadow-danger': media.uploadingFailed }"
+  >
     <loader v-if="previewLoading" class="text-60" :width="30" />
-    <img v-if="preview" :src="preview" :alt="media.fileName" class="w-16 h-16 object-cover" :class="{ 'group-hover:opacity-75': !media.uploading }">
-    <div v-if="!previewLoading && !preview" class="w-16 h-16 flex items-center justify-center" :class="{ 'group-hover:hidden': !media.uploading }">
+    <img
+      v-if="preview"
+      :src="preview"
+      :alt="media.fileName"
+      class="h-16 w-16 object-cover"
+      :class="{ 'group-hover:opacity-75': !media.uploading }"
+    />
+    <div
+      v-if="!previewLoading && !preview"
+      class="flex h-16 w-16 items-center justify-center"
+      :class="{ 'group-hover:hidden': !media.uploading }"
+    >
       {{ media.extension }}
     </div>
 
-    <div v-if="media.uploading" class="absolute pin w-full h-full bg-overlay">
+    <div v-if="media.uploading" class="bg-overlay absolute inset-0 h-full w-full">
       <svg class="progress-ring" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <circle
           :r="progressCircleRadius"
@@ -21,9 +35,14 @@
       </svg>
     </div>
 
-    <div v-else class="group-hover:block hidden absolute pin bg-overlay">
-      <div class="flex items-center justify-center h-full">
-        <button type="button" class="flex text-white hover:text-danger focus:outline-none" @click="media.remove()" dusk="nova-media-uploading-list-item-media-remove-button">
+    <div v-else class="bg-overlay absolute inset-0 hidden group-hover:block">
+      <div class="flex h-full items-center justify-center">
+        <button
+          type="button"
+          class="hover:text-danger focus:outline-none flex text-white"
+          @click="media.remove()"
+          dusk="nova-media-uploading-list-item-media-remove-button"
+        >
           <icon type="delete" view-box="0 0 20 20" width="20" height="20" />
         </button>
       </div>
@@ -61,7 +80,7 @@ export default {
     errorsHtml() {
       return this.media.validationErrors
         .get('file')
-        .map(error => `<span class="text-danger">${error}</span>`)
+        .map((error) => `<span class="text-danger">${error}</span>`)
         .join('<br>')
     },
 
@@ -80,7 +99,7 @@ export default {
     progressCircleStyle() {
       const circumference = this.progressCircleRadius * 2 * Math.PI
 
-      const offset = circumference - this.media.uploadingProgress / 100 * circumference
+      const offset = circumference - (this.media.uploadingProgress / 100) * circumference
 
       return {
         strokeDasharray: `${circumference} ${circumference}`,
@@ -109,10 +128,11 @@ export default {
 
       const fileReader = new FileReader()
 
-      fileReader.onload = () => setTimeout(() => {
-        this.preview = fileReader.result
-        this.previewLoading = false
-      }, 200)
+      fileReader.onload = () =>
+        setTimeout(() => {
+          this.preview = fileReader.result
+          this.previewLoading = false
+        }, 200)
 
       fileReader.readAsDataURL(this.media.file)
     },
