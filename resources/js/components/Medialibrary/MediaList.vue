@@ -7,7 +7,7 @@
       v-model="mediaList"
       item-key="id"
       :disabled="sortingDisabled"
-      class="-m-2 flex flex-wrap"
+      class="flex flex-wrap gap-2"
       drag-class="dragging"
       @start="handleDragStart"
       @end="handleDragEnd"

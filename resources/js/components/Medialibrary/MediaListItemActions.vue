@@ -1,23 +1,25 @@
 <template>
-  <div class="flex px-2 py-1">
-    <button v-if="canView" type="button" class="focus:outline-none flex hover:opacity-50" @click="media.view()">
-      <Icon type="eye" width="18" height="18" />
-    </button>
+  <div class="flex items-center justify-between px-2 py-1">
+    <div class="flex items-center">
+      <button v-if="canView" type="button" class="focus:outline-none flex hover:opacity-50" @click="media.view()">
+        <Icon type="eye" width="18" height="18" />
+      </button>
 
-    <button v-if="canEdit" type="button" class="focus:outline-none ml-2 flex hover:opacity-50" @click="media.edit()">
-      <Icon type="pencil-alt" width="18" height="18" />
-    </button>
+      <button v-if="canEdit" type="button" class="focus:outline-none ml-2 flex hover:opacity-50" @click="media.edit()">
+        <Icon type="pencil-alt" width="18" height="18" />
+      </button>
 
-    <button
-      v-if="canDelete"
-      type="button"
-      class="focus:outline-none ml-2 flex hover:opacity-50"
-      @click="media.openDeleteModal()"
-    >
-      <Icon type="trash" width="18" height="18" />
-    </button>
+      <button
+        v-if="canDelete"
+        type="button"
+        class="focus:outline-none ml-2 flex hover:opacity-50"
+        @click="media.openDeleteModal()"
+      >
+        <Icon type="trash" width="18" height="18" />
+      </button>
+    </div>
 
-    <Dropdown placement="bottom-start">
+    <Dropdown placement="bottom-start" class="btn-block place-self-end">
       <DropdownTrigger :show-arrow="false" class="h-6 w-6 hover:opacity-50">
         <Icon :solid="true" type="dots-horizontal" view-box="0 0 24 24" width="18" height="18" />
       </DropdownTrigger>

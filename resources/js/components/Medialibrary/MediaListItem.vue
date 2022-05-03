@@ -1,5 +1,5 @@
 <template>
-  <div v-tooltip="tooltip" class="dragging:border-none relative overflow-hidden rounded shadow">
+  <div v-tooltip="tooltip" class="dragging:border-none relative overflow-hidden rounded bg-gray-800 shadow">
     <MediaListItemPreview :media="media">
       <div class="dragging:hidden bg-overlay absolute inset-0 hidden rounded-b group-hover:block">
         <div class="flex h-full items-center justify-center">
