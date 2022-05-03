@@ -49,7 +49,7 @@
 import { PreventsModalAbandonment } from 'laravel-nova'
 
 export default {
-  emits: ['confirm', 'close'],
+  emits: ['confirm', 'close', 'submit'],
 
   mixins: [PreventsModalAbandonment],
 
