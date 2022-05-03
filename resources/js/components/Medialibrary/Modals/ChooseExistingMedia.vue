@@ -1,39 +1,12 @@
 <template>
   <Modal :show="show" @close-via-escape="$emit('close')" role="dialog" maxWidth="2xl">
-    <Card>
+    <div class="overflow-hidden rounded-lg bg-white shadow-lg dark:bg-gray-800">
       <ModalHeader class="flex items-center">
         {{ __('Choose existing media') }}
       </ModalHeader>
-      <!-- <div class="bg-30 mt-6 px-8 py-4"> -->
-      <!--   <form @submit.prevent="applyFilter"> -->
-      <!--     <div class="flex-no-shrink relative h-9"> -->
-      <!--       <svg -->
-      <!--         xmlns="http://www.w3.org/2000/svg" -->
-      <!--         width="20" -->
-      <!--         height="20" -->
-      <!--         viewBox="0 0 20 20" -->
-      <!--         class="search-icon-center text-70 absolute ml-3 fill-current" -->
-      <!--       > -->
-      <!--         <path -->
-      <!--           fill-rule="nonzero" -->
-      <!--           d="M14.32 12.906l5.387 5.387a1 1 0 0 1-1.414 1.414l-5.387-5.387a8 8 0 1 1 1.414-1.414zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" -->
-      <!--         /> -->
-      <!--       </svg> -->
-      <!--       <input -->
-      <!--         v-model="params.name" -->
-      <!--         placeholder="Search" -->
-      <!--         type="search" -->
-      <!--         class="form-search w-search pl-search appearance-none shadow" -->
-      <!--       /> -->
-      <!--     </div> -->
-      <!--   </form> -->
-      <!-- </div> -->
 
       <ModalContent>
         <IndexSearchInput @update:keyword="applyFilter" />
-        <!-- <div v-if="loading" class="mt-6"> -->
-        <!--   <loader class="text-60" /> -->
-        <!-- </div> -->
 
         <LoadingView :loading="loading">
           <slot>
@@ -62,7 +35,7 @@
           </LoadingButton>
         </div>
       </ModalFooter>
-    </Card>
+    </div>
   </Modal>
 </template>
 
