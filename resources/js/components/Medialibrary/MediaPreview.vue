@@ -4,6 +4,7 @@
     :src="media.previewUrl"
     :alt="media.fileName"
     class="block h-24 w-full object-cover"
+    style="max-height: 100%"
     @error="loadingFailed = true"
   />
   <div v-else class="bg-40 flex items-center justify-center">
