@@ -4,6 +4,7 @@
     @showing="handleShowingModal"
     @close-via-escape="handlePreventModalAbandonmentOnClose"
     role="dialog"
+    maxWidth="2xl"
   >
     <form
       ref="theForm"
@@ -31,7 +32,7 @@
         </div>
 
         <ModalFooter>
-          <div class="flex ml-auto items-center">
+          <div class="ml-auto flex items-center">
             <CancelButton component="button" type="button" class="ml-auto mr-3" @click="$emit('close')" />
 
             <LoadingButton type="submit" ref="confirmButton" :disabled="updating" :loading="updating">
