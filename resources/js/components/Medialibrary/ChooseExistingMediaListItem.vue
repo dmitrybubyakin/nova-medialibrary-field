@@ -3,8 +3,8 @@
     v-tooltip="tooltip"
     :class="{
       'border-50 group relative overflow-hidden rounded border': true,
-      'shadow-media-chosen border-red-50': chosen,
-      'border-50': !chosen,
+      'shadow-media-chosen border-red-500': chosen,
+      'border-gray-500': !chosen,
     }"
   >
     <!-- border-info-dark -->

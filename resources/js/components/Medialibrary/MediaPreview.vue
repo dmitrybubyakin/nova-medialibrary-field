@@ -3,7 +3,7 @@
     v-if="usePreview"
     :src="media.previewUrl"
     :alt="media.fileName"
-    class="block object-cover"
+    class="block h-24 w-full object-cover"
     @error="loadingFailed = true"
   />
   <div v-else class="bg-40 flex items-center justify-center">
