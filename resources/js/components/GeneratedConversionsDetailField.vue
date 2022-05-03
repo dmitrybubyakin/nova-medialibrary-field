@@ -9,7 +9,7 @@
           class="group relative m-2 flex overflow-hidden rounded"
         >
           <img :src="url" :alt="name" class="h-16 w-16 object-cover" />
-          <div class="pin bg-overlay absolute hidden group-hover:block">
+          <div class="bg-overlay absolute inset-0 hidden group-hover:block">
             <div class="flex h-full items-center justify-center">
               <button type="button" class="hover:text-primary focus:outline-none flex text-white" @click="doCopy(url)">
                 <icon type="link" view-box="0 0 20 20" width="20" height="20" />
