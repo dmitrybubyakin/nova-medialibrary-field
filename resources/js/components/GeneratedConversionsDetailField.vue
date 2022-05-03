@@ -23,6 +23,9 @@
 </template>
 
 <script>
+import { Localization } from 'laravel-nova'
+import Clipboard from 'clipboard'
+
 export default {
   props: ['resource', 'resourceName', 'resourceId', 'field'],
 
@@ -44,8 +47,12 @@ export default {
         : null
     },
 
-    async doCopy(event, as) {
-      await this.media.copy(as, event.target)
+    async doCopy(url) {
+      Clipboard.copy(url, {
+        container: typeof container === 'object' ? container : document.body,
+      })
+
+      Nova.success(Localization.methods.__('Copied!'))
     },
   },
 }
