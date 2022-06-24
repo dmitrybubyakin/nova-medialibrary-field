@@ -9,7 +9,7 @@
  */
 
 /*!
- * clipboard.js v2.0.10
+ * clipboard.js v2.0.11
  * https://clipboardjs.com/
  *
  * Licensed MIT © Zeno Rocha
@@ -20,6 +20,8 @@
  * (c) 2021 Evan You
  * @license MIT
  */
+
+/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
 
 /**
  * @license
