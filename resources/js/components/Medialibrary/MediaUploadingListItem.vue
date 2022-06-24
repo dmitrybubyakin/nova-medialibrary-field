@@ -1,7 +1,7 @@
 <template>
   <div
     v-tooltip="tooltip"
-    class="bg-50 group relative flex h-16 w-16 overflow-hidden rounded"
+    class="bg-50 group relative flex h-16 w-16 overflow-hidden rounded shadow"
     :class="{ 'shadow-danger': media.uploadingFailed }"
   >
     <loader v-if="previewLoading" class="text-60" :width="30" />
@@ -9,7 +9,7 @@
       v-if="preview"
       :src="preview"
       :alt="media.fileName"
-      class="h-16 w-16 object-cover"
+      class="h-16 w-16 object-cover shadow"
       :class="{ 'group-hover:opacity-75': !media.uploading }"
     />
     <div
