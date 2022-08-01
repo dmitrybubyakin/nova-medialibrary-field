@@ -39,7 +39,7 @@
       <div class="flex h-full items-center justify-center">
         <button
           type="button"
-          class="hover:text-danger focus:outline-none flex text-white"
+          class="hover:text-danger flex text-white focus:outline-none"
           @click="media.remove()"
           dusk="nova-media-uploading-list-item-media-remove-button"
         >

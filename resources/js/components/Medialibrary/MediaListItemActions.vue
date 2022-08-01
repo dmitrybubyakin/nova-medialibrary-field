@@ -1,18 +1,18 @@
 <template>
   <div class="flex items-center justify-between px-2 py-1">
     <div class="flex items-center">
-      <button v-if="canView" type="button" class="focus:outline-none flex hover:opacity-50" @click="media.view()">
+      <button v-if="canView" type="button" class="flex hover:opacity-50 focus:outline-none" @click="media.view()">
         <Icon type="eye" width="18" height="18" />
       </button>
 
-      <button v-if="canEdit" type="button" class="focus:outline-none ml-2 flex hover:opacity-50" @click="media.edit()">
+      <button v-if="canEdit" type="button" class="ml-2 flex hover:opacity-50 focus:outline-none" @click="media.edit()">
         <Icon type="pencil-alt" width="18" height="18" />
       </button>
 
       <button
         v-if="canDelete"
         type="button"
-        class="focus:outline-none ml-2 flex hover:opacity-50"
+        class="ml-2 flex hover:opacity-50 focus:outline-none"
         @click="media.openDeleteModal()"
       >
         <Icon type="trash" width="18" height="18" />

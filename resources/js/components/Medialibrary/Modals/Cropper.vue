@@ -21,7 +21,7 @@
           <button
             v-if="resizable"
             type="button"
-            class="focus:outline-none flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:ring"
+            class="flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
             @click="toggleAspectRatio"
           >
             <icon-cropper-lock v-if="locked" width="24" height="24" />
@@ -31,7 +31,7 @@
           <button
             v-if="rotatable"
             type="button"
-            class="focus:outline-none ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:ring"
+            class="ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
             @click="rotate(-90)"
           >
             <icon-cropper-rotate width="24" height="24" />
@@ -40,7 +40,7 @@
           <button
             v-if="rotatable"
             type="button"
-            class="focus:outline-none ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:ring"
+            class="ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
             @click="rotate(90)"
           >
             <icon-cropper-rotate width="24" height="24" style="transform: rotateY(180deg)" />
@@ -49,7 +49,7 @@
           <button
             v-if="zoomable"
             type="button"
-            class="focus:outline-none ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:ring"
+            class="ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
             @click="zoom(0.2)"
           >
             <icon-cropper-zoom-in width="24" height="24" />
@@ -58,7 +58,7 @@
           <button
             v-if="zoomable"
             type="button"
-            class="focus:outline-none ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:ring"
+            class="ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
             @click="zoom(-0.2)"
           >
             <icon-cropper-zoom-out width="24" height="24" />

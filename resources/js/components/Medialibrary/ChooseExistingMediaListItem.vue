@@ -23,7 +23,7 @@
     >
       <button
         type="button"
-        class="focus:outline-none flex h-full w-full items-center justify-center"
+        class="flex h-full w-full items-center justify-center focus:outline-none"
         @click="$emit(chosen ? 'unchoose' : 'choose')"
       >
         <icon v-if="chosen" width="40" height="40" type="check-circle" class="text-white" />
