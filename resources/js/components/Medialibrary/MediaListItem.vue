@@ -1,22 +1,22 @@
 <template>
-  <div v-tooltip="tooltip" class="dragging:border-none relative border border-40 rounded overflow-hidden shadow">
+  <div v-tooltip="tooltip" class="dragging:border-none relative overflow-hidden rounded bg-gray-800 shadow">
     <MediaListItemPreview :media="media">
-      <div class="dragging:hidden group-hover:block hidden absolute pin bg-overlay rounded-b">
-        <div class="h-full flex justify-center items-center">
+      <div class="dragging:hidden bg-overlay absolute inset-0 hidden rounded-b group-hover:block">
+        <div class="flex h-full items-center justify-center">
           <a :href="media.downloadUrl" target="_blank" class="media-item-download text-white">
-            <icon type="download" view-box="0 0 24 24" width="32" height="32" />
+            <Icon type="download" view-box="0 0 24 24" width="32" height="32" />
           </a>
         </div>
       </div>
     </MediaListItemPreview>
 
-    <div v-if="media.title" class="dragging:hidden w-32 mt-1 px-2">
-      <p class="text-80 text-sm truncate">
+    <div v-if="media.title" class="dragging:hidden mt-1 w-32 px-2">
+      <p class="text-80 truncate text-sm">
         {{ media.title }}
       </p>
     </div>
 
-    <div v-if="media.loading" class="absolute pin bg-90-half flex items-center justify-center">
+    <div v-if="media.loading" class="bg-overlay absolute inset-0 flex items-center justify-center">
       <loader class="text-white" />
     </div>
 
@@ -27,6 +27,7 @@
 
 <script>
 import { tooltip } from './Utils'
+
 import MediaListItemActions from './MediaListItemActions'
 import MediaListItemPreview from './MediaListItemPreview'
 import MediaListItemModals from './MediaListItemModals'

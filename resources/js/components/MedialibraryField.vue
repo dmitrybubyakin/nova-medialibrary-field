@@ -24,7 +24,6 @@ export default {
       type: String,
       required: true,
     },
-    // eslint-disable-next-line
     resourceId: {
       required: true,
     },

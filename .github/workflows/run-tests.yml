@@ -22,6 +22,9 @@ jobs:
         php-version: ${{ matrix.php }}
         extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
         coverage: none
+        
+    - name: Add HTTP basic auth credentials
+      run: echo '${{ secrets.COMPOSER_AUTH }}' > $GITHUB_WORKSPACE/auth.json
 
     - name: Install Dependencies
       env:

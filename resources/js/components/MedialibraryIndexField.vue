@@ -6,10 +6,10 @@
       v-tooltip="tooltip(media)"
       :href="media.downloadUrl"
       target="_blank"
-      class="no-underline"
+      class="h-8 w-8 no-underline"
     >
       <MediaPreview :media="media" :class="previewClassList">
-        <span slot="fallback" class="text-90 text-xs truncate select-none">
+        <span slot="fallback" class="text-90 select-none truncate text-xs">
           {{ media.extension.toUpperCase() }}
         </span>
       </MediaPreview>
@@ -34,7 +34,7 @@ export default {
       return this.field.value || []
     },
     previewClassList() {
-      return this.field.indexPreviewClassList || 'rounded-full w-8 h-8 min-w-8 min-h-8 ml-2'
+      return this.field.indexPreviewClassList || 'rounded w-8 h-8 min-w-8 min-h-8 ml-2'
     },
   },
 

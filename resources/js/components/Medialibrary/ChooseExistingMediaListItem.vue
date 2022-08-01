@@ -2,33 +2,31 @@
   <div
     v-tooltip="tooltip"
     :class="{
-      'relative group border border-50 rounded-full overflow-hidden': true,
-      'shadow-media-chosen border-info-dark': chosen,
-      'border-50': !chosen,
+      'border-50 group relative overflow-hidden rounded border': true,
+      'shadow-media-chosen border-red-500': chosen,
+      'border-gray-500': !chosen,
     }"
   >
-    <MediaPreview :media="media" class="w-24 h-24 shadow">
-      <span slot="fallback" class="text-90 text-xs truncate select-none">
+    <!-- border-info-dark -->
+    <MediaPreview :media="media" class="shadow">
+      <span slot="fallback" class="text-90 select-none truncate text-xs">
         {{ media.extension.toUpperCase() }}
       </span>
     </MediaPreview>
 
     <div
       :class="{
-        'absolute pin': true,
-        'group-hover:block hidden bg-overlay': !chosen,
+        'absolute inset-0': true,
+        'bg-overlay hidden group-hover:block': !chosen,
         'bg-info-dark-half': chosen,
       }"
     >
-      <button type="button" class="w-full h-full focus:outline-none flex items-center justify-center" @click="$emit(chosen ? 'unchoose' : 'choose')">
-        <icon
-          v-if="chosen"
-          view-box="0 0 24 24"
-          width="40"
-          height="40"
-          type="check-circle"
-          class="text-white"
-        />
+      <button
+        type="button"
+        class="flex h-full w-full items-center justify-center focus:outline-none"
+        @click="$emit(chosen ? 'unchoose' : 'choose')"
+      >
+        <icon v-if="chosen" width="40" height="40" type="check-circle" class="text-white" />
       </button>
     </div>
   </div>
@@ -39,6 +37,8 @@ import { tooltip } from './Utils'
 import MediaPreview from './MediaPreview'
 
 export default {
+  emits: ['choose', 'unchoose'],
+
   components: {
     MediaPreview,
   },

@@ -64,10 +64,11 @@ export const Provider = {
       }
 
       return this.withLoading(
-        Nova
-          .request()
-          .get(`/nova-vendor/dmitrybubyakin/nova-medialibrary-field/${resourceName}/${resourceId}/media/${attribute}`, { params })
-          .then(response => response.data.map(this.wrap)),
+        Nova.request()
+          .get(`/nova-vendor/dmitrybubyakin/nova-medialibrary-field/${resourceName}/${resourceId}/media/${attribute}`, {
+            params,
+          })
+          .then((response) => response.data.map(this.wrap))
       )
     },
 
@@ -79,7 +80,7 @@ export const Provider = {
     },
 
     async refresh(callback = null) {
-      this.context.media.forEach(media => media.setLoading(true))
+      this.context.media.forEach((media) => media.setLoading(true))
 
       this.setMedia(await this.fetch())
 
@@ -94,7 +95,7 @@ export const Provider = {
   },
 
   render() {
-    return this.$slots.default
+    return this.$slots.default()
   },
 }
 
@@ -104,6 +105,6 @@ export const Consumer = {
   },
 
   render() {
-    return this.$scopedSlots.default(this.context)
+    return this.$slots.default(this.context)
   },
 }

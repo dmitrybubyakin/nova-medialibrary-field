@@ -1,9 +1,14 @@
 <template>
-  <panel-item :field="field">
-    <div slot="value">
-      <MedialibraryField :add-files="canAddFiles" :field="field" :resource-name="resourceName" :resource-id="resourceId" />
-    </div>
-  </panel-item>
+  <PanelItem :field="field">
+    <template #value>
+      <MedialibraryField
+        :add-files="canAddFiles"
+        :field="field"
+        :resource-name="resourceName"
+        :resource-id="resourceId"
+      />
+    </template>
+  </PanelItem>
 </template>
 
 <script>
@@ -14,7 +19,6 @@ export default {
     MedialibraryField,
   },
 
-  // eslint-disable-next-line
   props: ['resource', 'resourceName', 'resourceId', 'field'],
 
   computed: {

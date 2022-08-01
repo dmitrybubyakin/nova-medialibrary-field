@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DmitryBubyakin\NovaMedialibraryField\Http\Controllers;
 
@@ -21,7 +23,7 @@ class AttachableController
 
         $query = call_or_default($field->attachExistingCallback, [$query, $request, $model]) ?: $query;
 
-        $paginator = $query->simplePaginate($request->input('perPage', 25));
+        $paginator = $query->paginate($request->input('perPage', 25));
 
         return response()->json(
             $paginator->setCollection(

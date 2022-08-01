@@ -1,17 +1,20 @@
 <template>
   <div v-if="context.loading && context.media.length === 0">
-    <loader class="text-60" />
+    <loader />
   </div>
   <div v-else>
     <Draggable
       v-model="mediaList"
+      item-key="id"
       :disabled="sortingDisabled"
-      class="flex flex-wrap -m-2"
+      class="flex flex-wrap gap-2"
       drag-class="dragging"
       @start="handleDragStart"
       @end="handleDragEnd"
     >
-      <MediaListItem v-for="media in mediaList" :key="media.id" :media="media" class="m-2" dusk="nova-media-list-item" />
+      <template #item="{ element }">
+        <MediaListItem :media="element" class="mr-2" dusk="nova-media-list-item" />
+      </template>
     </Draggable>
   </div>
 </template>
@@ -41,9 +44,7 @@ export default {
       },
     },
     sortingDisabled() {
-      return this.mediaList.length <= 1
-        || this.context.field.readonly
-        || this.context.field.sortable !== true
+      return this.mediaList.length <= 1 || this.context.field.readonly || this.context.field.sortable !== true
     },
   },
 
@@ -59,10 +60,9 @@ export default {
     setNewOrder(media) {
       this.context.setMedia(media)
 
-      Nova
-        .request()
+      Nova.request()
         .post('/nova-vendor/dmitrybubyakin/nova-medialibrary-field/sort', {
-          media: media.map(media => media.id),
+          media: media.map((media) => media.id),
         })
         .then(() => Nova.success(this.__('Media sorted')))
     },

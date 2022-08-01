@@ -1,14 +1,25 @@
 <template>
-  <modal class="select-text" @modal-close="handleClose">
-    <card class="w-action-fields overflow-hidden">
-      <h4 class="text-90 font-normal text-2xl flex-no-shrink px-8 pt-6">
-        {{ __('Edit Media') }}
-      </h4>
-
-      <form v-if="fields" autocomplete="off" @submit.prevent="handleSubmit">
+  <Modal
+    :show="show"
+    @showing="handleShowingModal"
+    @close-via-escape="handlePreventModalAbandonmentOnClose"
+    role="dialog"
+    maxWidth="2xl"
+  >
+    <form
+      ref="theForm"
+      autocomplete="off"
+      @change="onUpdateFormStatus"
+      @submit.prevent="handleSubmit()"
+      class="overflow-hidden rounded-lg bg-white shadow-lg dark:bg-gray-800"
+    >
+      <div>
+        <ModalHeader v-text="__('Edit Media')" />
+        <!-- Validation Errors -->
         <validation-errors :errors="errors" />
 
-        <div v-for="field in fields" :key="field.attribute" class="action">
+        <!-- Fields -->
+        <div class="action" v-for="field in fields" :key="field.attribute">
           <component
             :is="'form-' + field.component"
             :errors="errors"
@@ -16,30 +27,37 @@
             :resource-name="resourceName"
             :field="field"
             :show-help-text="field.helpText != null"
+            @field-changed="onUpdateFormStatus"
           />
         </div>
 
-        <div class="bg-30 flex px-8 py-4">
-          <button type="button" class="btn text-80 font-normal h-9 px-3 ml-auto mr-3 btn-link" @click="handleClose">
-            {{ __('Cancel') }}
-          </button>
+        <ModalFooter>
+          <div class="ml-auto flex items-center">
+            <CancelButton component="button" type="button" class="ml-auto mr-3" @click="$emit('close')" />
 
-          <progress-button type="submit" :disabled="updating" :processing="updating">
-            {{ __('Update Media') }}
-          </progress-button>
-        </div>
-      </form>
-    </card>
-  </modal>
+            <LoadingButton type="submit" ref="confirmButton" :disabled="updating" :loading="updating">
+              {{ __('Update Media') }}
+            </LoadingButton>
+          </div>
+        </ModalFooter>
+      </div>
+    </form>
+  </Modal>
 </template>
 
 <script>
-import { InteractsWithResourceInformation } from 'laravel-nova'
+import { PreventsModalAbandonment } from 'laravel-nova'
 
 export default {
-  mixins: [InteractsWithResourceInformation],
+  emits: ['confirm', 'close', 'submit'],
+
+  mixins: [PreventsModalAbandonment],
 
   props: {
+    show: {
+      type: Boolean,
+      default: false,
+    },
     resourceName: {
       type: String,
       required: true,
@@ -62,17 +80,56 @@ export default {
     },
   },
 
+  created() {
+    document.addEventListener('keydown', this.handleKeydown)
+  },
+
+  beforeUnmount() {
+    document.removeEventListener('keydown', this.handleKeydown)
+  },
+
   methods: {
     handleSubmit() {
       const formData = new FormData()
 
-      this.fields.forEach(field => field.fill(formData))
+      this.fields.forEach((field) => field.fill(formData))
 
       this.$emit('submit', formData)
     },
 
-    handleClose() {
-      this.$emit('close')
+    /**
+     * Prevent accidental abandonment only if form was changed.
+     */
+    onUpdateFormStatus() {
+      this.updateModalStatus()
+    },
+
+    /**
+     * Handle focus when modal being shown.
+     */
+    handleShowingModal(e) {
+      // If the modal has inputs, let's highlight the first one, otherwise
+      // let's highlight the submit button
+      this.$nextTick(() => {
+        if (this.$refs.theForm) {
+          let formFields = this.$refs.theForm.querySelectorAll('input, textarea, select')
+
+          formFields.length > 0 ? formFields[0].focus() : this.$refs.runButton.focus()
+        } else {
+          this.$refs.runButton.focus()
+        }
+      })
+    },
+
+    handlePreventModalAbandonmentOnClose() {
+      this.handlePreventModalAbandonment(
+        () => {
+          this.$emit('close')
+        },
+        () => {
+          e.stopPropagation()
+        }
+      )
     },
   },
 }

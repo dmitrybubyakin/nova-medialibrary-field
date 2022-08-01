@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DmitryBubyakin\NovaMedialibraryField\Tests;
 
@@ -11,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Nova\Actions\ActionResource;
 use Laravel\Nova\Events\ServingNova;
 use Laravel\Nova\Nova;
+use Laravel\Nova\NovaCoreServiceProvider;
 use Laravel\Nova\NovaServiceProvider;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -33,6 +36,7 @@ abstract class TestCase extends Orchestra
     {
         return [
             NovaServiceProvider::class,
+            NovaCoreServiceProvider::class,
             FieldServiceProvider::class,
             MediaLibraryServiceProvider::class,
         ];
@@ -59,7 +63,15 @@ abstract class TestCase extends Orchestra
         include_once __DIR__.'/../vendor/laravel/nova/database/migrations/2018_01_01_000000_create_action_events_table.php';
         include_once __DIR__.'/../vendor/laravel/nova/database/migrations/2019_05_10_000000_add_fields_to_action_events_table.php';
 
-        (new \CreateMediaTable())->up();
+        if (class_exists(\CreateMediaTable::class)) {
+            // PHP 7 only
+            (new \CreateMediaTable())->up();
+        } else {
+            // PHP 8+ version of medialibrary uses anonymous class, so we can require and call it
+            $mediaTableMigration = require __DIR__.'/../vendor/spatie/laravel-medialibrary/database/migrations/create_media_table.php.stub';
+            $mediaTableMigration->up();
+        }
+
         (new \CreateActionEventsTable())->up();
         (new \AddFieldsToActionEventsTable())->up();
     }
@@ -68,7 +80,12 @@ abstract class TestCase extends Orchestra
     {
         $this->app['config']->set('nova.actions.resource', ActionResource::class);
 
-        Route::middlewareGroup('nova', []);
+        // Middleware required because of impersonation check
+        Route::middlewareGroup('nova', [
+            \Illuminate\Session\Middleware\StartSession::class,
+        ]);
+
+        Route::middlewareGroup('nova:api', ['nova']);
 
         Nova::resources([
             \DmitryBubyakin\NovaMedialibraryField\Tests\Fixtures\Nova\TestPost::class,
@@ -93,7 +110,7 @@ abstract class TestCase extends Orchestra
 
     public function getSupportPath(string $path = ''): string
     {
-        return __DIR__ . '/Support' . ($path ? '/' . $path : '');
+        return __DIR__.'/Support'.($path ? '/'.$path : '');
     }
 
     public function getTextFile(): string
@@ -144,7 +161,6 @@ abstract class TestCase extends Orchestra
         $this->actingAs($this->authenticatedAs = Mockery::mock(Authenticatable::class));
 
         $this->authenticatedAs->shouldReceive('getAuthIdentifier')->andReturn(1);
-        $this->authenticatedAs->shouldReceive('getKey')->andReturn(1);
 
         return $this;
     }

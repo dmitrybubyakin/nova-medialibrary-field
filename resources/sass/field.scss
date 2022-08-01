@@ -2,8 +2,15 @@
   height: 4rem;
 }
 
+.w-16 {
+  width: 4rem;
+}
+
 .w-32 {
   width: 8rem;
+}
+.h-32 {
+  height: 8rem;
 }
 
 .w-24 {
@@ -14,8 +21,24 @@
   height: 6rem;
 }
 
+.btn-block button {
+  display: block;
+}
+
 .w-choose-existing-media {
   width: 1024px;
+}
+
+.grid-cols-5 {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.place-self-end {
+  place-self: end;
 }
 
 .bg-overlay {
@@ -32,7 +55,7 @@
       display: block;
     }
     .group-hover\:opacity-75 {
-      opacity: .75;
+      opacity: 0.75;
     }
     .group-hover\:hidden {
       display: none;
@@ -49,7 +72,7 @@
 }
 
 .bg-info-dark-half {
-  background-color: rgba(49, 130, 206, .5);
+  background-color: rgba(49, 130, 206, 0.5);
 }
 
 .dragging {

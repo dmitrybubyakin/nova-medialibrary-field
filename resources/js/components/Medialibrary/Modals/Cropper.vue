@@ -1,52 +1,93 @@
 <template>
-  <modal class="select-text" @modal-close="handleClose">
-    <card class="w-action-fields overflow-hidden">
-      <h4 class="text-90 font-normal text-2xl flex-no-shrink px-8 pt-6">
-        {{ __('Crop Media') }}
-      </h4>
+  <Modal :show="show" @close-via-escape="$emit('close')" role="dialog">
+    <div class="overflow-hidden rounded-lg bg-white shadow-lg dark:bg-gray-800">
+      <ModalHeader v-text="__('Crop Media')" />
 
-      <div class="px-8 py-6">
-        <VueCropper ref="cropper" :src="media.cropperMediaUrl" :data="media.cropperData" v-bind="media.cropperOptions" style="max-height: 500px" />
+      <div>
+        <VueCropper
+          ref="cropper"
+          :aspect-ratio="1 / 1"
+          :src="media.cropperMediaUrl"
+          v-bind="media.cropperOptions"
+          style="max-width: 36rem"
+          @ready="setInitCropperData"
+        />
 
-        <div class="flex justify-end mt-6">
-          <button v-if="resizable" type="button" class="flex items-center ml-3 text-70 hover:text-primary focus:outline-none" @click="toggleAspectRatio">
-            <icon v-if="locked" type="cropper-lock" width="16" height="16" view-box="-64 0 512 512" />
-            <icon v-else type="cropper-unlock" width="16" height="16" view-box="-64 0 512 512" />
+        <div class="flex justify-end"></div>
+      </div>
+
+      <ModalFooter>
+        <div class="flex">
+          <button
+            v-if="resizable"
+            type="button"
+            class="flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
+            @click="toggleAspectRatio"
+          >
+            <icon-cropper-lock v-if="locked" width="24" height="24" />
+            <icon-cropper-unlock v-else width="24" height="24" />
           </button>
 
-          <button v-if="rotatable" type="button" class="flex items-center ml-3 text-70 hover:text-primary focus:outline-none" @click="rotate(-90)">
-            <icon type="cropper-rotate" width="16" height="16" view-box="0 0 426.667 426.667" />
+          <button
+            v-if="rotatable"
+            type="button"
+            class="ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
+            @click="rotate(-90)"
+          >
+            <icon-cropper-rotate width="24" height="24" />
           </button>
 
-          <button v-if="rotatable" type="button" class="flex items-center ml-3 text-70 hover:text-primary focus:outline-none" @click="rotate(90)">
-            <icon type="cropper-rotate" width="16" height="16" view-box="0 0 426.667 426.667" style="transform: rotateY(180deg)" />
+          <button
+            v-if="rotatable"
+            type="button"
+            class="ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
+            @click="rotate(90)"
+          >
+            <icon-cropper-rotate width="24" height="24" style="transform: rotateY(180deg)" />
           </button>
 
-          <button v-if="zoomable" type="button" class="flex items-center ml-3 text-70 hover:text-primary focus:outline-none" @click="zoom(0.15)">
-            <icon type="cropper-zoom-in" width="16" height="16" view-box="0 0 512 512" />
+          <button
+            v-if="zoomable"
+            type="button"
+            class="ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
+            @click="zoom(0.2)"
+          >
+            <icon-cropper-zoom-in width="24" height="24" />
           </button>
 
-          <button v-if="zoomable" type="button" class="flex items-center ml-3 text-70 hover:text-primary focus:outline-none" @click="zoom(-0.15)">
-            <icon type="cropper-zoom-out" width="16" height="16" view-box="0 0 512 512" />
+          <button
+            v-if="zoomable"
+            type="button"
+            class="ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
+            @click="zoom(-0.2)"
+          >
+            <icon-cropper-zoom-out width="24" height="24" />
           </button>
         </div>
-      </div>
 
-      <div class="bg-30 flex px-8 py-4">
-        <button type="button" class="btn text-80 font-normal h-9 px-3 ml-auto mr-3 btn-link" @click="handleClose">
-          {{ __('Cancel') }}
-        </button>
+        <div class="ml-auto flex items-center">
+          <CancelButton component="button" type="button" class="ml-auto mr-3" @click="$emit('close')" />
 
-        <progress-button type="button" :disabled="updating" :processing="updating" @click.native="handleCrop">
-          {{ __('Crop') }}
-        </progress-button>
-      </div>
-    </card>
-  </modal>
+          <LoadingButton
+            type="button"
+            ref="runButton"
+            :disabled="updating"
+            :loading="updating"
+            component="DefaultButton"
+            @click.native="handleCrop()"
+          >
+            {{ __('Crop') }}
+          </LoadingButton>
+        </div>
+      </ModalFooter>
+    </div>
+  </Modal>
 </template>
 
 <script>
 import VueCropper from 'vue-cropperjs'
+import { PreventsModalAbandonment } from 'laravel-nova'
+
 import 'cropperjs/dist/cropper.css'
 
 export default {
@@ -54,7 +95,15 @@ export default {
     VueCropper,
   },
 
+  emits: ['confirm', 'close', 'crop'],
+
+  mixins: [PreventsModalAbandonment],
+
   props: {
+    show: {
+      type: Boolean,
+      default: false,
+    },
     media: {
       type: Object,
       required: true,
@@ -87,13 +136,13 @@ export default {
   },
 
   methods: {
-    handleClose() {
-      this.$emit('close')
-    },
-
     handleCrop() {
       this.cropper.disable()
       this.$emit('crop', this.cropper.getData(true))
+    },
+
+    setInitCropperData() {
+      this.cropper.setData(this.media.cropperData)
     },
 
     rotate(value) {
@@ -109,9 +158,7 @@ export default {
 
       this.locked = !aspectRatio
 
-      this.cropper.setAspectRatio(
-        aspectRatio ? null : this.media.cropperOptions.aspectRatio || 1,
-      )
+      this.cropper.setAspectRatio(aspectRatio ? null : this.media.cropperOptions.aspectRatio || 1)
     },
   },
 }

@@ -1,25 +1,32 @@
 <template>
-  <panel-item :field="field">
-    <div slot="value" class="flex flex-wrap -m-2">
-      <div v-for="(url, name) in conversions" :key="name" v-tooltip="tooltip(name)" class="relative group flex m-2 rounded-full overflow-hidden">
-        <img :src="url" :alt="name" class="w-16 h-16 object-cover">
-        <div class="group-hover:block hidden absolute pin bg-overlay">
-          <div class="flex items-center justify-center h-full">
-            <button type="button" class="flex text-white hover:text-primary focus:outline-none" @click="copy(url)">
-              <icon type="link" view-box="0 0 20 20" width="20" height="20" />
-            </button>
+  <PanelItem :field="field">
+    <template #value>
+      <div class="-m-2 flex flex-wrap">
+        <div
+          v-for="(url, name) in conversions"
+          :key="name"
+          v-tooltip="tooltip(name)"
+          class="group relative m-2 flex overflow-hidden rounded"
+        >
+          <img :src="url" :alt="name" class="h-16 w-16 object-cover" />
+          <div class="bg-overlay absolute inset-0 hidden group-hover:block">
+            <div class="flex h-full items-center justify-center">
+              <button type="button" class="hover:text-primary flex text-white focus:outline-none" @click="doCopy(url)">
+                <icon type="link" view-box="0 0 20 20" width="20" height="20" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </panel-item>
+    </template>
+  </PanelItem>
 </template>
 
 <script>
-import copy from 'clipboard-copy'
+import { Localization } from 'laravel-nova'
+import Clipboard from 'clipboard'
 
 export default {
-  // eslint-disable-next-line
   props: ['resource', 'resourceName', 'resourceId', 'field'],
 
   computed: {
@@ -30,18 +37,22 @@ export default {
 
   methods: {
     tooltip(name) {
-      return this.field.withTooltips ? {
-        classes: 'medialibrary-tooltip bg-white p-2 rounded border border-50 shadow text-sm leading-normal',
-        content: name,
-        offset: 10,
-        placement: 'bottom',
-      } : null
+      return this.field.withTooltips
+        ? {
+            classes: 'medialibrary-tooltip bg-white p-2 rounded border border-50 shadow text-sm leading-normal',
+            content: name,
+            offset: 10,
+            placement: 'bottom',
+          }
+        : null
     },
 
-    async copy(url) {
-      await copy(url)
+    async doCopy(url) {
+      Clipboard.copy(url, {
+        container: typeof container === 'object' ? container : document.body,
+      })
 
-      Nova.success(Nova.app.__('Copied!'))
+      Nova.success(Localization.methods.__('Copied!'))
     },
   },
 }

@@ -1,8 +1,15 @@
 <template>
-  <img v-if="usePreview" :src="media.previewUrl" :alt="media.fileName" class="block object-cover" @error="loadingFailed = true">
+  <img
+    v-if="usePreview"
+    :src="media.previewUrl"
+    :alt="media.fileName"
+    class="block h-24 w-full object-cover"
+    style="max-height: 100%"
+    @error="loadingFailed = true"
+  />
   <div v-else class="bg-40 flex items-center justify-center">
     <slot name="fallback">
-      <span class="truncate select-none">
+      <span class="select-none truncate">
         {{ media.extension.toUpperCase() }}
       </span>
     </slot>
@@ -30,9 +37,7 @@ export default {
 
   computed: {
     usePreview() {
-      return this.media.previewUrl
-          && !this.loadingFailed
-          && !this.useFallback
+      return this.media.previewUrl && !this.loadingFailed && !this.useFallback
     },
   },
 }
