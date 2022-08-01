@@ -22,7 +22,7 @@
 
     <label
       :for="inputId"
-      class="focus:outline-none bg-primary-500 bg-primary-500 hover:bg-primary-400 hover:bg-primary-400 active:bg-primary-600 active:bg-primary-600 relative relative inline-flex h-9 cursor-pointer items-center justify-center rounded px-3 text-sm font-bold text-white text-white shadow shadow focus:ring dark:text-gray-900 dark:text-gray-900"
+      class="bg-primary-500 hover:bg-primary-400 active:bg-primary-600 relative inline-flex h-9 cursor-pointer items-center justify-center rounded px-3 text-sm font-bold text-white shadow focus:outline-none focus:ring dark:text-gray-900"
       dusk="media-choose-action-button"
     >
       {{ chooseButtonText }}
@@ -38,8 +38,12 @@
       {{ __('Use existing') }}
     </button>
 
-    <progress-button v-if="mediaToUpload.length"
-      class="focus:outline-none bg-primary-500 bg-primary-500 hover:bg-primary-400 hover:bg-primary-400 active:bg-primary-600 active:bg-primary-600 relative relative inline-flex h-9 cursor-pointer items-center justify-center rounded px-3 text-sm font-bold text-white text-white shadow shadow focus:ring dark:text-gray-900 dark:text-gray-900 ml-3" @click.native="upload" dusk="media-upload-action-button">
+    <progress-button
+      v-if="mediaToUpload.length"
+      class="bg-primary-500 hover:bg-primary-400 active:bg-primary-600 relative ml-3 inline-flex h-9 cursor-pointer items-center justify-center rounded px-3 text-sm font-bold text-white shadow focus:outline-none focus:ring dark:text-gray-900"
+      @click.native="upload"
+      dusk="media-upload-action-button"
+    >
       {{ __('Upload') }}
     </progress-button>
 
