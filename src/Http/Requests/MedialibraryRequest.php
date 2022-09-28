@@ -17,7 +17,7 @@ class MedialibraryRequest extends NovaRequest
 
     public function resourceExists(): bool
     {
-        return is_numeric($this->route('resourceId'));
+        return !is_null($this->route('resourceId'));
     }
 
     public function fieldUuid(): string
