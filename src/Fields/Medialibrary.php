@@ -23,7 +23,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
- * @method static static make(string $name, string $collectionName, string $diskName, string $attribute)
+ * @method static static make(string $name, string $collectionName = '', string $diskName = '', string $attribute = null)
  */
 class Medialibrary extends Field
 {
