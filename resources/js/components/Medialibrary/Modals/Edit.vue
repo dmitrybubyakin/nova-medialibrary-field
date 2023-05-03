@@ -35,7 +35,7 @@
           <div class="ml-auto flex items-center">
             <CancelButton component="button" type="button" class="ml-auto mr-3" @click="$emit('close')" />
 
-            <LoadingButton type="submit" ref="confirmButton" :disabled="updating" :loading="updating">
+            <LoadingButton type="submit" ref="confirmButton" :disabled="updating" :loading="updating" dusk="nova-media-edit-update-file">
               {{ __('Update Media') }}
             </LoadingButton>
           </div>
