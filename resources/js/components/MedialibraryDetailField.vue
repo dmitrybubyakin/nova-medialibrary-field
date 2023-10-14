@@ -7,6 +7,11 @@
         :resource-name="resourceName"
         :resource-id="resourceId"
       />
+      <HelpText
+        class="help-text mt-2"
+        v-if="shouldShowHelpText"
+        v-html="field.helpText"
+      />
     </template>
   </PanelItem>
 </template>
@@ -24,6 +29,13 @@ export default {
   computed: {
     canAddFiles() {
       return !!this.field.attachOnDetails
+    },
+
+    /**
+     * Determine help text should be shown.
+     */
+     shouldShowHelpText() {
+      return this.field.helpText?.length > 0
     },
   },
 }
