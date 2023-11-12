@@ -15,14 +15,14 @@ class FieldServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            __DIR__.'/../resources/lang/' => resource_path('lang/vendor/nova-medialibrary-field'),
+            __DIR__ . '/../resources/lang/' => lang_path('vendor/nova-medialibrary-field'),
         ]);
 
-        $this->loadJSONTranslationsFrom(resource_path('lang/vendor/nova-medialibrary-field'));
+        $this->loadJSONTranslationsFrom(lang_path('vendor/nova-medialibrary-field'));
 
         Nova::serving(function (ServingNova $event): void {
-            Nova::script('nova-medialibrary-field', __DIR__.'/../dist/js/field.js');
-            Nova::style('nova-medialibrary-field', __DIR__.'/../dist/css/field.css');
+            Nova::script('nova-medialibrary-field', __DIR__ . '/../dist/js/field.js');
+            Nova::style('nova-medialibrary-field', __DIR__ . '/../dist/css/field.css');
 
             Media::$model = config('media-library.media_model');
 
@@ -58,9 +58,11 @@ class FieldServiceProvider extends ServiceProvider
     public function translations(): void
     {
         $locale = $this->app->getLocale();
+        is_dir(__DIR__ . '/../resources/lang/') ?
+            Nova::translations(__DIR__ . '/../resources/lang/' . $locale . '.json') :
+            Nova::translations(__DIR__ . '/../lang/' . $locale . '.json');
 
-        Nova::translations(__DIR__.'/../resources/lang/'.$locale.'.json');
-        Nova::translations(resource_path('lang/vendor/nova-medialibrary-field/'.$locale.'.json'));
+        Nova::translations(lang_path('vendor/nova-medialibrary-field/' . $locale . '.json'));
     }
 
     public function register(): void
