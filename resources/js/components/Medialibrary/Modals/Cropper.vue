@@ -68,7 +68,7 @@
         <div class="ml-auto flex items-center">
           <CancelButton component="button" type="button" class="ml-auto mr-3" @click="$emit('close')" />
 
-          <LoadingButton
+          <loading-button
             type="button"
             ref="runButton"
             :disabled="updating"
@@ -77,7 +77,7 @@
             @click.native="handleCrop()"
           >
             {{ __('Crop') }}
-          </LoadingButton>
+          </loading-button>
         </div>
       </ModalFooter>
     </div>

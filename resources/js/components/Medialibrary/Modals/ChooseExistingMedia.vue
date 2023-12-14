@@ -29,10 +29,10 @@
       <ModalFooter>
         <div class="ml-auto">
           <CancelButton component="button" type="button" class="ml-auto mr-3" @click="$emit('close')" />
-          <LoadingButton type="button" :disabled="loading" :loading="loading" ref="confirmButton" @click="handleChoose">
+          <loading-button type="button" :disabled="loading" :loading="loading" ref="confirmButton" @click="handleChoose">
             {{ __('Choose') }}
             <span v-if="chosenMedia.length > 0"> ({{ chosenMedia.length }}) </span>
-          </LoadingButton>
+          </loading-button>
         </div>
       </ModalFooter>
     </div>

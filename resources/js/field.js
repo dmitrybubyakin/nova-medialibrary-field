@@ -12,6 +12,9 @@ import IconCropperUnlock from './components/Icons/Cropper/Unlock'
 import IconCropperZoomIn from './components/Icons/Cropper/ZoomIn'
 import IconCropperZoomOut from './components/Icons/Cropper/ZoomOut'
 
+import LoadingButton from './components/Buttons/LoadingButton';
+import Loader from './components/Common/Loader';
+
 Nova.booting((app, store) => {
   // Icons
   app.component('icon-crop', IconCrop)
@@ -23,6 +26,11 @@ Nova.booting((app, store) => {
   app.component('icon-cropper-unlock', IconCropperUnlock)
   app.component('icon-cropper-zoom-in', IconCropperZoomIn)
   app.component('icon-cropper-zoom-out', IconCropperZoomOut)
+
+  app.component('loader', Loader);
+
+  // Buttons
+  app.component('loading-button', LoadingButton);
 
   app.component('index-nova-medialibrary-field', IndexField)
   app.component('detail-nova-medialibrary-field', DetailField)
