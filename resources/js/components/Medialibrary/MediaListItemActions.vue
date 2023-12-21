@@ -42,7 +42,7 @@
               class="flex items-center hover:bg-gray-100"
               v-for="copyAs in media.copyAs"
               :key="copyAs.as"
-              @click="media.copy(copyAs.as)"
+              @click="doCopy($event, copyAs.as)"
             >
               <Icon :type="copyAs.icon" width="20" height="20" />
               <span class="ml-2">{{ __(`Copy as ${copyAs.as}`) }}</span>
