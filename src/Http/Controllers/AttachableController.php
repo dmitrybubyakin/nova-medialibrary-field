@@ -27,7 +27,9 @@ class AttachableController
 
         return response()->json(
             $paginator->setCollection(
-                $paginator->getCollection()->mapInto(AttachableMediaPresenter::class)
+                $paginator->getCollection()->map( function ($media) use ($field) {
+                    return new AttachableMediaPresenter($media, $field);
+                })
             )
         );
     }
