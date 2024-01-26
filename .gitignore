@@ -1,5 +1,5 @@
 /.idea
-/vendor_old
+/vendor
 /node_modules
 package-lock.json
 composer.phar
