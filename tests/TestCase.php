@@ -17,6 +17,8 @@ use Laravel\Nova\NovaCoreServiceProvider;
 use Laravel\Nova\NovaServiceProvider;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Spatie\LaravelData\LaravelDataServiceProvider;
+use Spatie\LaravelData\Support\DataConfig;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\MediaLibrary\MediaLibraryServiceProvider;
@@ -39,6 +41,7 @@ abstract class TestCase extends Orchestra
             NovaCoreServiceProvider::class,
             FieldServiceProvider::class,
             MediaLibraryServiceProvider::class,
+            LaravelDataServiceProvider::class,
         ];
     }
 

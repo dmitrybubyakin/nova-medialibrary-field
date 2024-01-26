@@ -2,18 +2,19 @@
 
 namespace DmitryBubyakin\NovaMedialibraryField\Fields\Support;
 
-use function DmitryBubyakin\NovaMedialibraryField\call_or_default;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
-use DmitryBubyakin\NovaMedialibraryField\TransientModel;
+use DmitryBubyakin\NovaMedialibraryField\Models\TransientModel;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use function DmitryBubyakin\NovaMedialibraryField\call_or_default;
 
 class MediaPresenter implements Arrayable
 {
-    private $media;
-    private $field;
+    private Media $media;
+
+    private Medialibrary $field;
 
     public function __construct(Media $media, Medialibrary $field)
     {
@@ -23,24 +24,40 @@ class MediaPresenter implements Arrayable
 
     public function downloadUrl(): ?string
     {
-        return call_or_default($this->field->downloadCallback, [$this->media], function () {
+        $defaultCallback = function (): ?string {
             return $this->media->getFullUrl();
-        });
+        };
+
+        return call_or_default(
+            $this->field->downloadCallback,
+            [$this->media],
+            $defaultCallback,
+        );
     }
 
     public function previewUrl(): ?string
     {
-        return transform(call_or_default($this->field->previewCallback, [$this->media], function () {
+        $mediaUrlCallback = function (): ?string {
             return Str::is('image/*', $this->media->mime_type)
                 ? $this->media->getFullUrl()
                 : null;
-        }), function (string $url): string {
+        };
+
+        $mediaUrl = call_or_default(
+            $this->field->previewCallback,
+            [$this->media],
+            $mediaUrlCallback,
+        );
+
+        $appendTimestampCallback = function (string $url): string {
             if ($this->field->appendTimestampToPreview) {
                 return $url . '?timestamp=' . $this->media->updated_at->getTimestamp();
             }
 
             return $url;
-        });
+        };
+
+        return transform($mediaUrl, $appendTimestampCallback);
     }
 
     public function tooltip(): ?string
@@ -55,13 +72,12 @@ class MediaPresenter implements Arrayable
 
     public function copyAs(): array
     {
-        return collect(
-            $this->field->copyAs
-        )->mapSpread(function (string $as, string $icon, callable $value) {
-            $value = (string) $value($this->media);
+        return collect($this->field->copyAs)
+            ->mapSpread(function (string $as, string $icon, callable $value): array {
+                $value = (string) $value($this->media);
 
-            return compact('as', 'icon', 'value');
-        })->toArray();
+                return compact('as', 'icon', 'value');
+            })->toArray();
     }
 
     public function attached(): bool
@@ -71,7 +87,7 @@ class MediaPresenter implements Arrayable
 
     public function authorizedTo(string $ability): bool
     {
-        return Gate::getPolicyFor($this->media) ? Gate::check($ability, $this->media) : true;
+        return !Gate::getPolicyFor($this->media) or Gate::check($ability, $this->media);
     }
 
     public function toArray(): array
@@ -97,7 +113,7 @@ class MediaPresenter implements Arrayable
     {
         $options = call_or_default($this->field->cropperOptionsCallback, [$this->media]);
 
-        $enabled = $options !== null;
+        $enabled = ! is_null($options);
 
         return [
             'cropperEnabled' => $enabled,
@@ -110,9 +126,8 @@ class MediaPresenter implements Arrayable
 
     public function cropperData(): array
     {
-        $manipulations = $this->media->manipulations[$this->field->cropperConversion] ?? [];
-
-        $manualCrop = explode(',', $manipulations['manualCrop'] ?? '');
+        $manipulations = $this->getMediaManipulations();
+        $manualCrop = $this->resolveMediaCropperData();
 
         return array_map('intval', array_filter([
             'rotate' => $manipulations['orientation'] ?? null,
@@ -121,5 +136,27 @@ class MediaPresenter implements Arrayable
             'x' => $manualCrop[2] ?? null,
             'y' => $manualCrop[3] ?? null,
         ], 'is_numeric'));
+    }
+
+    private function getMediaManipulations(): array
+    {
+        return $this->media->manipulations[$this->field->cropperConversion] ?? [];
+    }
+
+    private function resolveMediaCropperData(): array
+    {
+        $manipulations = $this->getMediaManipulations();
+
+        if (isset($manipulations['manualCrop']) and ! empty($manipulations['manualCrop'])) {
+            if (is_string($manipulations['manualCrop'])) {
+                $manualCrop = explode(',', $manipulations['manualCrop']);
+            } else {
+                $manualCrop = $manipulations['manualCrop'];
+            }
+        } else {
+            $manualCrop = [];
+        }
+
+        return $manualCrop;
     }
 }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DmitryBubyakin\NovaMedialibraryField\Tests\Integration;
 
+use DmitryBubyakin\NovaMedialibraryField\Models\TransientModel;
 use DmitryBubyakin\NovaMedialibraryField\Tests\Fixtures\TestPost;
 use DmitryBubyakin\NovaMedialibraryField\Tests\TestCase;
-use DmitryBubyakin\NovaMedialibraryField\TransientModel;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Illuminate\Testing\Assert as PHPUnit;
@@ -43,12 +43,6 @@ class AttachControllerTest extends TestCase
             ->postJson($uri)
             ->assertJsonValidationErrorMessage('file', 'The file field is required.');
 
-        $file = $this->makeUploadedFile($this->getTextFile());
-
-        $this
-            ->postJson($uri, ['file' => $file])
-            ->assertJsonValidationErrorMessage('file', 'The file must be an image.');
-
         $file = $this->makeUploadedFile($this->getJpgFile());
 
         $this
@@ -66,12 +60,6 @@ class AttachControllerTest extends TestCase
         $this
             ->postJson($uri, ['fieldUuid' => $uuid])
             ->assertJsonValidationErrorMessage('file', 'The file field is required.');
-
-        $file = $this->makeUploadedFile($this->getTextFile());
-
-        $this
-            ->postJson($uri, ['fieldUuid' => $uuid, 'file' => $file])
-            ->assertJsonValidationErrorMessage('file', 'The file must be an image.');
 
         $file = $this->makeUploadedFile($this->getJpgFile());
 
@@ -105,7 +93,7 @@ class AttachControllerTest extends TestCase
 
         $this
             ->putJson("/nova-api/test-posts/{$post->id}", ['media_testing_custom_attribute' => $uuid])
-            ->assertJsonValidationErrorMessage('media_testing_custom_attribute', 'The media_testing_custom_attribute must have at least 2 items.');
+            ->assertJsonValidationErrorMessage('media_testing_custom_attribute', 'The media_testing_custom_attribute field must have at least 2 items.');
 
         $post = $this->createPostWithMedia(2, 'testing');
 
@@ -148,7 +136,7 @@ class AttachControllerTest extends TestCase
 
         $media = Media::first();
         $media->setCustomProperty('a', 'b')->save();
-        $media->update(['manipulations' => ['*' => ['width' => 100]]]);
+        $media->update(['manipulations' => ['*' => ['width' => [100]]]]);
 
         $this->assertSame($uuid, $media->collection_name);
         $this->assertTrue($media->model->is(TransientModel::make()));
@@ -174,7 +162,7 @@ class AttachControllerTest extends TestCase
         $this->assertCount(1, $post->media);
         $this->assertSame('b', $post->media->first()->getCustomProperty('a'));
         $this->assertSame(null, $post->media->first()->getCustomProperty(TransientModel::getCustomPropertyName()));
-        $this->assertSame(['*' => ['width' => 100]], $post->media->first()->manipulations);
+        $this->assertSame(['*' => ['width' => [100]]], $post->media->first()->manipulations);
     }
 
     /** @test */

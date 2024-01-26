@@ -7,7 +7,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class AttachableMediaPresenter implements Arrayable
 {
-    private $media;
+    private Media $media;
 
     public function __construct(Media $media)
     {

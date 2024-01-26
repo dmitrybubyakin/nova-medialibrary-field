@@ -9,15 +9,20 @@ class ResolveFromDependencyContainerFields
 {
     public function __invoke(FieldCollection $fields, string $attribute): ?Medialibrary
     {
-        return $fields->map(function ($field) {
+        $callback = function (mixed $field) {
             if (! is_a($field, \Epartment\NovaDependencyContainer\NovaDependencyContainer::class)) {
                 return $field;
             }
 
             return $field->meta['fields'];
-        })
+        };
+
+        /** @var FieldCollection $fields */
+        $fields = $fields
+            ->map($callback)
             ->flatten()
-            ->whereInstanceOf(Medialibrary::class)
-            ->findFieldByAttribute($attribute);
+            ->whereInstanceOf(Medialibrary::class);
+
+        return $fields->findFieldByAttribute($attribute);
     }
 }

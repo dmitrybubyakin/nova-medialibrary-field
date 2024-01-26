@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DmitryBubyakin\NovaMedialibraryField\Tests\Unit;
 
 use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
-use DmitryBubyakin\NovaMedialibraryField\Http\Requests\MedialibraryRequest;
+use DmitryBubyakin\NovaMedialibraryField\Http\Requests\MediaRequest;
 use DmitryBubyakin\NovaMedialibraryField\MedialibraryFieldResolver;
 use DmitryBubyakin\NovaMedialibraryField\Tests\Fixtures\Nova\ContainerField;
 use DmitryBubyakin\NovaMedialibraryField\Tests\TestCase;
@@ -62,24 +62,14 @@ class MedialibraryRequestTest extends TestCase
     /** @test */
     public function test_field_uuid(): void
     {
-        $request = MedialibraryRequest::create('', 'POST', ['fieldUuid' => 'uuid']);
+        $request = MediaRequest::create('', 'POST', ['fieldUuid' => 'uuid']);
 
         $this->assertSame('uuid', $request->fieldUuid());
     }
 
-    /** @test */
-    public function test_field_uuid_error(): void
+    private function createRequest(...$args): MediaRequest
     {
-        $this->expectException(TypeError::class);
-
-        $request = MedialibraryRequest::create('', 'POST');
-
-        $request->fieldUuid();
-    }
-
-    private function createRequest(...$args): MedialibraryRequest
-    {
-        $request = MedialibraryRequest::create(...$args);
+        $request = MediaRequest::create(...$args);
 
         $request->setRouteResolver(function () use ($request) {
             return $this->app['router']->getRoutes()->match($request);

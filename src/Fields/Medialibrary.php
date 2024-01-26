@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace DmitryBubyakin\NovaMedialibraryField\Fields;
 
-use function DmitryBubyakin\NovaMedialibraryField\callable_or_default;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Support\AttachCallback;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaCollectionRules;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaFields;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Support\MediaPresenter;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Support\ResolveMediaCallback;
-use DmitryBubyakin\NovaMedialibraryField\TransientModel;
-use function DmitryBubyakin\NovaMedialibraryField\validate_args;
-use Illuminate\Contracts\Validation\Rule;
+use DmitryBubyakin\NovaMedialibraryField\Models\TransientModel;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
@@ -21,56 +19,65 @@ use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Whitecube\NovaFlexibleContent\Flexible;
+use Whitecube\NovaFlexibleContent\Layouts\Layout;
+use function DmitryBubyakin\NovaMedialibraryField\callable_or_default;
 
 /**
  * @method static static make(string $name, string $collectionName = '', string $diskName = '', string $attribute = null)
  */
 class Medialibrary extends Field
 {
+    public string $collectionName;
+
+    public string $diskName;
+
+    public mixed $fieldsCallback;
+
+    public mixed $attachCallback;
+
+    public mixed $resolveMediaUsingCallback;
+
+    public bool $single;
+
+    public mixed $mediaOnIndexCallback;
+
+    public mixed $attachRules;
+
     public $component = 'nova-medialibrary-field';
 
-    public $collectionName;
+    public array $copyAs = [];
 
-    public $diskName;
+    public mixed $attachExistingCallback = null;
 
-    public $fieldsCallback;
+    public mixed $downloadCallback = null;
 
-    public $attachCallback;
+    public mixed $previewCallback = null;
 
-    public $copyAs = [];
+    public bool $appendTimestampToPreview = false;
 
-    public $attachExistingCallback;
+    public mixed $tooltipCallback = null;
 
-    public $resolveMediaUsingCallback;
+    public mixed $titleCallback = null;
 
-    public $mediaOnIndexCallback;
+    public ?string $cropperConversion = null;
 
-    public $downloadCallback;
+    public mixed $cropperOptionsCallback = null;
 
-    public $previewCallback;
+    public mixed $moveMediaToTargetModelCallback = null;
 
-    public $appendTimestampToPreview = false;
-
-    public $tooltipCallback;
-
-    public $titleCallback;
-
-    public $single;
-
-    public $cropperConversion;
-
-    public $cropperOptionsCallback;
-
-    public $moveMediaToTargetModelCallback;
-
-    public $attachRules;
-
-    public function __construct(string $name, string $collectionName = '', string $diskName = '', string $attribute = null)
+    public function __construct(
+        string $name,
+        string $collectionName = '',
+        string $diskName = '',
+        string $attribute = null,
+    )
     {
         parent::__construct($name, $attribute);
 
         $this->collectionName = $collectionName;
         $this->diskName = $diskName;
+
         $this->fields(MediaFields::make());
         $this->attachUsing(new AttachCallback);
         $this->resolveMediaUsing(new ResolveMediaCallback);
@@ -101,21 +108,15 @@ class Medialibrary extends Field
         return $this;
     }
 
-    /**
-     * @param string|callable|null $callback
-     */
-    public function attachExisting($callback = null): self
+    public function attachExisting(string | callable | null $callback = null): self
     {
-        validate_args();
-
-        $this->attachExistingCallback = callable_or_default(
-            $callback,
-            function (Builder $query) use ($callback): void {
-                if ($callback) {
-                    $query->where('collection_name', $callback);
-                }
+        $defaultCallback = function (Builder $query) use ($callback): void {
+            if ($callback) {
+                $query->where('collection_name', $callback);
             }
-        );
+        };
+
+        $this->attachExistingCallback = callable_or_default($callback, $defaultCallback);
 
         return $this->withMeta(['attachExisting' => true]);
     }
@@ -127,56 +128,40 @@ class Medialibrary extends Field
         return $this;
     }
 
-    /**
-     * @param int|callable $mediaOnIndex
-     */
-    public function mediaOnIndex($mediaOnIndex): self
+    public function mediaOnIndex(int | callable $mediaOnIndex): self
     {
-        validate_args();
+        $defaultCallback = function (HasMedia $resource, string $collectionName) use ($mediaOnIndex): Collection {
+            return $resource
+                ->media()
+                ->where('collection_name', $collectionName)
+                ->limit($mediaOnIndex)
+                ->orderBy('order_column')
+                ->get();
+        };
 
-        $this->mediaOnIndexCallback = callable_or_default(
-            $mediaOnIndex,
-            function (HasMedia $resource, string $collectionName) use ($mediaOnIndex): Collection {
-                return $resource->media()->where('collection_name', $collectionName)
-                                ->limit($mediaOnIndex)
-                                ->orderBy('order_column')
-                                ->get();
-            }
-        );
+        $this->mediaOnIndexCallback = callable_or_default($mediaOnIndex, $defaultCallback);
 
         return $this;
     }
 
-    /**
-     * @param string|callable $downloadUsing
-     */
-    public function downloadUsing($downloadUsing): self
+    public function downloadUsing(string | callable $downloadUsing): self
     {
-        validate_args();
+        $defaultCallback = function (Media $media) use ($downloadUsing): ?string {
+            return $media->getFullUrl($downloadUsing);
+        };
 
-        $this->downloadCallback = callable_or_default(
-            $downloadUsing,
-            function (Media $media) use ($downloadUsing): ?string {
-                return $media->getFullUrl($downloadUsing);
-            }
-        );
+        $this->downloadCallback = callable_or_default($downloadUsing, $defaultCallback);
 
         return $this;
     }
 
-    /**
-     * @param string|callable $previewUsing
-     */
-    public function previewUsing($previewUsing): self
+    public function previewUsing(string | callable $previewUsing): self
     {
-        validate_args();
+        $defaultCallback = function (Media $media) use ($previewUsing): ?string {
+            return $media->getFullUrl($previewUsing);
+        };
 
-        $this->previewCallback = callable_or_default(
-            $previewUsing,
-            function (Media $media) use ($previewUsing): ?string {
-                return $media->getFullUrl($previewUsing);
-            }
-        );
+        $this->previewCallback = callable_or_default($previewUsing, $defaultCallback);
 
         return $this;
     }
@@ -188,56 +173,38 @@ class Medialibrary extends Field
         return $this;
     }
 
-    /**
-     * @param string|callable $tooltip
-     */
-    public function tooltip($tooltip): self
+    public function tooltip(string | callable $tooltip): self
     {
-        validate_args();
+        $defaultCallback = function (Media $media) use ($tooltip): ?string {
+            return $media->{$tooltip};
+        };
 
-        $this->tooltipCallback = callable_or_default(
-            $tooltip,
-            function (Media $media) use ($tooltip): ?string {
-                return $media->{$tooltip};
-            }
-        );
+        $this->tooltipCallback = callable_or_default($tooltip, $defaultCallback);
 
         return $this;
     }
 
-    /**
-     * @param string|callable $title
-     */
-    public function title($title): self
+    public function title(string | callable $title): self
     {
-        validate_args();
+        $defaultCallback = function (Media $media) use ($title): ?string {
+            return $media->{$title};
+        };
 
-        $this->titleCallback = callable_or_default(
-            $title,
-            function (Media $media) use ($title): ?string {
-                return $media->{$title};
-            }
-        );
+        $this->titleCallback = callable_or_default($title, $defaultCallback);
 
         return $this;
     }
 
-    /**
-     * @param string|callable $value
-     */
-    public function copyAs(string $as, $value, string $icon = 'link'): self
+    public function copyAs(string $as, string | callable $value, string $icon = 'link'): self
     {
-        validate_args();
+        $defaultCallback = function (Media $media) use ($value): ?string {
+            return $media->{$value};
+        };
 
         $this->copyAs[] = [
             $as,
             $icon,
-            callable_or_default(
-                $value,
-                function (Media $media) use ($value): ?string {
-                    return $media->{$value};
-                }
-            ),
+            callable_or_default($value, $defaultCallback),
         ];
 
         return $this;
@@ -245,31 +212,22 @@ class Medialibrary extends Field
 
     public function hideCopyUrlAction(): self
     {
-        return $this->withMeta([
-            'hideCopyUrlAction' => true,
-        ]);
+        return $this->withMeta(['hideCopyUrlAction' => true]);
     }
 
-    /**
-     * @param string $conversion
-     * @param array|callable|null $options
-     */
-    public function croppable($conversion, $options = null): self
+    public function croppable(string $conversion, array | callable |null $options = null): self
     {
-        validate_args();
-
         $this->cropperConversion = $conversion;
 
-        $this->cropperOptionsCallback = callable_or_default(
-            $options,
-            function () use ($options) {
-                return $options ?: [
-                    'viewMode' => 3,
-                ];
-            }
-        );
+        $defaultCallback = function () use ($options): array {
+            return $options ?: [
+                'viewMode' => 3,
+            ];
+        };
 
-        $this->appendTimestampToPreview(true);
+        $this->cropperOptionsCallback = callable_or_default($options, $defaultCallback);
+
+        $this->appendTimestampToPreview();
 
         return $this;
     }
@@ -308,12 +266,9 @@ class Medialibrary extends Field
         return $this->withMeta(['autouploading' => true]);
     }
 
-    /**
-     * @param \Illuminate\Contracts\Validation\Rule|string|array $rules
-     */
-    public function attachRules($rules): self
+    public function attachRules(ValidationRule | string | array $rules): self
     {
-        $this->attachRules = ($rules instanceof Rule || is_string($rules)) ? func_get_args() : $rules;
+        $this->attachRules = ($rules instanceof ValidationRule || is_string($rules)) ? func_get_args() : $rules;
 
         return $this;
     }
@@ -338,11 +293,7 @@ class Medialibrary extends Field
     protected function makeMediaCollectionRules(NovaRequest $request, array $rules): array
     {
         return [
-            $this->attribute => MediaCollectionRules::make(
-                $rules[$this->attribute],
-                $request,
-                $this,
-            ),
+            $this->attribute => MediaCollectionRules::make($rules[$this->attribute], $request, $this),
         ];
     }
 
@@ -358,19 +309,24 @@ class Medialibrary extends Field
             'Laravel\Nova\Http\Controllers\LensController@show', // Lens controller action
         ];
 
-        if (in_array(Route::current()->getActionName(), $controllerActions)) {
-            $this->resolveForIndex($resource, $attribute);
+        $actionName = Route::current()->getActionName();
+
+        if (in_array($actionName, $controllerActions)) {
+            $this->resolveForIndex($resource);
         }
     }
 
-    public function resolveForIndex($resource, $attribute = null): void
+    public function resolveForIndex($resource): void
     {
-        $this->value = call_user_func_array($this->mediaOnIndexCallback, [
-            $resource,
-            $this->collectionName,
-        ])->map(function (Media $media) {
+        $callback = function (Media $media): MediaPresenter {
             return new MediaPresenter($media, $this);
-        });
+        };
+
+        $this->value = call_user_func_array(
+            $this->mediaOnIndexCallback,
+            [$resource, $this->collectionName],
+        )
+            ->map($callback);
     }
 
     protected function fillAttribute(NovaRequest $request, $requestAttribute, $model, $attribute): callable
@@ -387,8 +343,8 @@ class Medialibrary extends Field
             );
         }
 
-        if (is_a($model, \Whitecube\NovaFlexibleContent\Layouts\Layout::class)) {
-            $model = \Whitecube\NovaFlexibleContent\Flexible::getOriginModel();
+        if (is_a($model, Layout::class)) {
+            $model = Flexible::getOriginModel();
         }
 
         return function () use ($request, $attribute, $model, $callback): void {
@@ -410,14 +366,18 @@ class Medialibrary extends Field
     {
         $propertyName = TransientModel::getCustomPropertyName();
 
+        $callback = function (Media $media, HasMedia $target, string $propertyName): void {
+            $media
+                ->forgetCustomProperty($propertyName)
+                ->move($target, $this->collectionName, $this->diskName)
+                ->update([
+                    'manipulations' => $media->manipulations,
+                ]);
+        };
+
         $moveMediaToTargetModelCallback = callable_or_default(
             $this->moveMediaToTargetModelCallback,
-            function (Media $media, HasMedia $target, string $propertyName): void {
-                $media
-                    ->forgetCustomProperty($propertyName)
-                    ->move($target, $this->collectionName, $this->diskName)
-                    ->update(['manipulations' => $media->manipulations]);
-            }
+            $callback,
         );
 
         $moveMediaToTargetModelCallback($media, $target, $propertyName);

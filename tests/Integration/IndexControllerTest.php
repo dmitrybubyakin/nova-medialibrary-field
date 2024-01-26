@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DmitryBubyakin\NovaMedialibraryField\Tests\Integration;
 
+use DmitryBubyakin\NovaMedialibraryField\Models\TransientModel;
 use DmitryBubyakin\NovaMedialibraryField\Tests\TestCase;
-use DmitryBubyakin\NovaMedialibraryField\TransientModel;
 use Illuminate\Support\Str;
 
 class IndexControllerTest extends TestCase

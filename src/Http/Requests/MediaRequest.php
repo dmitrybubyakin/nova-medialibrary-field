@@ -8,7 +8,7 @@ use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
 use DmitryBubyakin\NovaMedialibraryField\MedialibraryFieldResolver;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class MedialibraryRequest extends NovaRequest
+class MediaRequest extends NovaRequest
 {
     public function medialibraryField(): Medialibrary
     {
@@ -17,10 +17,10 @@ class MedialibraryRequest extends NovaRequest
 
     public function resourceExists(): bool
     {
-        return !is_null($this->route('resourceId')) && $this->route('resourceId') !== 'undefined';
+        return ! is_null($this->route('resourceId')) and $this->route('resourceId') !== 'undefined';
     }
 
-    public function fieldUuid(): string
+    public function fieldUuid(): ?string
     {
         return $this->input('fieldUuid');
     }

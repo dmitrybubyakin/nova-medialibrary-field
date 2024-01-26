@@ -3,7 +3,7 @@
 namespace DmitryBubyakin\NovaMedialibraryField\Fields\Support;
 
 use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
-use DmitryBubyakin\NovaMedialibraryField\TransientModel;
+use DmitryBubyakin\NovaMedialibraryField\Models\TransientModel;
 use Illuminate\Contracts\Validation\ImplicitRule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;

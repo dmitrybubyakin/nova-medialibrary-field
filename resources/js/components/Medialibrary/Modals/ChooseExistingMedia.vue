@@ -6,7 +6,10 @@
       </ModalHeader>
 
       <ModalContent>
-        <IndexSearchInput @update:keyword="applyFilter" />
+        <IndexSearchInput
+            class="mb-2"
+            @update:keyword="applyFilter"
+        />
 
         <LoadingView :loading="loading">
           <slot>
@@ -22,7 +25,7 @@
         </LoadingView>
         <PaginationSimple v-bind="pagination" @page="selectPage"
           ><span class="text-xs"
-            >{{ pagination.from }}-{{ pagination.to }} of {{ pagination.allMatchingResourceCount }}</span
+            >{{ (pagination.from || 0) }}-{{ (pagination.to || 0) }} of {{ pagination.allMatchingResourceCount }}</span
           ></PaginationSimple
         >
       </ModalContent>
@@ -140,7 +143,6 @@ export default {
     },
 
     applyFilter(keyword) {
-      console.log(keyword)
       this.params.name = keyword
       this.selectPage(1)
     },

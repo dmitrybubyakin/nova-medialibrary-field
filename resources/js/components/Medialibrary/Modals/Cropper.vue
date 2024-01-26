@@ -31,7 +31,7 @@
           <button
             v-if="rotatable"
             type="button"
-            class="ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
+            class="hidden ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
             @click="rotate(-90)"
           >
             <icon-cropper-rotate width="24" height="24" />
@@ -40,7 +40,7 @@
           <button
             v-if="rotatable"
             type="button"
-            class="ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
+            class="hidden ml-2 flex h-8 w-8 items-center justify-center rounded hover:opacity-50 focus:outline-none focus:ring"
             @click="rotate(90)"
           >
             <icon-cropper-rotate width="24" height="24" style="transform: rotateY(180deg)" />

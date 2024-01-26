@@ -46,9 +46,13 @@ class CropControllerTest extends TestCase
 
         $this->assertSame([
             'preview' => [
-                'manualCrop' => '100,100,100,100',
-                'orientation' => '180',
+                'manualCrop' => [
+                    100,
+                    100,
+                    100,
+                    100,
+                ],
             ],
-        ], Media::first()->manipulations);
+        ], Media::query()->first()->manipulations);
     }
 }

@@ -3,6 +3,8 @@
 namespace DmitryBubyakin\NovaMedialibraryField\Integrations\NovaFlexibleContent;
 
 use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Whitecube\NovaFlexibleContent\Layouts\Layout;
 
 /**
@@ -16,15 +18,24 @@ trait HasMedialibraryField
             return;
         }
 
-        /** @var \DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary $field */
-        foreach ($this->fields->whereInstanceOf(Medialibrary::class) as $field) {
-            $field->fillUsing(function ($request, $model): void {
-                if ($model instanceof Layout) {
-                    config('media-library.media_model')::query()
-                        ->where('custom_properties->flexibleKey', $model->_key)
-                        ->update(['custom_properties->flexibleKey' => $model->key]);
-                }
-            });
+        $medialibraryFields = $this->fields->whereInstanceOf(Medialibrary::class);
+
+        $callback = function (NovaRequest $request, mixed $model): void {
+            if ($model instanceof Layout) {
+                /** @var Media $media */
+                $media = config('media-library.media_model');
+
+                $media::query()
+                    ->where('custom_properties->flexibleKey', $model->_key)
+                    ->update([
+                        'custom_properties->flexibleKey' => $model->key,
+                    ]);
+            }
+        };
+
+        /** @var Medialibrary $field */
+        foreach ($medialibraryFields as $field) {
+            $field->fillUsing($callback);
         }
     }
 }
